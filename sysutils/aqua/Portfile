@@ -1,0 +1,33 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/aquaproj/aqua 2.21.3 v
+github.tarball_from archive
+revision            0
+
+description         Declarative CLI Version manager written in Go
+
+long_description    ${description}. Support Lazy Install, Registry, and continuous \
+                    update with Renovate. CLI version is switched seamlessly.
+
+categories          sysutils
+installs_libs       no
+license             MIT
+maintainers         {macports.halostatue.ca:austin @halostatue} \
+                    openmaintainer
+
+checksums           rmd160  1d2d99c6aecfceda7e0836f0db9e56036e15dfea \
+                    sha256  adf0985eef238c2cc38f917e5e866da6781968c68555762b1bdaa20a8e22c238 \
+                    size    251763
+
+go.offline_build    no
+
+build.env-append        CGOENABLED=0
+build.pre_args-append   -ldflags \"-X main.version=${version} -X main.commit=MacPorts\"
+build.args              ./cmd/aqua/main.go
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/main ${destroot}${prefix}/bin/aqua
+}
