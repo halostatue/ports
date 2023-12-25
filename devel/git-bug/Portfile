@@ -1,0 +1,75 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/MichaelMure/git-bug 0.7.2 v
+
+homepage            https://github.com/MichaelMure/git-bug
+
+description         Distributed, offline-first bug tracker embedded in git, with bridges
+
+long_description    ${name} is distributed, offline-first bug tracker embedded in git \
+                    that can bridge to other bug trackers including GitHub, GitLab, and \
+                    Jira. This is now more than a proof of concept, but still not fully \
+                    stable. Expect dragons and unfinished business.
+
+categories          devel
+license             GPL-3+
+maintainers         {@halostatue macports.halostatue.ca:austin} \
+                    openmaintainer
+
+checksums           ${distname}${extract.suffix} \
+                    rmd160  09fdc8eb849c8f9494088afc8bb71fa59f0b8de5 \
+                    sha256  4138689baa86f9ffbf169af8d79062ad406aeadc106df4136525d45cfd0b80a2 \
+                    size    1933674
+
+depends_build       port:npm6 port:openssl11
+
+set gitbug_commands "${go.package}/commands"
+set gitbug_ldflags {-X ${gitbug_commands}.GitCommit=${github.tag_prefix}${go.version}  \
+    -X ${gitbug_commands}.GitLastTag=${github.tag_prefix}${go.version} \
+    -X ${gitbug_commands}.GitExactTag=${github.tag_prefix}${go.version}}
+
+build {
+    system -W ${worksrcpath}/webui "${build.env} npm ci"
+    system -W ${worksrcpath}/webui "${build.env} npm run generate"
+    system -W ${worksrcpath}/webui "${build.env} node node_modules/.bin/react-scripts build"
+    system -W ${worksrcpath} "${build.env} make pack-webui"
+    system -W ${worksrcpath} "${build.env} ${go.bin} generate"
+    system -W ${worksrcpath} "${build.env} ${go.bin} -ldflags \"${gitbug_ldflags}\" ."
+}
+
+set gitbug_manfiles {git-bug-add git-bug-bridge-auth-add-token git-bug-bridge-auth-rm \
+    git-bug-bridge-auth-show git-bug-bridge-auth git-bug-bridge-configure git-bug-bridge-pull \
+    git-bug-bridge-push git-bug-bridge-rm git-bug-bridge git-bug-commands git-bug-comment-add \
+    git-bug-comment-edit git-bug-comment git-bug-deselect git-bug-label-add git-bug-label-rm \
+    git-bug-label git-bug-ls-id git-bug-ls-label git-bug-ls git-bug-pull git-bug-push git-bug-rm \
+    git-bug-select git-bug-show git-bug-status-close git-bug-status-open git-bug-status \
+    git-bug-termui git-bug-title-edit git-bug-title git-bug-user-adopt git-bug-user-create \
+    git-bug-user-ls git-bug-user git-bug-version git-bug-webui git-bug}
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
+
+    # Install bash completion
+    xinstall -d  ${destroot}${prefix}/share/bash-completion/completions
+    xinstall -m 0644 ${worksrcpath}/misc/completion/${name} \
+        ${destroot}${prefix}/share/bash-completion/completions/${name}
+
+    # Install zsh completion
+    xinstall -d  ${destroot}${prefix}/share/zsh/site-functions
+    xinstall -m 0644 ${worksrcpath}/misc/completion/${name} \
+        ${destroot}${prefix}/share/zsh/site-functions/_${name}
+
+    # Install fish completion
+    xinstall -d ${destroot}${prefix}/share/fish/vendor_completions.d
+    xinstall -m 0644 ${worksrcpath}/misc/completion/${name} \
+        ${destroot}${prefix}/share/fish/vendor_completions.d/${name}.fish
+
+    xinstall ${worksrcpath}/doc/man/${cmd}.1 ${destroot}${prefix}/share/man/man1
+
+    foreach cmd ${gitbug_manfiles} {
+        xinstall ${worksrcpath}/doc/man/${cmd}.1 ${destroot}${prefix}/share/man/man1
+    }
+}
