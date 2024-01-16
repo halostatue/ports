@@ -1,0 +1,14 @@
+changie 416
+depends_build port:go portdir devel/changie description {Automated changelog tool} homepage https://github.com/miniscruff/changie epoch 0 platforms {darwin freebsd linux} name changie license MIT maintainers {{macports.halostatue.ca:austin @halostatue} openmaintainer} long_description {{Automated changelog tool} for preparing releases with lots of customization options} version 1.16.0 categories devel revision 0
+git-bug 647
+depends_build {port:npm6 port:openssl11} portdir devel/git-bug description {Distributed, offline-first bug tracker embedded in git, with bridges} homepage https://github.com/MichaelMure/git-bug epoch 0 platforms {darwin freebsd linux} name git-bug license GPL-3+ maintainers {{@halostatue macports.halostatue.ca:austin} openmaintainer} long_description {git-bug is distributed, offline-first bug tracker embedded in git that can bridge to other bug trackers including GitHub, GitLab, and Jira. This is now more than a proof of concept, but still not fully stable. Expect dragons and unfinished business.} version 0.7.2 categories devel revision 0
+git-mediate 546
+variants universal depends_build {port:stack port:ghc} portdir devel/git-mediate description {Become a (git) conflict resolution hero} homepage https://github.com/Peaker/git-mediate epoch 0 platforms macosx name git-mediate license GPL-2 maintainers {{macports.halostatue.ca:austin @halostatue} openmaintainer} long_description {{
+    git-mediate tries to resolve conflicts so that they are trivially
+    resolvable by applying simple changes across multiple versions
+    during resolution.
+}} categories {devel haskell} version 1.0.9 revision 0
+aqua 518
+depends_build port:go portdir sysutils/aqua description {Declarative CLI Version manager written in Go} homepage https://github.com/aquaproj/aqua epoch 0 platforms {darwin freebsd linux} name aqua installs_libs no license MIT maintainers {{macports.halostatue.ca:austin @halostatue} openmaintainer} long_description {{Declarative CLI Version manager written in Go.} Support Lazy Install, Registry, and continuous update with Renovate. CLI version is switched seamlessly.} categories sysutils version 2.21.3 revision 0
+cargo2port 429
+variants universal depends_build {port:rust port:cargo} portdir sysutils/cargo2port description {A tool for generating cargo.crates option from Cargo.lock} homepage https://github.com/l2dy/cargo2port epoch 0 platforms darwin name cargo2port license BSD maintainers {{l2dy @l2dy} openmaintainer} long_description {A tool for generating cargo.crates option from Cargo.lock.} categories {sysutils macports} version 0.1.2 revision 0
