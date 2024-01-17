@@ -26,7 +26,7 @@ These changes may or may not be contributed to the MacPorts repository.
 ## Updated Ports
 
 - `sysutils/cargo2port`: A small update to be able to test source builds of
-  ld2y/cargo2port
+  [ld2y/cargo2port][]. First step is upgrading dependencies.
 
 ## Override Ports
 
@@ -41,3 +41,5 @@ Previously, there were override ports for:
   the `depends_lib` on `port:rbenv`. This has been accepted into mainline
   MacPorts and with the next release of ruby-build, I will be removing the
   message that warns about the dependency change.
+
+[ld2y/cargo2port]: https://github.com/ld2y/cargo2port
