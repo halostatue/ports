@@ -18,6 +18,10 @@ These changes may or may not be contributed to the MacPorts repository.
 - `devel/git-bug`: A distributed, offline-first bug tracker. Does not currently
   build, if I remember correctly. I haven't looked at this in a while.
 
+- `devel/chainloop`: An open source software supply chain control plane,
+  a single source of truth for artifacts plus a declarative attestation crafting
+  process.
+
 - `sysutils/aqua`: A package installer framework. I have not yet been able to
   wrap my head around this one, even though it builds, so I am likely to
   delete this (I don't want to maintain it even if others in the MacPorts
