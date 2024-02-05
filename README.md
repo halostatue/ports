@@ -25,8 +25,7 @@ These changes may or may not be contributed to the MacPorts repository.
 
 ## Updated Ports
 
-- `sysutils/cargo2port`: A small update to be able to test source builds of
-  [ld2y/cargo2port][]. First step is upgrading dependencies.
+There are currently no update ports.
 
 ## Override Ports
 
