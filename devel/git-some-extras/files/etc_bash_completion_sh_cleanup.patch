@@ -1,0 +1,26 @@
+--- etc/bash_completion.sh.orig	2024-03-10 23:30:00
++++ etc/bash_completion.sh	2024-03-10 23:31:13
+@@ -137,23 +137,6 @@
+     __gitcomp "$(git for-each-ref --format='%(refname:short)')"
+ }
+ 
+-_git_psykorebase(){
+-  __gitcomp "$(__git_heads) --continue --no-ff"
+-}
+-
+-_git_reauthor(){
+-  local prev="${COMP_WORDS[COMP_CWORD-1]}"
+-  local comp
+-
+-  if [[ "${prev}" == '--type' ]] || [[ "${prev}" == '-t' ]]; then
+-    comp='author committer full'
+-  else
+-    comp='--all --correct-email --correct-name --old-email --type --use-config'
+-  fi
+-
+-   __gitcomp "${comp}"
+-}
+-
+ _git_scp(){
+   __git_complete_remote_or_refspec
+ }

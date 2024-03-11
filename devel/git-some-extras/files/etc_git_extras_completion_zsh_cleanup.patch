@@ -1,0 +1,61 @@
+--- etc/git-extras-completion.zsh.orig	2024-03-10 23:31:22
++++ etc/git-extras-completion.zsh	2024-03-10 23:32:37
+@@ -122,12 +122,6 @@
+         '(-l --list)'{-l,--list}'[list commits]' \
+ }
+ 
+-_git-clear() {
+-    _arguments \
+-        '(-f --force)'{-f,--force}'[force clear]' \
+-        '(-h --help)'{-h,--help}'[help message]' \
+-}
+-
+ _git-coauthor() {
+     _arguments \
+         ':co-author[co-author to add]:__gitex_author_names' \
+@@ -362,8 +356,6 @@
+     brv:'list branches sorted by their last commit date'\
+     changelog:'generate a changelog report' \
+     chore:'create chore branch' \
+-    clear-soft:'soft clean up a repository' \
+-    clear:'rigorously clean up a repository' \
+     coauthor:'add a co-author to the last commit' \
+     commits-since:'show commit logs since some date' \
+     contrib:'show user contributions' \
+@@ -378,11 +370,8 @@
+     effort:'show effort statistics on file(s)' \
+     extras:'awesome git utilities' \
+     feature:'create/merge feature branch' \
+-    force-clone:'overwrite local repositories with clone' \
+-    fork:'fork a repo on GitHub' \
+     fresh-branch:'create fresh branches' \
+     get:'clone a repository in a directory' \
+-    gh-pages:'create the GitHub pages branch' \
+     graft:'merge and destroy a given branch' \
+     guilt:'calculate change between two revisions' \
+     ignore-io:'get sample gitignore file' \
+@@ -391,24 +380,14 @@
+     local-commits:'list local commits' \
+     lock:'lock a file excluded from version control' \
+     locked:'ls files that have been locked' \
+-    magic:'commits everything with a generated message' \
+     merge-into:'merge one branch into another' \
+-    merge-repo:'merge two repo histories' \
+     missing:'show commits missing from another branch' \
+-    mr:'checks out a merge request locally' \
+-    obliterate:'rewrite past commits to remove some files' \
+-    paste:'send patches to pastebin sites' \
+-    pr:'checks out a pull request locally' \
+-    psykorebase:'rebase a branch with a merge commit' \
+-    pull-request:'create pull request to GitHub project' \
+-    reauthor:'replace the author and/or committer identities in commits and tags' \
+     rebase-patch:'rebases a patch' \
+     refactor:'create refactor branch' \
+     release:'commit, tag and push changes to the repository' \
+     rename-branch:'rename a branch' \
+     rename-tag:'rename a tag' \
+     rename-remote:'rename a remote' \
+-    repl:'git read-eval-print-loop' \
+     reset-file:'reset one file' \
+     root:'show path of root' \
+     scp:'copy files to ssh compatible `git-remote`' \

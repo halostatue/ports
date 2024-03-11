@@ -1,0 +1,45 @@
+--- etc/git-extras.fish.orig	2024-03-10 23:32:45
++++ etc/git-extras.fish	2024-03-10 23:33:53
+@@ -8,8 +8,6 @@
+     "brv:List branches sorted by their last commit date" \
+     "bulk:Run git commands on multiple repositories" \
+     "changelog:Generate a changelog report" \
+-    "clear-soft:Soft clean up a repository" \
+-    "clear:Rigorously clean up a repository" \
+     "coauthor:Add a co-author to the last commit" \
+     "commits-since:Show commit logs since some date" \
+     "contrib:Show user's contributions" \
+@@ -24,11 +22,8 @@
+     "delta:Lists changed files" \
+     "effort:Show effort statistics on file(s)" \
+     "feature:Create/Merge feature branch" \
+-    "force-clone:overwrite local repositories with clone" \
+-    "fork:Fork a repo on github" \
+     "fresh-branch:Create fresh branches" \
+     "get:Clone a repository in a directory" \
+-    "gh-pages:Create the GitHub Pages branch" \
+     "graft:Merge and destroy a given branch" \
+     "guilt:calculate change between two revisions" \
+     "ignore-io:Get sample gitignore file" \
+@@ -38,21 +33,12 @@
+     "lock:Lock a file excluded from version control" \
+     "locked:ls files that have been locked" \
+     "merge-into:Merge one branch into another" \
+-    "merge-repo:Merge two repo histories" \
+     "missing:Show commits missing from another branch" \
+-    "mr:Checks out a merge request locally" \
+-    "obliterate:rewrite past commits to remove some files" \
+-    "paste:Send patches to pastebin for chat conversations" \
+-    "pr:Checks out a pull request locally" \
+-    "psykorebase:Rebase a branch with a merge commit" \
+-    "pull-request:Create pull request for GitHub project" \
+-    "reauthor:Rewrite history to change author's identity" \
+     "rebase-patch:Rebases a patch" \
+     "release:Commit, tag and push changes to the repository" \
+     "rename-branch:rename local branch and push to remote" \
+     "rename-remote:Rename a remote" \
+     "rename-tag:Rename a tag" \
+-    "repl:git read-eval-print-loop" \
+     "reset-file:Reset one file" \
+     "root:show path of root" \
+     "scp:Copy files to SSH compatible git-remote" \

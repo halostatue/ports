@@ -1,0 +1,72 @@
+--- bin/git-extras.orig	2023-10-29 06:52:56
++++ bin/git-extras	2024-03-10 23:43:04
+@@ -1,54 +1,24 @@
+ #!/usr/bin/env bash
+ 
+ VERSION="7.1.0"
+-INSTALL_SCRIPT="https://raw.githubusercontent.com/tj/git-extras/main/install.sh"
+ 
+ update() {
+-  local bin="$(command -v git-extras)"
+-  local prefix=${bin%/*/*}
+-  local orig=$PWD
+-
+-  curl -s $INSTALL_SCRIPT | PREFIX="$prefix" bash /dev/stdin \
+-    && cd "$orig" \
+-    && echo "... updated git-extras $VERSION -> $(git extras --version)"
++  echo "This git-extras installation is managed by MacPorts."
++  echo "If you'd like to update git-extras, run the following:"
++  echo
++  echo "  sudo port upgrade git-some-extras"
++  echo
++  return 1
+ }
+ 
+-updateForWindows() {
+-  local bin="$(command -v git-extras)"
+-  local prefix=${bin%/*/*}
+-  local orig=$PWD
+-
+-  # we need to clean up /tmp manually on windows
+-  cd /tmp \
+-    && rm -rf ./git-extras \
+-    && echo "Setting up 'git-extras'...." \
+-    && git clone https://github.com/tj/git-extras.git &> /dev/null \
+-    && cd git-extras \
+-	&& git checkout \
+-        $(git describe --tags $(git rev-list --tags --max-count=1)) \
+-        &> /dev/null \
+-	&& ./install.cmd "$prefix" \
+-	&& cd "$orig" \
+-	&& echo "... updated git-extras $VERSION -> $(git extras --version)"
+-  rm -rf /tmp/git-extras &> /dev/null
+-}
+-
+ case "$1" in
+-  -v|--version)
+-    echo $VERSION && exit 0
+-    ;;
+-  update)
+-    platform=$(uname -s)
+-    if [ "${platform::9}" = "CYGWIN_NT" ] || \
+-      [ "${platform::5}" = "MINGW" ] || \
+-      [ "${platform::7}" = "MSYS_NT" ]
+-    then
+-      updateForWindows
+-    else
+-      update
+-    fi
+-    ;;
+-  *)
+-    git extras --help
+-    ;;
++-v | --version)
++  echo $VERSION && exit 0
++  ;;
++update)
++  update
++  ;;
++*)
++  git extras --help
++  ;;
+ esac
