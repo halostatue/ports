@@ -1,9 +1,9 @@
---- bin/git-extras.orig	2023-10-29 06:52:56
-+++ bin/git-extras	2024-03-10 23:43:04
-@@ -1,54 +1,24 @@
+--- bin/git-extras.orig	2024-04-23 13:40:11
++++ bin/git-extras	2024-04-23 13:41:52
+@@ -1,52 +1,22 @@
  #!/usr/bin/env bash
  
- VERSION="7.1.0"
+ VERSION="7.2.0"
 -INSTALL_SCRIPT="https://raw.githubusercontent.com/tj/git-extras/main/install.sh"
  
  update() {
@@ -14,8 +14,8 @@
 -  curl -s $INSTALL_SCRIPT | PREFIX="$prefix" bash /dev/stdin \
 -    && cd "$orig" \
 -    && echo "... updated git-extras $VERSION -> $(git extras --version)"
-+  echo "This git-extras installation is managed by MacPorts."
-+  echo "If you'd like to update git-extras, run the following:"
++  echo "This git-extras (sub) installation is managed by MacPorts."
++  echo "If you'd like to update this git-extras, run the following:"
 +  echo
 +  echo "  sudo port upgrade git-some-extras"
 +  echo
@@ -43,10 +43,10 @@
 -}
 -
  case "$1" in
--  -v|--version)
--    echo $VERSION && exit 0
--    ;;
--  update)
+   -v|--version)
+     echo $VERSION && exit 0
+     ;;
+   update)
 -    platform=$(uname -s)
 -    if [ "${platform::9}" = "CYGWIN_NT" ] || \
 -      [ "${platform::5}" = "MINGW" ] || \
@@ -56,17 +56,7 @@
 -    else
 -      update
 -    fi
--    ;;
--  *)
--    git extras --help
--    ;;
-+-v | --version)
-+  echo $VERSION && exit 0
-+  ;;
-+update)
-+  update
-+  ;;
-+*)
-+  git extras --help
-+  ;;
- esac
++    update
+     ;;
+   *)
+     git extras --help
