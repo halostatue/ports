@@ -1,0 +1,21 @@
+--- Makefile.orig	2024-07-18 00:46:15
++++ Makefile	2024-07-18 00:59:45
+@@ -1,5 +1,5 @@
+ PKG_TARGET=x86_64-unknown-linux-musl
+-PKG_TARGET_DARWIN=x86_64-apple-darwin
++PKG_TARGET_DARWIN=@@TRIPLE@@
+ RUST_VERSION ?= $(shell rustc --version | cut -d ' ' -f2)
+ 
+ PKG_BIN_PATH=./bin
+@@ -120,11 +120,4 @@
+ 	@rustc -vV
+ 	@echo "Compiling Darwin release binary for $(PKG_TARGET_DARWIN)..."
+ 	@cargo build --release --target $(PKG_TARGET_DARWIN)
+-	@du -sh ./target/$(PKG_TARGET_DARWIN)/release/$(PKG_NAME)
+-
+-	@echo "Shrinking Darwin release binary..."
+-	@x86_64-apple-darwin20.2-strip ./target/$(PKG_TARGET_DARWIN)/release/$(PKG_NAME)
+-	@du -sh ./target/$(PKG_TARGET_DARWIN)/release/$(PKG_NAME)
+-	@mkdir -p $(PKG_BIN_PATH)/$(PKG_TARGET_DARWIN)/
+-	@cp ./target/$(PKG_TARGET_DARWIN)/release/$(PKG_NAME) $(PKG_BIN_PATH)/$(PKG_TARGET_DARWIN)/
+ .PHONY: prod.release.darwin
