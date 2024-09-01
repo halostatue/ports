@@ -1,0 +1,27 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/leg100/pug 0.5.1 v
+categories          devel sysutil
+maintainers         {@halostatue macports.halostatue.ca:austin} \
+                    openmaintainer
+license             MPL-2
+
+description         Drive terraform at terminal velocity
+
+long_description    ${description}
+
+checksums           ${distname}${extract.suffix} \
+                    rmd160  e73087c9aa3857438b63f08bd2f0568781d906ca \
+                    sha256  bb35a5441bceeb550ca894a5556b32e9c4e441fa2683c1b5fba64af90d7c2cd9 \
+                    size    8775788
+
+go.offline_build false
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
+}
+
+
