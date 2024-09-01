@@ -1,0 +1,29 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/estesp/manifest-tool 2.1.7 v
+categories          devel
+maintainers         {macports.halostatue.ca:austin @halostatue} \
+                    openmaintainer
+license             Apache-2
+
+description         Command line tool to create and query container image manifest \
+                    list/indexes
+
+long_description    {*}{
+  manifest-tool is a command line utility used to view or push multi-platform container
+  image references located in an OCIv1 or Docker v2.2 compatible container registry.
+}
+
+checksums           rmd160  71de7462040d6389e8be42fd5595ba79dea79240 \
+                    sha256  01427be5b5e37afa62e181ad55f55bf112b444ef51969d97445a52c4f8dc41b5 \
+                    size    2483808
+
+build.cmd           make
+build.args          binary
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
+}
