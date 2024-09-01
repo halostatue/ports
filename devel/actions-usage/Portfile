@@ -1,0 +1,54 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/self-actuated/actions-usage 0.1.2 v
+github.tarball_from tarball
+revision            0
+
+categories          devel
+license             MIT
+
+maintainers         {macports.halostatue.ca:austin @halostatue} \
+                    openmaintainer
+
+description         Find your total usage on GitHub Actions
+
+long_description    {*}${description}
+
+checksums           ${distname}${extract.suffix} \
+                    rmd160  8be2ce9b1b10831378b5905a7610d55f334683a9 \
+                    sha256  633a19988bb4ce4d694deb7e31632783fe0d5e1e92505653c0c19419abc68a1e \
+                    size    9354
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
+}
+
+
+go.vendors          golang.org/x/oauth2 \
+                        lock    v0.19.0 \
+                        rmd160  ccd5caa64ebcdd4190827ef5aa75b4bf5bae2370 \
+                        sha256  4b1a69e5409d0f348fb1e7c57b6dc5178d93ff3d87ed32826433c742a068aeac \
+                        size    98395 \
+                    github.com/google/go-querystring \
+                        lock    v1.1.0 \
+                        rmd160  d74c139ec42fee88039b05bd10924f560467fac7 \
+                        sha256  95f52c816370b06a38bb827367c1acb5b1a0aa2e8d425f94ce2d32afe0c57510 \
+                        size    10418 \
+                    github.com/google/go-github \
+                        lock    v61.0.0 \
+                        rmd160  e4d816b1fc217186bca17f7bd6c621e8e8de151c \
+                        sha256  a506d581c76d9d04683809749acb2d59eadbbc75dfef82d8e240936770ed1175 \
+                        size    686207 \
+                    github.com/google/go-cmp \
+                        lock    v0.6.0 \
+                        rmd160  2c9f5dab93f8a0895591466fe4a07c5dd9166ae2 \
+                        sha256  0d550825fae514f8a947ab7e42fcb874f509d9cbfa3ad2711d7570a25f31571a \
+                        size    104795 \
+                    github.com/docker/go-units \
+                        lock    v0.5.0 \
+                        rmd160  43b8579cfcb0af5377e0af531d203c16c99f7bc1 \
+                        sha256  6fb6c155c6d1a61059a3ec82e790dc6bfe87bff4d72cfa7c23f5c76303240bc0 \
+                        size    12244
