@@ -7,7 +7,7 @@ go.setup            github.com/RoseSecurity/Terramaid 1.11.0 v
 
 homepage            https://github.com/RoseSecurity/Terramaid
 categories          devel
-maintainers         {@halostatue macports.halostatue.ca:austin} \
+maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 license             Apache-2
 
@@ -21,7 +21,7 @@ checksums           ${distname}${extract.suffix} \
                     sha256  6a20375dfa4cb4a8ce46b61cb98047d58b34aba673c282c189ef5bd72565d248 \
                     size    704418
 
-go.offline_build false
+go.offline_build no
 
 destroot {
     xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/

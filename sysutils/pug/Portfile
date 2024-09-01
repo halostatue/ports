@@ -5,7 +5,7 @@ PortGroup           golang 1.0
 
 go.setup            github.com/leg100/pug 0.5.1 v
 categories          devel sysutil
-maintainers         {@halostatue macports.halostatue.ca:austin} \
+maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 license             MPL-2
 
@@ -18,7 +18,7 @@ checksums           ${distname}${extract.suffix} \
                     sha256  bb35a5441bceeb550ca894a5556b32e9c4e441fa2683c1b5fba64af90d7c2cd9 \
                     size    8775788
 
-go.offline_build false
+go.offline_build no
 
 destroot {
     xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/

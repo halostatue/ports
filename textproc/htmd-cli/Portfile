@@ -9,7 +9,7 @@ revision            0
 
 categories          textproc
 license             Apache-2
-maintainers         {halostatue @halostatue} \
+maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 
 description         A turndown.js-inspired HTML to Markdown converter written in Rust

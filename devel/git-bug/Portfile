@@ -3,73 +3,53 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/MichaelMure/git-bug 0.7.2 v
-
-homepage            https://github.com/MichaelMure/git-bug
+go.setup            github.com/MichaelMure/git-bug 0.8.0 v
 
 description         Distributed, offline-first bug tracker embedded in git, with bridges
 
-long_description    ${name} is distributed, offline-first bug tracker embedded in git \
-                    that can bridge to other bug trackers including GitHub, GitLab, and \
-                    Jira. This is now more than a proof of concept, but still not fully \
-                    stable. Expect dragons and unfinished business.
+long_description    {*}{
+    ${name} is distributed, offline-first bug tracker embedded in git that can bridge to
+    other bug trackers including GitHub, GitLab, and Jira. This is now more than a proof
+    of concept, but still not fully stable. Expect dragons and unfinished business.
+}
+
+go.offline_build    no
 
 categories          devel
 license             GPL-3+
-maintainers         {@halostatue macports.halostatue.ca:austin} \
+maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 
 checksums           ${distname}${extract.suffix} \
-                    rmd160  09fdc8eb849c8f9494088afc8bb71fa59f0b8de5 \
-                    sha256  4138689baa86f9ffbf169af8d79062ad406aeadc106df4136525d45cfd0b80a2 \
-                    size    1933674
+                    rmd160  764616e981b5a1bd20dbf97bb4900a4c3124bef6 \
+                    sha256  584f7efa7c9ee419b6c6f03ef3824ebc8fc9c13bfa31388d496c57c54fd08aaf \
+                    size    2557823
 
-depends_build       port:npm6 port:openssl11
+depends_build       bin:npm:npm10
 
-set gitbug_commands "${go.package}/commands"
-set gitbug_ldflags {-X ${gitbug_commands}.GitCommit=${github.tag_prefix}${go.version}  \
-    -X ${gitbug_commands}.GitLastTag=${github.tag_prefix}${go.version} \
-    -X ${gitbug_commands}.GitExactTag=${github.tag_prefix}${go.version}}
+patchfiles-append   macports-Makefile.diff
 
-build {
-    system -W ${worksrcpath}/webui "${build.env} npm ci"
-    system -W ${worksrcpath}/webui "${build.env} npm run generate"
-    system -W ${worksrcpath}/webui "${build.env} node node_modules/.bin/react-scripts build"
-    system -W ${worksrcpath} "${build.env} make pack-webui"
-    system -W ${worksrcpath} "${build.env} ${go.bin} generate"
-    system -W ${worksrcpath} "${build.env} ${go.bin} -ldflags \"${gitbug_ldflags}\" ."
-}
-
-set gitbug_manfiles {git-bug-add git-bug-bridge-auth-add-token git-bug-bridge-auth-rm \
-    git-bug-bridge-auth-show git-bug-bridge-auth git-bug-bridge-configure git-bug-bridge-pull \
-    git-bug-bridge-push git-bug-bridge-rm git-bug-bridge git-bug-commands git-bug-comment-add \
-    git-bug-comment-edit git-bug-comment git-bug-deselect git-bug-label-add git-bug-label-rm \
-    git-bug-label git-bug-ls-id git-bug-ls-label git-bug-ls git-bug-pull git-bug-push git-bug-rm \
-    git-bug-select git-bug-show git-bug-status-close git-bug-status-open git-bug-status \
-    git-bug-termui git-bug-title-edit git-bug-title git-bug-user-adopt git-bug-user-create \
-    git-bug-user-ls git-bug-user git-bug-version git-bug-webui git-bug}
+build.cmd           make
+build.args          build
 
 destroot {
     xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
 
     # Install bash completion
     xinstall -d  ${destroot}${prefix}/share/bash-completion/completions
-    xinstall -m 0644 ${worksrcpath}/misc/completion/${name} \
+    xinstall -m 0644 ${worksrcpath}/misc/completion/bash/${name} \
         ${destroot}${prefix}/share/bash-completion/completions/${name}
 
     # Install zsh completion
     xinstall -d  ${destroot}${prefix}/share/zsh/site-functions
-    xinstall -m 0644 ${worksrcpath}/misc/completion/${name} \
+    xinstall -m 0644 ${worksrcpath}/misc/completion/zsh/${name} \
         ${destroot}${prefix}/share/zsh/site-functions/_${name}
 
     # Install fish completion
     xinstall -d ${destroot}${prefix}/share/fish/vendor_completions.d
-    xinstall -m 0644 ${worksrcpath}/misc/completion/${name} \
+    xinstall -m 0644 ${worksrcpath}/misc/completion/fish/${name} \
         ${destroot}${prefix}/share/fish/vendor_completions.d/${name}.fish
 
-    xinstall ${worksrcpath}/doc/man/${cmd}.1 ${destroot}${prefix}/share/man/man1
-
-    foreach cmd ${gitbug_manfiles} {
-        xinstall ${worksrcpath}/doc/man/${cmd}.1 ${destroot}${prefix}/share/man/man1
-    }
+    xinstall -m 0444 {*}[glob ${worksrcpath}/doc/man/*.1] \
+        ${destroot}${prefix}/share/man/man1
 }

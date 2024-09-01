@@ -1,0 +1,37 @@
+--- Makefile.orig	2024-09-01 13:17:14
++++ Makefile	2024-09-01 13:32:43
+@@ -1,8 +1,8 @@
+ all: build
+ 
+-GIT_COMMIT:=$(shell git rev-list -1 HEAD)
+-GIT_LAST_TAG:=$(shell git describe --abbrev=0 --tags)
+-GIT_EXACT_TAG:=$(shell git name-rev --name-only --tags HEAD)
++GIT_COMMIT:=@@GIT_COMMIT@@
++GIT_LAST_TAG:=@@GIT_COMMIT@@
++GIT_EXACT_TAG:=@@GIT_COMMIT@@
+ UNAME_S := $(shell uname -s)
+ XARGS:=xargs -r
+ ifeq ($(UNAME_S),Darwin)
+@@ -15,7 +15,7 @@
+ 	-X ${COMMANDS_PATH}.GitExactTag=${GIT_EXACT_TAG}
+ 
+ .PHONY: build
+-build:
++build: pack-webui
+ 	go generate
+ 	go build -ldflags "$(LDFLAGS)" .
+ 
+@@ -49,8 +49,12 @@
+ test:
+ 	go test -v -bench=. ./...
+ 
++.PHONY: npm-install
++npm-install:
++	npm --prefix webui ci
++
+ .PHONY: pack-webui
+-pack-webui:
++pack-webui: npm-install
+ 	npm run --prefix webui build
+ 	go run webui/pack_webui.go
+ 

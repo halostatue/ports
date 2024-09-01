@@ -9,7 +9,7 @@ revision            0
 
 categories          sysutils
 license             Apache-2
-maintainers         {halostatue @halostatue} \
+maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 
 description         A simple and fast package manager for the Fish shell written in Rust
