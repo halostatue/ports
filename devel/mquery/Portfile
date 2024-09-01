@@ -1,0 +1,48 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/estesp/mquery 0.5.0 v
+categories          devel
+maintainers         {macports.halostatue.ca:austin @halostatue} \
+                    openmaintainer
+license             Apache-2
+
+description         "Multi-platform OCI registry image query utility"
+
+long_description    {*}{
+  A simple utility and serverless-based backend for querying Docker v2 & OCI v1 container
+  images and reporting on manifest list/OCI index multi-platform image support.
+}
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
+}
+
+checksums           ${distname}${extract.suffix} \
+                        rmd160  cdc981018ffc48154edce697f68c032e3efe00f5 \
+                        sha256  fa66227e02f6a9853859e44bddfa36af8b20b3b9a7f65df7af8ceae7e27c9d2e \
+                        size    2678726
+
+go.vendors          github.com/opencontainers/image-spec \
+                        lock    v1.0.2 \
+                        rmd160  c81a1b71e8e90bc5fbd3ea0f0c50b0f5f4f5a553 \
+                        sha256  0bbb4acffd16bc0d257aaf30dc216d5aa99ed837df89aa7dd2408c561c2fa9a3 \
+                        size    138762 \
+                    github.com/opencontainers/go-digest \
+                        lock    v1.0.0 \
+                        rmd160  8a4108c4ab0b11d2bb6e82021f5a7bb0fdee2e6f \
+                        sha256  7c93509fe4e49a67f5e9147534927d5efa662c852e593ab08ab50fc7228ce734 \
+                        size    24469 \
+                    github.com/google/go-querystring \
+                        lock    v1.0.0 \
+                        rmd160  48593728f6bf361fa168bdc87737ee30de24f34b \
+                        sha256  0add5428914c2a378cd9e6e120a4b1e84d69df504b983f99a86aea98a52c5a57 \
+                        size    7536 \
+                    github.com/dghubble/sling \
+                        lock    v1.3.0 \
+                        rmd160  e8947eb7b0456c2ff129cabf34b39e35a0a0da4b \
+                        sha256  c6127a1beca2487000a162dc2797f939987be4c9bc7a24a58e37e114dc42cab2 \
+                        size    17780
+
