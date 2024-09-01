@@ -1,0 +1,22 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/laurent22/massren 1.5.6 v
+categories          sysutils
+maintainers         {macports.halostatue.ca:austin @halostatue} \
+                    openmaintainer
+license             MIT
+
+description         Easily rename multiple files using your text editor
+
+long_description    {*}${description}
+
+checksums           rmd160  954623ea9b47b5e99d14bb306388c18ce4352c44 \
+                    sha256  bdf6ba82254eb2c3d8a82a2e04cd9f7537f1e1d57005633d5f4f8fc1bfec0314 \
+                    size    1540968
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
+}
