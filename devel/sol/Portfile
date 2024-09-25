@@ -1,0 +1,32 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/noperator/sol 0.0.1
+git.branch          7762c5115dd899bfac10d2f46d066de3c0e81774
+github.tarball_from archive
+revision            0
+
+categories          devel
+maintainers         {macports.halostatue.ca:austin @halostatue} \
+                    openmaintainer
+license             Apache-2
+
+description         A de-minifier (formatter, exploder, beautifier) \
+                    for shell one-liners
+
+long_description    {*}${description}
+
+checksums           ${distname}${extract.suffix} \
+                    rmd160  e9e78d3517fa4dba9a518117a7179802377b42ef \
+                    sha256  e72473ad928528216d98107275f7a402cae5f36f8fb0c65032ebee5c19e04f61 \
+                    size    37603
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
+}
+
+go.offline_build    no
+
+build.args              ./cmd/sol
