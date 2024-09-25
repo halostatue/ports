@@ -1,0 +1,32 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/noperator/jqfmt 0.0.1
+git.branch          8fc6f864c295e6bd6b08f36f503b3d809270da61
+github.tarball_from archive
+revision            0
+
+categories          devel
+maintainers         {macports.halostatue.ca:austin @halostatue} \
+                    openmaintainer
+license             Apache-2
+
+description         A de-minifier (formatter, exploder, beautifier) \
+                    for shell one-liners
+
+long_description    {*}${description}
+
+checksums           ${distname}${extract.suffix} \
+                    rmd160  d83ac7f6502e49dd1bd3f80546edcd8ec1e116c1 \
+                    sha256  57250ad45a015db97d5e989674dbbcb8e7c97017da3a622e004c3b83a561bdd3 \
+                    size    15534
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
+}
+
+go.offline_build    no
+
+build.args              ./cmd/jqfmt
