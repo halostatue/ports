@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           golang 1.0
 
 go.setup            github.com/estesp/mquery 0.5.0 v
-categories          devel
+categories          sysutils
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 license             Apache-2

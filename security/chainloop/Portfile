@@ -7,7 +7,7 @@ go.setup            github.com/chainloop-dev/chainloop 0.96.4 v
 github.tarball_from archive
 revision            0
 
-categories          devel security
+categories          security
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 license             Apache-2

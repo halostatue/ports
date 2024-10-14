@@ -7,7 +7,7 @@ PortGroup           cargo 1.0
 github.setup        shopify shadowenv 2.1.2
 revision            0
 
-categories          devel
+categories          sysutils
 license             MIT
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer

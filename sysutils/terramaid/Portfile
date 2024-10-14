@@ -4,9 +4,10 @@ PortSystem          1.0
 PortGroup           golang 1.0
 
 go.setup            github.com/RoseSecurity/Terramaid 1.11.0 v
+name                terramaid
 
 homepage            https://github.com/RoseSecurity/Terramaid
-categories          devel
+categories          sysutils
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 license             Apache-2

@@ -7,7 +7,7 @@ go.setup            github.com/reproducible-containers/diffoci 0.1.5 v
 github.tarball_from archive
 revision            0
 
-categories          devel
+categories          sysutils
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 license             Apache-2

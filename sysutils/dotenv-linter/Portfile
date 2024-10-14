@@ -7,7 +7,7 @@ PortGroup           cargo 1.0
 github.setup        dotenv-linter dotenv-linter 3.3.0 v
 revision            0
 
-categories          devel
+categories          sysutils
 license             MIT
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer

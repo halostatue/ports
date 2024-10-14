@@ -4,8 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-
-github.setup        jhspetersson git-task 0.1.1
+github.setup        jhspetersson git-task 0.1.2
 revision            0
 
 categories          devel
@@ -29,9 +28,9 @@ destroot {
 }
 
 checksums           ${distname}${extract.suffix} \
-                    rmd160  1a9c2fceefebf387ef9bda387b4b2e497da05b16 \
-                    sha256  827f1f49cb70be5bcd9da54e2dfd44397ff1d75a0e3268a7bc95c4995d0acdf1 \
-                    size    611113
+                    rmd160  1ec0d7bc7175a65a7a1b7b4a3b36022ad638234b \
+                    sha256  8744ab36a164ce707dca6ac16ac32eedfe52b70fc97e898fe42c91f5c198ff9c \
+                    size    610855
 
 cargo.crates \
     addr2line                       0.24.1  f5fb1d8e4442bd405fdfd1dacb42792696b0cf9cb15882e5d097b742a676d375 \
@@ -97,7 +96,7 @@ cargo.crates \
     getrandom                       0.2.15  c4567c8db10ae91089c99af84c68c38da3ec2f087c3f82960bcdbf3656b6f4d7 \
     gimli                           0.31.0  32085ea23f3234fc7846555e85283ba4de91e21016dc0455a16286d87a292d64 \
     git2                            0.19.0  b903b73e45dc0c6c596f2d37eccece7c1c8bb6e4407b001096387c63d0d93724 \
-    gitlab                        0.1704.0  96809d4726430071464002f401b3cccff970b97d4c1ba7ab68cf7b4d3ed19a0a \
+    gitlab                        0.1704.1  7ddee594ea054d39177e1420ddfabb7cd04b9e367093793d0d8e252bedb862bd \
     graphql-introspection-query      0.2.0  7f2a4732cf5140bd6c082434494f785a19cfb566ab07d1382c3671f5812fed6d \
     graphql-parser                   0.4.0  d2ebc8013b4426d5b81a4364c419a95ed0b404af2b82e2457de52d9348f0e474 \
     graphql_client                  0.14.0  a50cfdc7f34b7f01909d55c2dcb71d4c13cbcbb4a1605d6c8bd760d654c1144b \
@@ -297,3 +296,4 @@ cargo.crates \
     zerocopy                        0.7.35  1b9b4fd18abc82b8136838da5d50bae7bdea537c574d8dc1a34ed098d6c166f0 \
     zerocopy-derive                 0.7.35  fa4f8080344d4671fb4e831a13ad1e68092748387dfc4f55e356242fae12ce3e \
     zeroize                          1.8.1  ced3678a2879b30306d323f4542626697a464a97c0a07c9aebf7ebca65cd4dde
+

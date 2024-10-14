@@ -7,7 +7,7 @@ PortGroup           cargo 1.0
 github.setup        Kampfkarren selene 0.27.1
 revision            0
 
-categories          devel, lua
+categories          devel lua
 license             MPL-2
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer

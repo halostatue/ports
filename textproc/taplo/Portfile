@@ -7,7 +7,7 @@ PortGroup           cargo 1.0
 github.setup        tamasfe taplo 0.9.3
 revision            0
 
-categories          devel
+categories          textproc
 license             MIT
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer

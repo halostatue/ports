@@ -7,7 +7,7 @@ PortGroup           cargo 1.0
 github.setup        mthom scryer-prolog 0.9.4 v
 revision            0
 
-categories          devel
+categories          lang
 license             3BSD
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer

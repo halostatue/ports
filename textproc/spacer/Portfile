@@ -7,7 +7,7 @@ PortGroup           cargo 1.0
 github.setup        samwho spacer 0.3.0 v
 revision            0
 
-categories          devel
+categories          textproc
 license             MIT
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer

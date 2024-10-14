@@ -4,9 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-
 github.setup        gitext-rs git-branch-stash 0.11.1 v
-name                git-branch-stash
 revision            0
 
 categories          devel

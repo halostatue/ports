@@ -7,7 +7,7 @@ go.setup            github.com/self-actuated/actions-usage 0.1.2 v
 github.tarball_from tarball
 revision            0
 
-categories          devel
+categories          sysutils
 license             MIT
 
 maintainers         {macports.halostatue.ca:austin @halostatue} \
