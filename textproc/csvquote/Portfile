@@ -1,0 +1,27 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           github   1.0
+PortGroup           makefile 1.0
+
+github.setup        dbro csvquote 0.1.5 v
+github.tarball_from archive
+revision            0
+
+description         Enables common unix utlities like cut, awk, wc, head to \
+                    work correctly with csv data containing delimiters and \
+                    newlines and asynchronous execution.
+
+categories          textproc
+license             MIT
+maintainers         {macports.halostatue.ca:austin @halostatue} \
+                    openmaintainer
+platforms           darwin freebsd linux
+
+checksums           rmd160  527316e58901f82e867f156290217a91f30264fd \
+                    sha256  2e83c902f33efccaec55707b025c6da5367f786d5a117eaf386a6e17741b9d40 \
+                    size    6933
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
+}
