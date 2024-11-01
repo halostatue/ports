@@ -1,5 +1,5 @@
---- etc/git-extras.fish.orig	2024-03-10 23:32:45
-+++ etc/git-extras.fish	2024-03-10 23:33:53
+--- etc/git-extras.fish.orig	2024-10-31 23:24:09
++++ etc/git-extras.fish	2024-10-31 23:24:53
 @@ -8,8 +8,6 @@
      "brv:List branches sorted by their last commit date" \
      "bulk:Run git commands on multiple repositories" \
@@ -21,7 +21,7 @@
      "graft:Merge and destroy a given branch" \
      "guilt:calculate change between two revisions" \
      "ignore-io:Get sample gitignore file" \
-@@ -38,21 +33,12 @@
+@@ -38,22 +33,13 @@
      "lock:Lock a file excluded from version control" \
      "locked:ls files that have been locked" \
      "merge-into:Merge one branch into another" \
@@ -37,6 +37,7 @@
      "rebase-patch:Rebases a patch" \
      "release:Commit, tag and push changes to the repository" \
      "rename-branch:rename local branch and push to remote" \
+     "rename-file:rename a file or directory and ensure Git recognizes the change, regardless of filesystem case-sensitivity" \
      "rename-remote:Rename a remote" \
      "rename-tag:Rename a tag" \
 -    "repl:git read-eval-print-loop" \

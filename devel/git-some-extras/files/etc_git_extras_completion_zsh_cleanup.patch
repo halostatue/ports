@@ -1,6 +1,6 @@
---- etc/git-extras-completion.zsh.orig	2024-03-10 23:31:22
-+++ etc/git-extras-completion.zsh	2024-03-10 23:32:37
-@@ -122,12 +122,6 @@
+--- etc/git-extras-completion.zsh.orig	2024-10-31 23:22:26
++++ etc/git-extras-completion.zsh	2024-10-31 23:23:20
+@@ -127,12 +127,6 @@
          '(-l --list)'{-l,--list}'[list commits]' \
  }
  
@@ -13,7 +13,7 @@
  _git-coauthor() {
      _arguments \
          ':co-author[co-author to add]:__gitex_author_names' \
-@@ -362,8 +356,6 @@
+@@ -375,8 +369,6 @@
      brv:'list branches sorted by their last commit date'\
      changelog:'generate a changelog report' \
      chore:'create chore branch' \
@@ -22,7 +22,7 @@
      coauthor:'add a co-author to the last commit' \
      commits-since:'show commit logs since some date' \
      contrib:'show user contributions' \
-@@ -378,11 +370,8 @@
+@@ -391,11 +383,8 @@
      effort:'show effort statistics on file(s)' \
      extras:'awesome git utilities' \
      feature:'create/merge feature branch' \
@@ -34,7 +34,7 @@
      graft:'merge and destroy a given branch' \
      guilt:'calculate change between two revisions' \
      ignore-io:'get sample gitignore file' \
-@@ -391,24 +380,14 @@
+@@ -404,17 +393,8 @@
      local-commits:'list local commits' \
      lock:'lock a file excluded from version control' \
      locked:'ls files that have been locked' \
@@ -52,7 +52,8 @@
      rebase-patch:'rebases a patch' \
      refactor:'create refactor branch' \
      release:'commit, tag and push changes to the repository' \
-     rename-branch:'rename a branch' \
+@@ -422,7 +402,6 @@
+     rename-file:'rename a file or directory and ensure Git recognizes the change, regardless of filesystem case-sensitivity' \
      rename-tag:'rename a tag' \
      rename-remote:'rename a remote' \
 -    repl:'git read-eval-print-loop' \
