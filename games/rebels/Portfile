@@ -4,8 +4,8 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        ricott1 rebels-in-the-sky v1.0.22
-revision            0
+github.setup        ricott1 rebels-in-the-sky 1.0.23 v
+revision            1
 set name            rebels
 
 categories          textproc
@@ -30,12 +30,12 @@ destroot {
     xinstall -m 0755 "${worksrcpath}/target/${cargo_triple}/release/${name}" "${destroot}${prefix}/bin/"
 }
 
-patchfiles          Cargo.lock.patch
+# patchfiles          Cargo.lock.patch
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  e9fdeaaff92a9d3bbd40bea0e7edf5f56b4b503b \
-                    sha256  2a4cdd5ea7aa26a1c4418b24c143534b990f4c1389ef8bbc9929577f7d7ff16a \
-                    size    9748213
+                    rmd160  5e125a03bcf6987ade22ad0e06241f9c51441433 \
+                    sha256  5785108f7361f1ea5c06497a4a87e72ddebdff20ccf03229dbc46d75220cae90 \
+                    size    9749207
 
 cargo.crates \
     ab_glyph                           0.2.28  79faae4620f45232f599d9bc7b290f88247a0834162c4495ab2f02d60004adfb \
@@ -493,7 +493,7 @@ cargo.crates \
     ssh-key                             0.6.6  ca9b366a80cf18bb6406f4cf4d10aebfb46140a8c0c33f666a144c5c76ecbafc \
     stable_deref_trait                  1.2.0  a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3 \
     static_assertions                   1.1.0  a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f \
-    stream-download                    0.12.0  2efb56f4fe68892bc1dd731a76faccab50f483d1c7238db4e91f887984320e2f \
+    stream-download                    0.13.1  81221d0a002314782fac02988a87198110f462e995cea349508e22b993554ee6 \
     strsim                             0.11.0  5ee073c9e4cd00e28217186dbe12796d692868f432bf2e97ee73bed0c56dfa01 \
     strum                              0.26.3  8fec0f0aef304996cf250b31b5a10dee7980c85da9d759361292b8bca5a18f06 \
     strum_macros                       0.26.4  4c6bee85a5a24955dc440386795aa378cd9cf82acd5f764469152d2270e581be \
@@ -560,7 +560,7 @@ cargo.crates \
     unsigned-varint                     0.8.0  eb066959b24b5196ae73cb057f45598450d2c5f71460e98c49b738086eff9c06 \
     untrusted                           0.7.1  a156c684c91ea7d62626509bce3cb4e1d9ed5c4d978f7b4352658f96a4c26b4a \
     untrusted                           0.9.0  8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1 \
-    url                                 2.5.3  8d157f1b96d14500ffdc1f10ba712e780825526c03d9a49b4d0324b0d9113ada \
+    url                                 2.5.4  32f8b686cadd1473f4bd0117a5d28d36b1ade384ea9b5069a1c40aefed7fda60 \
     utf16_iter                          1.0.5  c8232dd3cdaed5356e0f716d285e4b40b932ac434100fe9b7e0e8e935b9e6246 \
     utf8_iter                           1.0.4  b6c140620e7ffbb22c2dee59cafe6084a59b5ffc27a8859a5f0d494b5d52b6be \
     utf8parse                           0.2.1  711b9620af191e0cdc7468a8d14e709c3dcdb115b36f838e601583af800a370a \
@@ -655,3 +655,4 @@ cargo.crates \
     zune-core                          0.4.12  3f423a2c17029964870cfaabb1f13dfab7d092a62a29a89264f4d36990ca414a \
     zune-inflate                       0.2.54  73ab332fe2f6680068f3582b16a24f90ad7096d5d39b974d1c0aff0125116f02 \
     zune-jpeg                          0.4.13  16099418600b4d8f028622f73ff6e3deaabdff330fb9a2a131dea781ee8b0768
+

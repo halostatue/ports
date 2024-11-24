@@ -1,5 +1,5 @@
---- Cargo.lock.orig	2024-11-22 23:34:13
-+++ Cargo.lock	2024-11-22 23:35:06
+--- Cargo.lock.orig	2024-11-24 17:49:39
++++ Cargo.lock	2024-11-24 17:49:26
 @@ -1728,7 +1728,7 @@
   "ipnet",
   "once_cell",
@@ -77,7 +77,7 @@
  [[package]]
  name = "rebels"
 -version = "1.0.21"
-+version = "1.0.22"
++version = "1.0.23"
  dependencies = [
   "anyhow",
   "async-trait",
@@ -110,6 +110,18 @@
  ]
  
  [[package]]
+@@ -4981,9 +4971,9 @@
+ 
+ [[package]]
+ name = "stream-download"
+-version = "0.12.0"
++version = "0.13.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2efb56f4fe68892bc1dd731a76faccab50f483d1c7238db4e91f887984320e2f"
++checksum = "81221d0a002314782fac02988a87198110f462e995cea349508e22b993554ee6"
+ dependencies = [
+  "bytes",
+  "educe",
 @@ -5319,7 +5309,7 @@
   "parking_lot",
   "pin-project-lite",
@@ -119,3 +131,15 @@
   "tokio-macros",
   "windows-sys 0.52.0",
  ]
+@@ -5624,9 +5614,9 @@
+ 
+ [[package]]
+ name = "url"
+-version = "2.5.3"
++version = "2.5.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8d157f1b96d14500ffdc1f10ba712e780825526c03d9a49b4d0324b0d9113ada"
++checksum = "32f8b686cadd1473f4bd0117a5d28d36b1ade384ea9b5069a1c40aefed7fda60"
+ dependencies = [
+  "form_urlencoded",
+  "idna 1.0.3",
