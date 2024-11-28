@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        ethanholz git-ce 0.3.5 v
+github.setup        ethanholz git-ce 0.3.6 v
 revision            0
 
 categories          devel
@@ -19,6 +19,7 @@ long_description    {*}${description}
 
 installs_libs       no
 use_configure       no
+cargo.update        yes
 
 set cargo_triple    [cargo.rust_platform]
 
@@ -27,9 +28,9 @@ destroot {
 }
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  c877ff67954248f70c12b10cadf317f905dcc9ed \
-                    sha256  1b55fc14809f8f8d95c991676ca8b2b67c9e24eb6e2b76ecbe89e00365b9d8b2 \
-                    size    10032
+                    rmd160  19a7970a0e2a018186f5e4171321478d4af35867 \
+                    sha256  a9fa1c9eb352818e8a0bc3da407fcc6289d9838d94ac0a50a505e933a5ca20a5 \
+                    size    10723
 
 cargo.crates \
     anstream                    0.6.15  64e15c1ab1f89faffbf04a634d5e1962e9074f2741eef6d97f3c4e322426d526 \
@@ -40,13 +41,13 @@ cargo.crates \
     bitflags                     2.6.0  b048fb63fd8b5923fc5aa7b340d8e156aec7ec02f0c78fa8a6ddc2613f6f71de \
     cc                           1.1.7  26a5c3fd7bfa1ce3897a3a3501d362b2d87b7f2583ebcb4a949ec25911025cbc \
     cfg-if                       1.0.0  baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd \
-    cfg_aliases                  0.1.1  fd16c4719339c4530435d38e511904438d07cce7950afa3718a84ac36c10e89e \
-    clap                        4.5.13  0fbb260a053428790f3de475e304ff84cdbc4face759ea7a3e64c1edd938a7fc \
-    clap_builder                4.5.13  64b17d7ea74e9f833c7dbf2cbe4fb12ff26783eda4782a8975b72f895c9b4d99 \
+    cfg_aliases                  0.2.1  613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724 \
+    clap                        4.5.20  b97f376d85a664d5837dbae44bf546e6477a679ff6610010f17276f686d867e8 \
+    clap_builder                4.5.20  19bc80abd44e4bed93ca373a0704ccbd1b710dc5749406201bb018272808dc54 \
     clap_lex                     0.7.2  1462739cb27611015575c0c11df5df7601141071f07518d56fcc1be504cbec97 \
     colorchoice                  1.0.2  d3fd119d74b830634cea2a0f58bbd0d54540518a14397557951e79340abc28c0 \
     console                     0.15.8  0e1f83fc076bd6dd27517eacdf25fef6c4dfe5f1d7448bafaaf3a26f13b5e4eb \
-    ctrlc                        3.4.4  672465ae37dc1bc6380a6547a8883d5dd397b0f1faaad4f265726cc7042a5345 \
+    ctrlc                        3.4.5  90eeab0aa92f3f9b4e87f258c72b139c207d251f9cbc1080a0086b86a8870dd3 \
     dialoguer                   0.11.0  658bce805d770f407bc62102fca7c2c64ceef2fbcb2b8bd19d2765ce093980de \
     encode_unicode               0.3.6  a357d28ed41a50f9c765dbfe56cbc04a64e53e5fc58ba79fbc34c10ef3df831f \
     errno                        0.3.9  534c5cf6194dfab3db3242765c03bbe257cf92f22b38f6bc0c58d59108a820ba \
@@ -63,7 +64,7 @@ cargo.crates \
     libz-sys                    1.1.18  c15da26e5af7e25c90b37a2d75cdbf940cf4a55316de9d84c679c9b8bfabf82e \
     linux-raw-sys               0.4.14  78b3ae25bc7c8c38cec158d1f2757ee79e9b3740fbc7ccf0e59e4b08d793fa89 \
     log                         0.4.22  a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24 \
-    nix                         0.28.0  ab2156c4fce2f8df6c499cc1c763e4394b7482525bf2a9701c9d79d215f519e4 \
+    nix                         0.29.0  71e2746dc3a24dd78b3cfcb7be93368c6de9963d30f43a6a73998a9cf4b17b46 \
     once_cell                   1.19.0  3fdb12b2476b595f9358c5161aa467c2438859caa136dec86c26fdd2efe17b92 \
     percent-encoding             2.3.1  e3148f5046208a5d56bcfc03053e3ca6334e51da8dfb19b6cdc8b306fae3283e \
     pkg-config                  0.3.30  d231b230927b5e4ad203db57bbcbee2802f6bce620b1e4a9024a07d94e2907ec \
@@ -87,6 +88,7 @@ cargo.crates \
     utf8parse                    0.2.2  06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821 \
     vcpkg                       0.2.15  accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426 \
     windows-sys                 0.52.0  282be5f36a8ce781fad8c8ae18fa3f9beff57ec1b52cb3de0789201425d9a33d \
+    windows-sys                 0.59.0  1e38bc4d79ed67fd075bcc251a1c39b32a1776bbe92e5bef1f0bf1f8c531853b \
     windows-targets             0.52.6  9b724f72796e036ab90c1021d4780d4d3d648aca59e491e6b98e725b84e99973 \
     windows_aarch64_gnullvm     0.52.6  32a4622180e7a0ec044bb555404c800bc9fd9ec262ec147edd5989ccd0c02cd3 \
     windows_aarch64_msvc        0.52.6  09ec2a7bb152e2252b53fa7803150007879548bc709c039df7627cabbd05d469 \
@@ -97,4 +99,3 @@ cargo.crates \
     windows_x86_64_gnullvm      0.52.6  24d5b23dc417412679681396f2b49f3de8c1473deb516bd34410872eff51ed0d \
     windows_x86_64_msvc         0.52.6  589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec \
     zeroize                      1.8.1  ced3678a2879b30306d323f4542626697a464a97c0a07c9aebf7ebca65cd4dde
-
