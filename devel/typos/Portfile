@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        crate-ci typos 1.24.5 v
+github.setup        crate-ci typos 1.28.1 v
 revision            0
 
 categories          devel
@@ -27,9 +27,9 @@ destroot {
 }
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  a6ebfe018e63842a8c3de713c67d39eccce7135c \
-                    sha256  dd984341e82ea7ba491c46d3209f25126f03553a51c30a2616c7e5084589a82c \
-                    size    2990977
+                    rmd160  e71a72a0af2e169f107cf99ac936612d1cc7bdf5 \
+                    sha256  5a31c39e38690c75861cfd0ac15e389dc0992c0a9c413829c5781b0b2ebb1261 \
+                    size    3020495
 
 # This is the typos port, but the crate required is typos-cli. This requires using the
 # Cargo.lock in the repo for a full build. If a variation of the cargo port can be built
@@ -40,12 +40,12 @@ cargo.crates \
     adler                            1.0.2  f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe \
     ahash                           0.8.11  e89da841a80418a9b391ebaea17f5c112ffaaa96f621d2c285b5174da76b9011 \
     aho-corasick                     1.1.2  b2969dcb958b36655471fc61f7e416fa76033bdd4bfed0678d8fee1e2d07a1f0 \
-    anstream                        0.6.15  64e15c1ab1f89faffbf04a634d5e1962e9074f2741eef6d97f3c4e322426d526 \
-    anstyle                          1.0.8  1bec1de6f59aedf83baf9ff929c98f2ad654b97c9510f4e70cf6f661d49fd5b1 \
+    anstream                        0.6.17  23a1e53f0f5d86382dafe1cf314783b2044280f406e7e1506368220ad11b1338 \
+    anstyle                          1.0.9  8365de52b16c035ff4fcafe0092ba9390540e3e352870ac09933bebcaa2c8c56 \
     anstyle-parse                    0.2.2  317b9a89c1868f5ea6ff1d9539a69f45dffc21ce321ac1fd1160dfa48c8e2140 \
     anstyle-query                    1.0.0  5ca11d4be1bab0c8bc8734a9aa7bf4ee8316d462a08c6ac5052f888fef5b494b \
-    anstyle-wincon                   3.0.1  f0699d10d2f4d628a98ee7b57b289abbc98ff3bad977cb3152709d4bf2330628 \
-    anyhow                          1.0.86  b3d1d046238990b9cf5bcde22a3fb3584ee5cf65fb2765f454ed428c7a0063da \
+    anstyle-wincon                   3.0.6  2109dbce0e72be3ec00bed26e6a7479ca384ad226efdd66db8fa2e3a38c83125 \
+    anyhow                          1.0.91  c042108f3ed77fd83760a5fd79b53be043192bb3b9dba91d8c574c0ada7850c8 \
     assert_fs                        1.1.2  7efdb1fdb47602827a342857666feb372712cbc64b414172bd6b167a02927674 \
     autocfg                          1.1.0  d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa \
     automod                         1.0.14  edf3ee19dbc0a46d740f6f0926bde8c50f02bdbc7b536842da28f6ac56513a8b \
@@ -55,14 +55,14 @@ cargo.crates \
     bstr                            1.10.0  40723b8fb387abc38f4f4a37c09073622e41dd12327033091ef8950659e6dc0c \
     cc                              1.0.83  f1174fb0b6ec23863f8b971027804a42614e347eafb0a95bf0b12cdae21fc4d0 \
     cfg-if                           1.0.0  baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd \
-    clap                            4.5.13  0fbb260a053428790f3de475e304ff84cdbc4face759ea7a3e64c1edd938a7fc \
-    clap-verbosity-flag              2.2.1  63d19864d6b68464c59f7162c9914a0b569ddc2926b4a2d71afe62a9738eff53 \
-    clap_builder                    4.5.13  64b17d7ea74e9f833c7dbf2cbe4fb12ff26783eda4782a8975b72f895c9b4d99 \
-    clap_derive                     4.5.13  501d359d5f3dcaf6ecdeee48833ae73ec6e42723a1e52419c79abf9507eec0a0 \
+    clap                            4.5.20  b97f376d85a664d5837dbae44bf546e6477a679ff6610010f17276f686d867e8 \
+    clap-verbosity-flag              2.2.2  e099138e1807662ff75e2cebe4ae2287add879245574489f9b1588eb5e5564ed \
+    clap_builder                    4.5.20  19bc80abd44e4bed93ca373a0704ccbd1b710dc5749406201bb018272808dc54 \
+    clap_derive                     4.5.18  4ac6a0c7b1a9e9a5186361f67dfa1b88213572f427fb9ab038efb2bd8c582dab \
     clap_lex                         0.7.0  98cc8fbded0c607b7ba9dd60cd98df59af97e84d24e49c8557331cfc26d301ce \
     codegenrs                        3.0.2  11a564a9c6e001f881ff5074dc1fb10aae609c82c92b7ddb47e40987be820771 \
     colorchoice                      1.0.0  acbf1af155f9b9ef647e42cdc158db4b64a1b61f743629225fde6f3e0be2a7c7 \
-    colorchoice-clap                 1.0.5  155b8e9e427b7311bcd1d80fd448ace78a02787fe621c6942997031d9a8a0558 \
+    colorchoice-clap                 1.0.6  96a804da36d925510ac4d61a0ee8edfdba6ae00c7d5c93c8bf58f25915966956 \
     condtype                         1.3.0  baf0a07a401f374238ab8e2f11a104d2851bf9ce711ec69804834de8af45c7af \
     content_inspector                0.2.4  b7bda66e858c683005a53a9a60c69a4aca7eeaa45d124526e389f7aec8e62f38 \
     crossbeam-deque                  0.8.3  ce6fd6f855243022dcecf8702fef0c297d4338e226845fe067f6341ad9fa0cef \
@@ -82,9 +82,9 @@ cargo.crates \
     divan-macros                    0.1.14  27540baf49be0d484d8f0130d7d8da3011c32a44d4fc873368154f1510e574a2 \
     doc-comment                      0.3.3  fea41bba32d969b513997752735605054bc0dfa92b4c56bf1189f2e174be7a10 \
     dunce                            1.0.4  56ce8c6da7551ec6c462cbaf3bfbc75131ebbfa1c944aeaa9dab51ca1c5f0c3b \
-    edit-distance                    2.1.2  853fc7035888bd1c9320f3a05bfe7f344f49b8766a4bb4209b1ac5f0503d9577 \
+    edit-distance                    2.1.3  e3f497e87b038c09a155dfd169faa5ec940d0644635555ef6bd464ac20e97397 \
     either                           1.9.0  a26ae43d7bcc3b814de94796a5e736d4029efb0ee900c12e2d54c993ad1a1e07 \
-    encoding_rs                     0.8.34  b45de904aa0b010bce2ab45264d0631681847fa7b6f2eaa7dab7619943bc4f59 \
+    encoding_rs                     0.8.35  75030f3c4f45dafd7586dd6780965a8c7e8e285a5ecb86713e63a79c5b2766f3 \
     enumflags2                      0.7.10  d232db7f5956f3f14313dc2f87985c58bd2c695ce124c8cdd984e08e15ac133d \
     enumflags2_derive               0.7.10  de0d48a183585823424a4ce1aa132d174a6a81bd540895822eb4c8373a8e49e8 \
     env_filter                       0.1.0  a009aa4810eb158359dda09d0c87378e4bbb89b5a801f016885a4707ba24f7ea \
@@ -97,16 +97,16 @@ cargo.crates \
     getrandom                       0.2.10  be4136b2a15dd319360be1c07d9933517ccf0be8f16bf62a3bee4f0d618df427 \
     gimli                           0.28.0  6fb8d784f27acf97159b40fc4db5ecd8aa23b9ad5ef69cdd136d3bc80665f0c0 \
     glob                             0.3.1  d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b \
-    globset                         0.4.14  57da3b9b5b85bd66f31093f8c408b90a74431672542466497dcbdfdc02034be1 \
+    globset                         0.4.15  15f1ce686646e7f1e19bf7d5533fe443a45dbfb990e00629110797578b42fb19 \
     globwalk                         0.9.1  0bf760ebf69878d9fd8f110c89703d90ce35095324d1f1edcb595c63945ee757 \
-    hashbrown                       0.14.1  7dfda62a12f55daeae5015f81b0baea145391cb4520f86c248fc615d72640d12 \
+    hashbrown                       0.15.0  1e087f84d4f86bf4b218b927129862374b72199ae7d8657835f1e89000eea4fb \
     heck                             0.5.0  2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea \
-    human-panic                      2.0.1  1c5a08ed290eac04006e21e63d32e90086b6182c7cd0452d10f4264def1fec9a \
+    human-panic                      2.0.2  80b84a66a325082740043a6c28bbea400c129eac0d3a27673a1de971e44bf1f7 \
     humantime                        2.1.0  9a3a5bfb195931eeb336b2a7b4d761daec841b97f947d34394601737a7bba5e4 \
     humantime-serde                  1.1.1  57a3db5ea5923d99402c94e9feb261dc5ee9b4efa158b0315f788cf549cc200c \
     ident_case                       1.0.1  b9e0384b61958566e926dc50660321d12159025e767c18e043daf26b70104c39 \
-    ignore                          0.4.22  b46810df39e66e925525d6e38ce1e7f6e1d208f72dc39757880fcb66e2c58af1 \
-    indexmap                         2.3.0  de3fc2e30ba82dd1b3911c8de1ffc143c74a914a14e99514d7637e3099df5ea0 \
+    ignore                          0.4.23  6d89fd380afde86567dfba715db065673989d6253f42b88179abd3eae47bda4b \
+    indexmap                         2.6.0  707907fe3c25f5424cce2cb7e1cbcafee6bdbe735ca90ef77c29e84591e5b9da \
     is_terminal_polyfill            1.70.0  f8478577c03552c21db0e2724ffb8986a5ce7af88107e6be5d2ee6e158c12800 \
     itertools                       0.11.0  b1c173a5686ce8bfa551b3563d0c2170bf24ca44da99c7ca4bfdab5418c3fe57 \
     itertools                       0.13.0  413ee7dfc52ee1a4949ceeb7dbc8a33f2d6c088194d9f922fb8318faf1f01186 \
@@ -121,7 +121,7 @@ cargo.crates \
     miniz_oxide                      0.7.1  e7810e0be55b428ada41041c41f32c9f1a42817901b4ccf45fa3d4b6561e74c7 \
     normalize-line-endings           0.3.0  61807f77802ff30975e01f4f071c8ba10c022052f98b3294119f3e615d13e5be \
     object                          0.32.1  9cf5f9dd3933bd50a9e1f149ec995f39ae2c496d31fd772c1fd45ebc27e902b0 \
-    once_cell                       1.19.0  3fdb12b2476b595f9358c5161aa467c2438859caa136dec86c26fdd2efe17b92 \
+    once_cell                       1.20.2  1261fe7e33c73b354eab43b1273a57c8f967d0391e80353e51f764ac02cf6775 \
     os_info                          3.7.0  006e42d5b888366f1880eda20371fedde764ed2213dc8496f49622fa0c99cd5e \
     os_pipe                          1.1.4  0ae859aa07428ca9a929b936690f8b12dc5f11dd8c6992a18ca93919f28bc177 \
     phf                             0.11.2  ade2d8b8f33c7333b51bcf0428d37e217e9f32192ae4772156f65063b8ce03dc \
@@ -140,51 +140,51 @@ cargo.crates \
     rayon                            1.8.0  9c27db03db7734835b3f53954b534c91069375ce6ccaa2e065441e07d9b6cdb1 \
     rayon-core                      1.12.0  5ce3fb6ad83f861aac485e76e1985cd109d9a3713802152be56c3b1f0e0658ed \
     redox_syscall                    0.3.5  567664f262709473930a4bf9e51bf2ebf3348f2e748ccc50dea20646858f8f29 \
-    regex                           1.10.5  b91213439dad192326a0d7c6ee3955910425f441d7038e0d6933b0aec5c4517f \
-    regex-automata                   0.4.5  5bb987efffd3c6d0d8f5f89510bb458559eab11e4f869acb20bf845e016259cd \
+    regex                           1.11.1  b544ef1b4eac5dc2db33ea63606ae9ffcfac26c1416a2806ae0bf5f56b201191 \
+    regex-automata                   0.4.8  368758f23274712b504848e9d5a6f010445cc8b87a7cdb4d7cbee666c1288da3 \
     regex-lite                       0.1.5  30b661b2f27137bdbc16f00eda72866a92bb28af1753ffbd56744fb6e2e9cd8e \
-    regex-syntax                     0.8.2  c08c74e62047bb2de4ff487b251e4a92e24f48745648451635cec7d591162d9f \
+    regex-syntax                     0.8.5  2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c \
     rustc-demangle                  0.1.23  d626bb9dae77e28219937af045c257c28bfd3f69333c512553507f5f9798cb76 \
     rustix                         0.38.19  745ecfa778e66b2b63c88a61cb36e0eea109e803b0b86bf9879fbc77c70e86ed \
     ryu                             1.0.15  1ad4cc8da4ef723ed60bced201181d83791ad433213d8c24efffda1eec85d741 \
     same-file                        1.0.6  93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502 \
     scopeguard                       1.2.0  94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49 \
-    serde                          1.0.204  bc76f558e0cbb2a839d37354c575f1dc3fdc6546b5be373ba43d95f231bf7c12 \
-    serde_derive                   1.0.204  e0cd7e117be63d3c3678776753929474f3b04a43a080c744d6b0ae2a8c28e222 \
-    serde_json                     1.0.121  4ab380d7d9f22ef3f21ad3e6c1ebe8e4fc7a2000ccba2e4d71fc96f15b2cb609 \
+    serde                          1.0.214  f55c3193aca71c12ad7890f1785d2b73e1b9f63a0bbc353c08ef26fe03fc56b5 \
+    serde_derive                   1.0.214  de523f781f095e28fa605cdce0f8307e451cc0fd14e2eb4cd2e98a355b147766 \
+    serde_json                     1.0.132  d726bfaff4b320266d395898905d0eba0345aae23b54aee3a737e260fd46db03 \
     serde_regex                      1.1.0  a8136f1a4ea815d7eac4101cfd0b16dc0cb5e1fe1b8609dfd728058656b7badf \
     serde_spanned                    0.6.7  eb5b1b31579f3811bf615c144393417496f152e12ac8b7663bf664f4a815306d \
     shlex                            1.2.0  a7cee0529a6d40f580e7a5e6c495c8fbfe21b7b52795ed4bb5e62cdf92bc6380 \
-    simdutf8                         0.1.4  f27f6278552951f1f2b8cf9da965d10969b2efdea95a6ec47987ab46edfe263a \
+    simdutf8                         0.1.5  e3a9fe34e3e7a50316060351f37187a3f546bce95496156754b601a5fa71b76e \
     similar                          2.3.0  2aeaf503862c419d66959f5d7ca015337d864e9c49485d771b732e2a20453597 \
     siphasher                       0.3.11  38b58827f4464d87d377d175e90bf58eb00fd8716ff0a62f80356b5e61555d0d \
-    snapbox                         0.6.17  840b73eb3148bc3cbc10ebe00ec9bc6d96033e658d022c4adcbf3f35596fd64a \
+    snapbox                         0.6.19  881f1849454828a68363dd288b7a0a071e55e2a4356d2c38b567db18a9be0d9f \
     snapbox-macros                  0.3.10  16569f53ca23a41bb6f62e0a5084aa1661f4814a67fa33696a79073e03a664af \
     static_assertions                1.1.0  a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f \
     strsim                          0.10.0  73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623 \
     strsim                          0.11.0  5ee073c9e4cd00e28217186dbe12796d692868f432bf2e97ee73bed0c56dfa01 \
-    syn                             2.0.66  c42f3f41a2de00b01c0aaad383c5a45241efc8b2d1eda5661812fda5f3cdcff5 \
+    syn                             2.0.86  e89275301d38033efb81a6e60e3497e734dfcc62571f2854bf4b16690398824c \
     tempfile                         3.8.0  cb94d2f3cc536af71caac6b6fcebf65860b347e7ce0cc9ebe8f70d3e521054ef \
-    terminal_size                    0.3.0  21bebf2b7c9e0a515f6e0f8c51dc0f8e4696391e6f1ff30379559f8365fb0df7 \
+    terminal_size                    0.4.0  4f599bd7ca042cfdf8f4512b277c02ba102247820f9d9d4a9f521f496751a6ef \
     termtree                         0.4.1  3369f5ac52d5eb6ab48c6b4ffdc8efbcad6b89c765749064ba298f2c68a16a76 \
-    thiserror                       1.0.63  c0342370b38b6a11b6cc11d6a805569958d54cfa061a29969c3b5ce2ea405724 \
-    thiserror-impl                  1.0.63  a4558b58466b9ad7ca0f102865eccc95938dca1a74a856f2b57b6629050da261 \
+    thiserror                       1.0.66  5d171f59dbaa811dbbb1aee1e73db92ec2b122911a48e1390dfe327a821ddede \
+    thiserror-impl                  1.0.66  b08be0f17bd307950653ce45db00cd31200d82b624b36e181337d9c7d92765b5 \
     thread_local                     1.1.8  8b9ef9bad013ada3808854ceac7b46812a6465ba368859a37e2100283d2d719c \
     toml                            0.8.19  a1ed1f98e3fdc28d6d910e6737ae6ab1a93bf1985935a1193e68f93eeb68d24e \
     toml_datetime                    0.6.8  0dd7358ecb8fc2f8d014bf86f6f638ce72ba252a2c3a2572f2a795f1d23efb41 \
     toml_edit                      0.22.20  583c44c02ad26b0c3f3066fe629275e50627026c51ac2e595cca4c230ce1ce1d \
-    trycmd                          0.15.6  3e8673f1dc45acdff8e25a06cc62f8e529563e8acd84237ce83d5a28e2befa12 \
+    trycmd                          0.15.8  656073a28690a4b8dfd578d1df087826cf8fa53c8161dbd90130d092570a21e1 \
     typed-arena                      2.0.2  6af6ae20167a9ece4bcb41af5b80f8a1f1df981f6391189ce00fd257af04126a \
     unic-char-property               0.9.0  a8c57a407d9b6fa02b4795eb81c5b6652060a15a7903ea981f3d723e6c0be221 \
     unic-char-range                  0.9.0  0398022d5f700414f6b899e10b8348231abf9173fa93144cbc1a43b9793c1fbc \
     unic-common                      0.9.0  80d7ff825a6a654ee85a63e80f92f054f904f21e7d12da4e22f9834a4aaa35bc \
     unic-emoji-char                  0.9.0  0b07221e68897210270a38bde4babb655869637af0f69407f96053a34f76494d \
     unic-ucd-version                 0.9.0  96bd2f2237fe450fcd0a1d2f5f4e91711124f7857ba2e964247776ebeeb7b0c4 \
-    unicase                          2.7.0  f7d2d4dafb69621809a81864c9c1b864479e1235c0dd4e199924b9742439ed89 \
+    unicase                          2.8.0  7e51b68083f157f853b6379db119d1c1be0e6e4dec98101079dec41f6f5cf6df \
     unicode-ident                   1.0.12  3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b \
-    unicode-segmentation            1.11.0  d4c87d22b6e3f4a18d4d40ef354e97c90fcb14dd91d7dc0aa9d8a1172ebf7202 \
-    unicode-width                   0.1.13  0336d538f7abc86d282a4189614dfaa90810dfc2c6f6427eaf88e16311dd225d \
-    unicode-xid                      0.2.4  f962df74c8c05a667b5ee8bcf162993134c104e96440b663c8daa176dc772d8c \
+    unicode-segmentation            1.12.0  f6ccf251212114b54433ec949fd6a7841275f9ada20dddd2f29e9ceea4501493 \
+    unicode-width                    0.2.0  1fc81956842c57dac11422a97c3b8195a1ff727f06e85c84ed2e8aa277c9a0fd \
+    unicode-xid                      0.2.6  ebc1c04c71510c7f702b52b7c350734c9ff1295c464a03335b00bb84fc54f853 \
     utf8parse                        0.2.1  711b9620af191e0cdc7468a8d14e709c3dcdb115b36f838e601583af800a370a \
     uuid                             1.4.1  79daa5ed5740825c40b389c5e50312b9c86df53fccd33f281df655642b43869d \
     version_check                    0.9.4  49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f \
@@ -214,7 +214,6 @@ cargo.crates \
     windows_x86_64_gnullvm          0.52.6  24d5b23dc417412679681396f2b49f3de8c1473deb516bd34410872eff51ed0d \
     windows_x86_64_msvc             0.48.5  ed94fce61571a4006852b7389a063ab983c02eb1bb37b47f8272ce92d06d9538 \
     windows_x86_64_msvc             0.52.6  589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec \
-    winnow                          0.6.18  68a9bda4691f099d435ad181000724da8e5899daa10713c2d432552b9ccd3a6f \
+    winnow                          0.6.20  36c1fec1a2bb5866f07c25f68c26e565c4c200aebb96d7e55710c19d3e8ac49b \
     zerocopy                        0.7.32  74d4d3961e53fa4c9a25a8637fc2bfaf2595b3d3ae34875568a5cf64787716be \
     zerocopy-derive                 0.7.32  9ce1b18ccd8e73a9321186f97e46f9f04b778851177567b1975109d26a08d2a6
-
