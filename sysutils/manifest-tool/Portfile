@@ -3,7 +3,7 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/estesp/manifest-tool 2.1.7 v
+go.setup            github.com/estesp/manifest-tool 2.1.8 v
 categories          sysutils
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
@@ -17,9 +17,9 @@ long_description    {*}{
   image references located in an OCIv1 or Docker v2.2 compatible container registry.
 }
 
-checksums           rmd160  71de7462040d6389e8be42fd5595ba79dea79240 \
-                    sha256  01427be5b5e37afa62e181ad55f55bf112b444ef51969d97445a52c4f8dc41b5 \
-                    size    2483808
+checksums           rmd160  a03b739213f77bec7f33b1c5eed017b8860495ca \
+                    sha256  3783772ebc33f41a73e3721aed106fb398d42661fd6f989b39032a15acb92418 \
+                    size    2483172
 
 build.cmd           make
 build.args          binary
