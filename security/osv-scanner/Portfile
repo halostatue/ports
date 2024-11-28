@@ -3,7 +3,7 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/google/osv-scanner 1.7.0 v
+go.setup            github.com/google/osv-scanner 1.9.1 v
 github.tarball_from archive
 revision            0
 
@@ -16,9 +16,9 @@ license             Apache-2
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 
-checksums           rmd160  3db26687006e8d51ef61c852cdb9d4e986c3946e \
-                    sha256  2e36bb23c87665e0081b1d3d538fe342cd27d041d864158d099f3c1a9de6de31 \
-                    size    8987467
+checksums           rmd160  19150c880429c33948b8a6090512092ac0f439ee \
+                    sha256  ebb7f5017c6fe0c9aad25c520a44ac32d0424efb75f87641f66d5c2ef4fafe1a \
+                    size    6932913
 
 go.offline_build    no
 
