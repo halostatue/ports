@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           haskell_stack 1.0
 
 name                git-mediate
-version             1.0.9
+version             1.1.0
 revision            0
 
 description         Become a (git) conflict resolution hero
@@ -22,9 +22,9 @@ maintainers         {macports.halostatue.ca:austin @halostatue} \
 categories          devel haskell
 platforms           macosx
 
-checksums           rmd160  43b1f7b8ca31ae973e6a800deb742221726b489e \
-                    sha256  299aa76f10bb94c62f0f3b68902ed09a6151e5f6feaef01efd07e164e1692aad \
-                    size    18073
+checksums           rmd160  13905097897e05530811498be4025c3db5dcb43d \
+                    sha256  7826a1cdbbd20696059c9a2b927916c6e3593be24ac10bd647b6c2d8e13b1124 \
+                    size    21525
 
 master_sites        https://hackage.haskell.org/package/${name}-${version}
 
