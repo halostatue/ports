@@ -5,7 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        cocogitto cocogitto 6.1.0
-revision            0
+revision            1
 
 categories          devel
 license             MIT, Apache-2
@@ -35,6 +35,8 @@ The Conventional Commits toolbox, providing:
 
 installs_libs       no
 use_configure       no
+
+depends_run         port:libgit2
 
 set cargo_triple    [cargo.rust_platform]
 
