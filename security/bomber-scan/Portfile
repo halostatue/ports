@@ -1,0 +1,367 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/devops-kung-fu/bomber 0.5.1 v
+github.tarball_from archive
+revision            0
+
+categories          security
+maintainers         {macports.halostatue.ca:austin @halostatue} \
+                    openmaintainer
+license             MPL
+conflicts           bomber
+
+description         Scans Software Bill of Materials (SBOMs) for security vulnerabilities
+
+
+long_description    {*}${description}
+
+checksums           ${distname}${extract.suffix} \
+                    rmd160  9690e2140e9a0f8ca82080bb2af903bcda465e0d \
+                    sha256  f4d8165ea9d3be0e88fdb33d35870588df308f31a4c40f14f09f0b68570f6ae1 \
+                    size    2719305
+
+set bin             bomber
+name                bomber-scan
+
+# go.offline_build    no
+
+post-build {
+    set bomber ${worksrcpath}/${bin}
+    set completions ${worksrcpath}/completions
+
+    xinstall -d ${completions}
+
+    system "${bomber} --output json completion bash > ${completions}/${bin}.bash"
+    system "${bomber} --output json completion fish > ${completions}/${bin}.fish"
+    system "${bomber} --output json completion zsh > ${completions}/${bin}.zsh"
+}
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/${bin} ${destroot}${prefix}/bin/
+
+    set bash_completions_dir share/bash-completion/completions
+    set fish_completions_dir share/fish/vendor_completions.d
+    set zsh_completions_dir share/zsh/site-functions
+
+    xinstall -d ${destroot}${prefix}/${bash_completions_dir}
+    xinstall ${worksrcpath}/completions/${bin}.bash \
+        ${destroot}${prefix}/${bash_completions_dir}/${bin}
+
+    xinstall -d ${destroot}${prefix}/${fish_completions_dir}
+    xinstall ${worksrcpath}/completions/${bin}.fish \
+        ${destroot}${prefix}/${fish_completions_dir}
+
+    xinstall -d ${destroot}${prefix}/${zsh_completions_dir}
+    xinstall ${worksrcpath}/completions/${bin}.zsh \
+        ${destroot}${prefix}/${zsh_completions_dir}/_${bin}
+}
+
+go.vendors          gopkg.in/yaml.v3 \
+                        lock    v3.0.1 \
+                        rmd160  e85ac1368fb7f9ef945b7fd7bd608a1f0d261c12 \
+                        sha256  f3ea6be3f405ec25f8799773355aba54f8831d11f5315a01155bdc69b92eca7b \
+                        size    91208 \
+                    gopkg.in/check.v1 \
+                        lock    20d25e280405 \
+                        rmd160  412aa0d109919182ff84259e9b5bbc9f24d78117 \
+                        sha256  233f8faf427ce6701ac3427f85c28bc6b6ae7cdc97a303a52873c69999223325 \
+                        size    30360 \
+                    golang.org/x/time \
+                        lock    v0.6.0 \
+                        rmd160  a8649c7469cbb459e8241757c6a614fdcb1ccdeb \
+                        sha256  603182a18e9d5e0522081e6b783b72b7f819ecfb6773d9e1ea91b3e791202fa3 \
+                        size    12222 \
+                    golang.org/x/text \
+                        lock    v0.18.0 \
+                        rmd160  3e5a1cb8e141cf12ec79d1eab772321e81b07a60 \
+                        sha256  6e7c97372c202ad9843ff3c45d8e945b2dfecb31ada4d3271e8022e54f833bb9 \
+                        size    8972482 \
+                    golang.org/x/term \
+                        lock    v0.24.0 \
+                        rmd160  0c07221782908de525f7ee67c888a154560035cf \
+                        sha256  74ca2a12c437881f515a8eeea3e5299582a896d9faff563b44067bd6d36d835b \
+                        size    14752 \
+                    golang.org/x/sys \
+                        lock    v0.25.0 \
+                        rmd160  55d28e9a063084b6785b7f62b304ec1d1a20a0a5 \
+                        sha256  b73bf6a693f6ead22a333323731ab80d829685cab4e98e3e9c0bc1e3eb9e5d58 \
+                        size    1507013 \
+                    golang.org/x/sync \
+                        lock    v0.8.0 \
+                        rmd160  753a4804058e3be785a5d00aea60bc6950baa709 \
+                        sha256  9f9f999d50ea1bbba9f7d9a629d594da7e221eeb4d54216ef480d1a8546fa817 \
+                        size    18185 \
+                    golang.org/x/net \
+                        lock    v0.29.0 \
+                        rmd160  4ada27f7775af13a883cbc920781c6d38cf9af91 \
+                        sha256  9f52b3e3bb6aca1f9d43c767f9b9c5ede7074e2bfa2fde783ecc5e0acb342354 \
+                        size    1454733 \
+                    golang.org/x/mod \
+                        lock    v0.21.0 \
+                        rmd160  bdaf1212227152ae9331c6498fad9edfb57c6367 \
+                        sha256  d4fed195d70543f97654ab93327fcd179e0bb3cdead1778832fe5cb9af818c2c \
+                        size    124539 \
+                    golang.org/x/exp \
+                        lock    701f63a606c0 \
+                        rmd160  952d94ca878ba1012fcf17e14e18681c67eef986 \
+                        sha256  3949dbf030605761da8eac418135866096f302722658f6a56debbbfef939da9f \
+                        size    1749797 \
+                    github.com/xo/terminfo \
+                        lock    abceb7e1c41e \
+                        rmd160  03f45e9801b38da949e34fec0c1881c96d6fa37d \
+                        sha256  c8f968af54b9283119a9132ff6748f081afdd6b52deef111f6ac680c00a01f19 \
+                        size    35179 \
+                    github.com/xeipuuv/gojsonschema \
+                        lock    v1.2.0 \
+                        rmd160  ba1db9ae750381fcefd61d0737b68d1660ec3dbe \
+                        sha256  3aa8acdbf5e175e81e8cb55fd79119e2a14e8a048a21bb873b9cd081798a4ccc \
+                        size    73606 \
+                    github.com/xeipuuv/gojsonreference \
+                        lock    bd5ef7bd5415 \
+                        rmd160  2d4dc312bb9356590e9aedff63b2b1b3dad662d5 \
+                        sha256  5a735c6ba2b1802d610c799ef3fc6145a11ab2e6cc46468043e42bd884219137 \
+                        size    6958 \
+                    github.com/xeipuuv/gojsonpointer \
+                        lock    02993c407bfb \
+                        rmd160  d906910a3301a1edca7a0a0c4d79f00a8017a46b \
+                        sha256  3761c7a11f7d63021537fc61020f0f756d68b5eabae68e7971bd2165be42234f \
+                        size    7704 \
+                    github.com/tidwall/sjson \
+                        lock    v1.2.5 \
+                        rmd160  d8411a1ed81a0ee7a6dc4db0a8012b145ddfdb6f \
+                        sha256  ddf95bbda973c626ae74f2f7443fbf7d8b65c55f21a37a3d33602a771c6f7e8c \
+                        size    28149 \
+                    github.com/tidwall/pretty \
+                        lock    v1.2.1 \
+                        rmd160  68d91cf13a8012fbb254bb214661a52258af8575 \
+                        sha256  4b4f55ff61e2ceee462ff49e19b531041a7888d85358654b2f16d3dfd2be64d2 \
+                        size    11281 \
+                    github.com/tidwall/match \
+                        lock    v1.1.1 \
+                        rmd160  c120d8ecd4d45abbb5b04deb804d1566b9a672fe \
+                        sha256  9fd7217a82378a818d31cf6b01db7f9f176674cea583b139ee89b4f06da2ccfd \
+                        size    5934 \
+                    github.com/tidwall/gjson \
+                        lock    v1.17.3 \
+                        rmd160  90179c6a36feaebe34089b66233bc15b181ed3b0 \
+                        sha256  3eefeb7cf906bbe3b76cff34c26431ec538ff091b003b4977736783bfa69ff22 \
+                        size    73654 \
+                    github.com/terminalstatic/go-xsd-validate \
+                        lock    v0.1.5 \
+                        rmd160  328a932cfb79f21eb807d8e9ef78afa8e982da1a \
+                        sha256  31a7c2dab124e50985f5d5bba3ba1b22ae14d46a0dd58510063afb686fabb016 \
+                        size    11655 \
+                    github.com/stretchr/testify \
+                        lock    v1.9.0 \
+                        rmd160  59147e117812fdf8270ec79e46a229c472caf08d \
+                        sha256  e6fa4f530cad5bac94bf08af05ddd1f569aeac8db4017ab4330ab7fe2802a6a3 \
+                        size    108716 \
+                    github.com/spf13/pflag \
+                        lock    v1.0.5 \
+                        rmd160  2ce81608a38c6f383a35bccd24d64361df5828c9 \
+                        sha256  7f41acdcba65b1fab5b9b633947a139f9915b60f94bdab486cdbe9d90c54f61e \
+                        size    50815 \
+                    github.com/spf13/cobra \
+                        lock    v1.8.1 \
+                        rmd160  a735ec73fa26b66076a971e066513fff3eb7e367 \
+                        sha256  49ca05093e0452e1b56be8a0765e23fd74be819228f0e1870c759b2e2e8178da \
+                        size    192387 \
+                    github.com/spf13/afero \
+                        lock    v1.11.0 \
+                        rmd160  a986da1741dfe513ea0a0edaed3b2961e7a06069 \
+                        sha256  f8c35597e31410563e80730100f8bb615e359ad931a9214787feefa4085d48b6 \
+                        size    89254 \
+                    github.com/sashabaranov/go-openai \
+                        lock    v1.30.3 \
+                        rmd160  fb8729438c93701991c660fc48b2ce760a309df3 \
+                        sha256  a759a4017fc06df865bac88165a7b7ca4399d762aa59a0179ce47bbe6dc2897c \
+                        size    92427 \
+                    github.com/rogpeppe/go-internal \
+                        lock    v1.12.0 \
+                        rmd160  ed748fa7713fcb28a8b0dd08c130eb4e61bf2a74 \
+                        sha256  4e8a59559866e8e6a75f92ec826e6374c8d866da21ff8bb62b3eab3092214513 \
+                        size    116901 \
+                    github.com/rivo/uniseg \
+                        lock    v0.4.7 \
+                        rmd160  a9056dc9a2a80aa9c46d0ff9e54f9e2e5a498c41 \
+                        sha256  abc6a2f17b64b34b8a0c56eb9d0b53886ebbe0c88d467755c09c7fa696a16677 \
+                        size    458166 \
+                    github.com/remeh/sizedwaitgroup \
+                        lock    v1.0.0 \
+                        rmd160  284f09ac7768fda039f764409c1540f57d47b1d0 \
+                        sha256  a0aedd09f66634620066e4d5f4e0bb3ad94258af917918997b7075f22579363f \
+                        size    2679 \
+                    github.com/pmezard/go-difflib \
+                        lock    v1.0.0 \
+                        rmd160  fc879bfbdef9e3ff50844def58404e2b5a613ab8 \
+                        sha256  7cd492737641847266115f3060489a67f63581e521a8ec51efbc280c33fc991f \
+                        size    11409 \
+                    github.com/pandatix/go-cvss \
+                        lock    v0.6.2 \
+                        rmd160  9799995274b10617e77ea8b447f91f7f31bdd800 \
+                        sha256  b284cc4139987db4e5b9fee14ac0a428fddd7e13e3610a4df3ecaa2a0a3c068a \
+                        size    314522 \
+                    github.com/package-url/packageurl-go \
+                        lock    v0.1.3 \
+                        rmd160  c2155c1106748aad4c233201c43317f90db8c807 \
+                        sha256  629a34c6328de44cc8d9d98979008da26f5c63f3fda9ceea945a612a6b9aeb1f \
+                        size    11831 \
+                    github.com/owenrumney/go-sarif \
+                        lock    v2.3.3 \
+                        rmd160  f9d125c02451f14db5d3d79bd016d284ae9ebd5f \
+                        sha256  3904d76cdf766ef2c07951f35ffb9433c519cf5e50fa03fc4847b826d047123f \
+                        size    50421 \
+                    github.com/microcosm-cc/bluemonday \
+                        lock    v1.0.27 \
+                        rmd160  dfd2e71a46de1613b4d8bc7189fd07252264c947 \
+                        sha256  8a2a7358720e428d3d7d6cf848951d356b861ff83b70c333efa04ec4a9a77c2c \
+                        size    169843 \
+                    github.com/maxatome/go-testdeep \
+                        lock    v1.12.0 \
+                        rmd160  79f26d497f2d2ecfa171c875f314f532e8a47346 \
+                        sha256  dc950d531abf5c4af65353097db2cb77da64925d24e3fd4b1356094e7fd4b16f \
+                        size    295133 \
+                    github.com/mattn/go-runewidth \
+                        lock    v0.0.16 \
+                        rmd160  297825c4365b5f723ae485e726259ebb620ecd66 \
+                        sha256  6c9e81a6b46220612b97ebc35e8d29d1907fd225a9ce3e40b7cebd64cc58d09c \
+                        size    18496 \
+                    github.com/mattn/go-isatty \
+                        lock    v0.0.20 \
+                        rmd160  ef20ccdf87de8b704c0c7118625b2beb31d8f1b4 \
+                        sha256  397549e98cf5d40df585f31dc7902f017c37be88c64311dd2b4aeccab4009949 \
+                        size    4717 \
+                    github.com/mattn/go-colorable \
+                        lock    v0.1.13 \
+                        rmd160  c9e8ab9d0773c0984f36235e3c9f8c033552ac1a \
+                        sha256  0cd9a951799c1a9f999df56e4b020170fa887456049c274aae6262d9ae3f7424 \
+                        size    9778 \
+                    github.com/maruel/natural \
+                        lock    v1.1.1 \
+                        rmd160  3d250ed7f6f152a6fa430deb82b6990c6412b7f7 \
+                        sha256  ae8a1de236bfabd95fcf5cf90deaa40db6527683b6dd8be6c17605d8619a6578 \
+                        size    9187 \
+                    github.com/kr/text \
+                        lock    v0.2.0 \
+                        rmd160  48558c7e8ff67d510f83c66883907e95f4783163 \
+                        sha256  2f2e21ac8a9d523e88cbba4039441defc4a66bfaa78811c900a88fcf28729c4c \
+                        size    8702 \
+                    github.com/kr/pretty \
+                        lock    v0.3.1 \
+                        rmd160  8c08579b4c56cdc958794e77afe3413e80aa67c3 \
+                        sha256  7fcea475d6280976cf4a838e75d2b3a4105827316e588a80e49e8063d950c999 \
+                        size    10232 \
+                    github.com/jedib0t/go-pretty \
+                        lock    v6.5.9 \
+                        rmd160  234c6e2f1e4206bb461f1e2848d0bee0e3cefbce \
+                        sha256  98d14f006f96d1be242c0be77e1ddb1621f0262201fec2e96a229dac18aefc46 \
+                        size    765668 \
+                    github.com/jarcoal/httpmock \
+                        lock    v1.3.1 \
+                        rmd160  7b4e59b0842ef093f73c6643e16dcd4611bc8a9a \
+                        sha256  d6ee322298295d18c836bd2683e12eefd00e21c8b090782297e6ce4e52cd0548 \
+                        size    41077 \
+                    github.com/inconshreveable/mousetrap \
+                        lock    v1.1.0 \
+                        rmd160  88f9577df93ac0f8801d8960adc7f28e38867f3e \
+                        sha256  f69af10ff08c0e87f92dac3ee5172d8ed02463725b74edfc8943ef018a1a632d \
+                        size    5343 \
+                    github.com/gorilla/css \
+                        lock    v1.0.1 \
+                        rmd160  bc1e2160af4746e5e1c3a0911eddcdca0855dba2 \
+                        sha256  7b38e56aedbf7b242516a363f609eab447cf7e5c8e8aea62ca5ba298fb0a6529 \
+                        size    7768 \
+                    github.com/gookit/color \
+                        lock    v1.5.4 \
+                        rmd160  55131b28b87b2c49c2cf217c6254a95306b9ba59 \
+                        sha256  caceda3b3ee3f3bfaa9ec00df615ee07047e1062f47eba640cff48f984b9b64b \
+                        size    2155322 \
+                    github.com/google/osv-scanner \
+                        lock    v1.8.5 \
+                        rmd160  10889d6d23f92517ad0d68e6f211ac30a163cd53 \
+                        sha256  aff1788b9f268efdad9cd02f62beedc3a412cc38401bdb932f04e4bd7f22776d \
+                        size    6875036 \
+                    github.com/google/go-querystring \
+                        lock    v1.1.0 \
+                        rmd160  d74c139ec42fee88039b05bd10924f560467fac7 \
+                        sha256  95f52c816370b06a38bb827367c1acb5b1a0aa2e8d425f94ce2d32afe0c57510 \
+                        size    10418 \
+                    github.com/google/go-github \
+                        lock    v17.0.0 \
+                        rmd160  2c1917adfc161a2252354d558352180079005d8d \
+                        sha256  c064b8849dcf8e184e1333f8411c7285e0abeb321ffc268b3798f84d6db5f947 \
+                        size    212064 \
+                    github.com/google/go-cmp \
+                        lock    v0.6.0 \
+                        rmd160  2c9f5dab93f8a0895591466fe4a07c5dd9166ae2 \
+                        sha256  0d550825fae514f8a947ab7e42fcb874f509d9cbfa3ad2711d7570a25f31571a \
+                        size    104795 \
+                    github.com/gomarkdown/markdown \
+                        lock    034f12af3bf6 \
+                        rmd160  b136d6ca77f8390183daf299aa7943080d419048 \
+                        sha256  98bba6713a0dfbcad792e491780b2b3d2934b7f00aaff73b6d284e08e3875be6 \
+                        size    123519 \
+                    github.com/go-resty/resty \
+                        lock    v2.15.2 \
+                        rmd160  c2139a64954274e83589528b355a5f5414daa6f1 \
+                        sha256  8995133a2f0644a2bb0369408d559a7cb883f600bb2121a0b6667a66060affe1 \
+                        size    2665261 \
+                    github.com/gkampitakis/go-snaps \
+                        lock    v0.5.7 \
+                        rmd160  f5c514d7cf97d1defb832e949b9178f941a84276 \
+                        sha256  090870bce40d533dd2eae678996bb35f74b52b1455d654fc23d3ae8138cc4ddf \
+                        size    138130 \
+                    github.com/gkampitakis/go-diff \
+                        lock    v1.3.2 \
+                        rmd160  0cf01fd3ae9fdc65fbb83b6cc98281f024bd49d9 \
+                        sha256  8a1c65bafadda5cb66c6ee6f1272a052d68332058256f0b6ace581c9202c4056 \
+                        size    1329427 \
+                    github.com/gkampitakis/ciinfo \
+                        lock    v0.3.0 \
+                        rmd160  902bdb7bd5d694a2299621873ac02b3996b207bb \
+                        sha256  f1568696270924c959b89202c34c891fa4215cc17d792bc93bde7bc082fc39fc \
+                        size    10853 \
+                    github.com/fatih/color \
+                        lock    v1.17.0 \
+                        rmd160  9d0962ae868c99aad71d9f8ad21b58a219fca1cc \
+                        sha256  861f4ff9c6566b6e097ad4fe53248461dcad57fbb2c201413d64206f7d2b02b2 \
+                        size    12339 \
+                    github.com/devops-kung-fu/common \
+                        lock    v0.2.6 \
+                        rmd160  6fef50d3da3cf5dfa93a61040b63c74cd4890cf3 \
+                        sha256  9920ce59c3d98cc7e9a428c49f02ed54ca8f1f6945aa40c95f49729638df650a \
+                        size    43744 \
+                    github.com/davecgh/go-spew \
+                        lock    v1.1.1 \
+                        rmd160  7c02883aa81f81aca14e13a27fdca9e7fbc136f7 \
+                        sha256  e85d6afa83e64962e0d63dd4812971eccf2b9b5445eda93f46a4406f0c177d5f \
+                        size    42171 \
+                    github.com/briandowns/spinner \
+                        lock    v1.23.1 \
+                        rmd160  5aebe951e4032320c155b28be258d6d70a611d0a \
+                        sha256  cdd450f2b60b444c15200aa7bf9aabb9d8705540df4b174a7fa6ba41e2f11a51 \
+                        size    1260621 \
+                    github.com/bradleyjkemp/cupaloy \
+                        lock    v2.8.0 \
+                        rmd160  f430cf1a1a8ff4c21f1fedc6ac7fb1d90ff50612 \
+                        sha256  9e90a603d73bd569ef28cbea2566d3f353f5cbcab9257b31326b5a91af0eb321 \
+                        size    276629 \
+                    github.com/aymerick/douceur \
+                        lock    v0.2.0 \
+                        rmd160  84476f7c75bac3becc1fbdd8afce7fbb56ea97a3 \
+                        sha256  61f436302495e77e790979b25097aaf1e4e0f07bc8173f1d87232d199a7ada28 \
+                        size    20929 \
+                    github.com/CycloneDX/cyclonedx-go \
+                        lock    v0.9.1 \
+                        rmd160  1b7128b6465e456acaceb5338ffb48f036b19962 \
+                        sha256  4ddb72fc5733196a1d555b3939716fd9b67e44bf0861add4394adf524336d40e \
+                        size    655014 \
+                    github.com/BurntSushi/toml \
+                        lock    v1.4.0 \
+                        rmd160  61fb91ac7b8b358e229a361c615a3cf3ea1fbd14 \
+                        sha256  45692255b59b4dbe0045a088a20eba0efafdca83446accf65847a3184686eff9 \
+                        size    117687
+
