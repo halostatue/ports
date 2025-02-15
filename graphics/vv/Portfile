@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           cmake 1.1
 PortGroup           github 1.0
 
-github.setup        wolfpld vv 3.1 v
+github.setup        wolfpld vv 3.2 v
 github.tarball_from archive
 revision            0
 categories          graphics
@@ -19,27 +19,29 @@ long_description    Display image files directly in your terminal. This works bo
                     to fit the available space in the terminal. Small images can be \
                     upscaled.
 
-checksums           rmd160  ec47154d5b583ce8726610038903dea7e494d47a \
-                    sha256  299785f78202dd5af7b849e60a4e318fbd6c27b2162ecc2f424e267f1407c5e9 \
-                    size    1839316
+checksums           rmd160  ac830231282b011fc7a1f054412c7593917a8c63 \
+                    sha256  728b7a7323e48566009f9999b9149b06efafd0fd7d69bd63f3404abb87da6628 \
+                    size    2269969
 
 depends_build-append \
                     path:bin/pkg-config:pkgconfig
 
 depends_lib-append  \
                     path:lib/pkgconfig/cairo.pc:cairo \
-                    port:openexr \
+                    path:lib/pkgconfig/lcm2s.pc:lcms2 \
+                    path:lib/pkgconfig/libexif.pc:libexif \
                     path:lib/pkgconfig/libheif.pc:libheif \
                     path:lib/pkgconfig/libjpeg.pc:libjpeg \
                     path:lib/pkgconfig/libjxl_threads.pc:libjxl \
-                    path:lib/pkgconfig/lcm2s.pc:lcms2 \
                     path:lib/pkgconfig/libpng.pc:libpng \
                     path:lib/pkgconfig/libraw.pc:libraw \
                     path:lib/pkgconfig/librsvg-2.0.pc:librsvg \
                     path:lib/pkgconfig/libsixel.pc:libsixel \
                     path:lib/pkgconfig/libtiff-4.pc:libtiff-4 \
                     path:lib/pkgconfig/libwebpdemux.pc:webp \
-                    path:lib/pkgconfig/zlib.pc:zlib
+                    path:lib/pkgconfig/pugixml.pc:pugixml \
+                    path:lib/pkgconfig/zlib.pc:zlib \
+                    port:openexr
 
 destroot {
     xinstall -m 0755 "${build.dir}/${name}" "${destroot}${prefix}/bin/"
