@@ -4,7 +4,8 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        wezm titlecase 3.3.0 v
+github.setup        wezm titlecase 3.5.0 v
+github.tarball_from archive
 revision            0
 
 categories          textproc
@@ -14,8 +15,6 @@ maintainers         {macports.halostatue.ca:austin @halostatue} \
 
 description         Transform text into Title Case
 long_description    {*}${description}
-
-# github.tarball_from archive
 
 installs_libs       no
 use_configure       no
@@ -27,9 +26,9 @@ destroot {
 }
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  c5d59d5f0f90f36e20384f957328995c16db7369 \
-                    sha256  43da37f0cc36ed4fe00c230d6d5e0fb6dfa80ee62f4ba50e27484b336a2805a3 \
-                    size    10777
+                    rmd160  f5604c39d22205fc137cbc2d2823c8b88e639101 \
+                    sha256  513185482d3530deca7dab79022ad89749d8e421b243617e74104e46f86f46c8 \
+                    size    11338
 
 cargo.crates \
     aho-corasick                    1.1.3  8e60d3430d3a69478ad0993f19238d2df97c507009a52b3c10addcd7f6bcb916 \
