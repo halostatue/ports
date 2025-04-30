@@ -3,7 +3,8 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/laurent22/massren 1.5.6 v
+go.setup            github.com/laurent22/massren 1.5.7 v
+github.tarball_from archive
 categories          sysutils
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
@@ -13,9 +14,9 @@ description         Easily rename multiple files using your text editor
 
 long_description    {*}${description}
 
-checksums           rmd160  954623ea9b47b5e99d14bb306388c18ce4352c44 \
-                    sha256  bdf6ba82254eb2c3d8a82a2e04cd9f7537f1e1d57005633d5f4f8fc1bfec0314 \
-                    size    1540968
+checksums           rmd160  a8f7c9c8ecb7015237cd655aadd142b0f52b74c9 \
+                    sha256  7e7dd149bd3364235247268cc684b5a35badd9bee22f39960e075c792d037a8c \
+                    size    1541573
 
 destroot {
     xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
