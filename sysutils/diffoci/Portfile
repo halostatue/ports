@@ -3,7 +3,7 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/reproducible-containers/diffoci 0.1.5 v
+go.setup            github.com/reproducible-containers/diffoci 0.1.6 v
 github.tarball_from archive
 revision            0
 
@@ -17,9 +17,9 @@ description         diff for Docker and OCI container images
 long_description    {*}${description}
 
 checksums           ${distname}${extract.suffix} \
-                    rmd160  8aff1e94ef859155a5435acb3006fe2aaf8587cb \
-                    sha256  c71e9dac5854a61240f82fd31e67eb993bd4340e91b6dbf47d1eba52720a1eca \
-                    size    43492
+                    rmd160  40eec2c68bbe9c36a11633055b61fcd94f882c7f \
+                    sha256  650554edbc7118e6fb7008865281e5dba6bc6d82a417a1e0e0ea05c1561ee402 \
+                    size    43490
 
 destroot {
     xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
