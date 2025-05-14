@@ -1,10 +1,10 @@
---- Makefile.orig	2024-09-01 13:17:14
-+++ Makefile	2024-09-01 13:32:43
+--- Makefile.orig	2025-05-13 23:00:53
++++ Makefile	2025-05-13 23:16:47
 @@ -1,8 +1,8 @@
  all: build
  
 -GIT_COMMIT:=$(shell git rev-list -1 HEAD)
--GIT_LAST_TAG:=$(shell git describe --abbrev=0 --tags)
+-GIT_LAST_TAG:=$(shell git describe --abbrev=0 --tags 2>/dev/null || true)
 -GIT_EXACT_TAG:=$(shell git name-rev --name-only --tags HEAD)
 +GIT_COMMIT:=@@GIT_COMMIT@@
 +GIT_LAST_TAG:=@@GIT_COMMIT@@
@@ -12,8 +12,8 @@
  UNAME_S := $(shell uname -s)
  XARGS:=xargs -r
  ifeq ($(UNAME_S),Darwin)
-@@ -15,7 +15,7 @@
- 	-X ${COMMANDS_PATH}.GitExactTag=${GIT_EXACT_TAG}
+@@ -25,7 +25,7 @@
+ 		xargs -I NAME printf '\t%-20s %s\n' "NAME" "nix build .#checks.linux.NAME"
  
  .PHONY: build
 -build:
@@ -21,13 +21,13 @@
  	go generate
  	go build -ldflags "$(LDFLAGS)" .
  
-@@ -49,8 +49,12 @@
+@@ -59,8 +59,12 @@
  test:
  	go test -v -bench=. ./...
  
 +.PHONY: npm-install
 +npm-install:
-+	npm --prefix webui ci
++	npm --prefix webui install
 +
  .PHONY: pack-webui
 -pack-webui:
