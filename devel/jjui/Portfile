@@ -1,0 +1,31 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/idursun/jjui 0.8.8 v
+github.tarball_from archive
+revision            0
+
+go.offline_build    no
+
+description         Jujutsu UI (jjui) is a Text User Interface (TUI) designed for \
+                    interacting with the Jujutsu version control system.
+
+long_description    {*}${description}
+
+categories          devel
+installs_libs       no
+license             MIT
+maintainers         {macports.halostatue.ca:austin @halostatue} \
+                    openmaintainer
+
+checksums           ${distname}${extract.suffix} \
+                    rmd160  0d1da6d0541a9a77088c971c1c5e7f08198e7f5c \
+                    sha256  66963f2b091855d1e4116bdf45dbbde728ff6b2a65e4adb879e32249a3693242 \
+                    size    49313
+
+build.args          ./cmd/jjui
+destroot {
+    xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
+}
