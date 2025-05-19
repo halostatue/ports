@@ -1,0 +1,10 @@
+--- webui/codegen.yaml.orig	2025-05-19 21:32:19
++++ webui/codegen.yaml	2025-05-19 21:32:22
+@@ -29,7 +29,3 @@
+       withComponent: false
+       withHOC: false
+       withHooks: true
+-
+-hooks:
+-  afterAllFileWrite:
+-    - nix fmt

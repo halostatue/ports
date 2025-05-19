@@ -1,5 +1,5 @@
---- Makefile.orig	2025-05-13 23:00:53
-+++ Makefile	2025-05-13 23:16:47
+--- Makefile.orig	2025-05-19 21:26:48
++++ Makefile	2025-05-19 21:28:03
 @@ -1,8 +1,8 @@
  all: build
  
@@ -21,7 +21,7 @@
  	go generate
  	go build -ldflags "$(LDFLAGS)" .
  
-@@ -59,8 +59,12 @@
+@@ -53,8 +53,12 @@
  test:
  	go test -v -bench=. ./...
  

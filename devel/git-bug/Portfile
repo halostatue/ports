@@ -3,7 +3,7 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/MichaelMure/git-bug 0.9.0 v
+go.setup            github.com/MichaelMure/git-bug 0.10.1 v
 
 description         Distributed, offline-first bug tracker embedded in git, with bridges
 
@@ -21,13 +21,14 @@ maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 
 checksums           ${distname}${extract.suffix} \
-                    rmd160  d97a4cb1477de3b4c1bdc55c6e9fe91d10c7a293 \
-                    sha256  4f9a8d77b0c0e10579d9f28a1355e2d349b0ee83da282daacb17263d40fe8c77 \
-                    size    2554071
+                    rmd160  b5f27ad92ea4124182c69c41bcb40e1ba9e8725d \
+                    sha256  1b5cafa3d9918ce18c4674c93b83359e211def83e716d5841fa93c77b457e6c2 \
+                    size    2669305
 
 depends_build       bin:npm:npm10
 
-patchfiles-append   macports-Makefile.diff
+patchfiles-append   macports-Makefile.diff \
+                    macports-webui-codegen.yaml.diff
 
 build.cmd           make
 build.args          build
