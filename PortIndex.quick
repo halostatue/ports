@@ -13,9 +13,9 @@ jjui 6080
 jqfmt 6629
 licensure 7080
 mrml 7538
-prql 7937
-prr 8692
-sol 9113
+prr 7937
+sol 8358
+prql 8801
 typos 9556
 wrkflw 9951
 vv 10407
@@ -35,7 +35,7 @@ pug 17521
 shadowenv 17909
 terramaid 18646
 csvquote 19130
-htmd-cli 19577
-spacer 20076
-taplo 20508
-titlecase 20917
+spacer 19577
+taplo 20009
+titlecase 20418
+htmd-cli 20840
