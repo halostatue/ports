@@ -1,5 +1,5 @@
---- etc/git-extras.fish.orig	2024-10-31 23:24:09
-+++ etc/git-extras.fish	2024-10-31 23:24:53
+--- etc/git-extras.fish.orig	2025-06-20 22:44:54
++++ etc/git-extras.fish	2025-06-20 22:45:43
 @@ -8,8 +8,6 @@
      "brv:List branches sorted by their last commit date" \
      "bulk:Run git commands on multiple repositories" \
@@ -44,3 +44,12 @@
      "reset-file:Reset one file" \
      "root:show path of root" \
      "scp:Copy files to SSH compatible git-remote" \
+@@ -72,7 +58,7 @@
+     "unlock:Unlock a file excluded from version control"
+ 
+ # completion for git-extras itself
+-complete -c git -f -n __fish_git_needs_command -a extras -d 'GIT utilities: repo summary, repl, changelog population, and more'
++complete -c git -f -n __fish_git_needs_command -a extras -d 'GIT utilities: repo summary, changelog population, and more'
+ complete -c git -f -n '__fish_git_using_command extras' -s h -l help -d 'Show the help message, can be used for any git-extras commands'
+ complete -c git -f -n '__fish_git_using_command extras' -s v -l version -d 'Show git-extras version number'
+ complete -c git -f -n '__fish_git_using_command extras; and not contains -- update (commandline -opc)' -a update -d 'Self update'

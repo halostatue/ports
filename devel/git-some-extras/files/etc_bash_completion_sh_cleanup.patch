@@ -1,5 +1,5 @@
---- etc/bash_completion.sh.orig	2024-10-31 23:20:38
-+++ etc/bash_completion.sh	2024-10-31 23:21:41
+--- etc/bash_completion.sh.orig	2025-06-20 22:35:20
++++ etc/bash_completion.sh	2025-06-20 22:39:30
 @@ -141,23 +141,6 @@
      __gitcomp "$(git for-each-ref --format='%(refname:short)')"
  }
