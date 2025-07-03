@@ -4,6 +4,7 @@ PortSystem          1.0
 PortGroup           golang 1.0
 
 go.setup            github.com/MichaelMure/git-bug 0.10.1 v
+revision            1
 
 description         Distributed, offline-first bug tracker embedded in git, with bridges
 
@@ -29,6 +30,10 @@ depends_build       bin:npm:npm10
 
 patchfiles-append   macports-Makefile.diff \
                     macports-webui-codegen.yaml.diff
+
+post-patch {
+    reinplace "s|@@GIT_COMMIT@@|${github.tag_prefix}${version}|g" "${worksrcpath}/Makefile"
+}
 
 build.cmd           make
 build.args          build
