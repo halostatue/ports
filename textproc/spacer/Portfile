@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        samwho spacer 0.3.8 v
+github.setup        samwho spacer 0.4.5 v
 github.tarball_from archive
 revision            0
 
@@ -26,9 +26,10 @@ destroot {
 }
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  8127a6b92aa79b20790002181e2145114fa17a73 \
-                    sha256  56e10af707cb060d6974559d3464e2ba0cb60db70d4e9d81e961ba88058b2925 \
-                    size    416262
+                    rmd160  0a0224801d728ea0e6b219bf16584411fbddc0b4 \
+                    sha256  543ad6081bb61cfd69aa5feb88efb4c10b217a4755c871f688e44693ff3b5b1c \
+                    size    416872
+
 
 cargo.crates \
     addr2line                       0.24.2  dfbe277e56a376000877090da837660b4427aad530e3028d44e0bffe4f89a1c1 \
