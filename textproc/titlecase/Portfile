@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        wezm titlecase 3.5.0 v
+github.setup        wezm titlecase 3.6.0 v
 github.tarball_from archive
 revision            0
 
@@ -26,9 +26,10 @@ destroot {
 }
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  f5604c39d22205fc137cbc2d2823c8b88e639101 \
-                    sha256  513185482d3530deca7dab79022ad89749d8e421b243617e74104e46f86f46c8 \
-                    size    11338
+                    rmd160  e25d7c49b248ff4f08fb9a66e35c9453aaf4fcc2 \
+                    sha256  d73fac5fcba3046cf23afe260bb2c58b4878d5b9d06830c0d8ebe22b01eb8d4f \
+                    size    11845
+
 
 cargo.crates \
     aho-corasick                    1.1.3  8e60d3430d3a69478ad0993f19238d2df97c507009a52b3c10addcd7f6bcb916 \
