@@ -3,7 +3,7 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/RoseSecurity/Terramaid 2.2.0 v
+go.setup            github.com/RoseSecurity/Terramaid 2.6.2 v
 github.tarball_from archive
 name                terramaid
 
@@ -19,9 +19,9 @@ description         A utility for generating Mermaid diagrams from \
 long_description    ${description}
 
 checksums           ${distname}${extract.suffix} \
-                    rmd160  346b2f9b18958dc1b187defceb33ebac3511c226 \
-                    sha256  75c6d87aac78397ff3c7b54bd963b1624a3d24d9507c3377fe127ee5a3862d5c \
-                    size    792447
+                    rmd160  363fbafb7475a6fb7e405118edc6c073f3294da1 \
+                    sha256  d9733bbe9a9df2736d654e5ab3fa9caf7448e82a1ae23f581f5cb6f59fd50a58 \
+                    size    793388
 
 go.offline_build no
 
