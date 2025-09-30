@@ -11,6 +11,8 @@ license             Apache-2
 
 description         "Multi-platform OCI registry image query utility"
 
+livecheck.regex     {v(\d+\.\d+\.\d+)$}
+
 long_description    {*}{
   A simple utility and serverless-based backend for querying Docker v2 & OCI v1 container
   images and reporting on manifest list/OCI index multi-platform image support.
