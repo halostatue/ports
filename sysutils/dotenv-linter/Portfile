@@ -5,7 +5,8 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        dotenv-linter dotenv-linter 3.3.0 v
-revision            0
+github.tarball_from archive
+revision            1
 
 categories          sysutils
 license             MIT
@@ -14,8 +15,6 @@ maintainers         {macports.halostatue.ca:austin @halostatue} \
 
 description         Lightning-fast linter for .env files, written in Rust
 long_description    {*}${description}
-
-# github.tarball_from archive
 
 installs_libs       no
 use_configure       no
@@ -27,9 +26,9 @@ destroot {
 }
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  47a0da576c882d05c58372722745ed26cdb0bd74 \
-                    sha256  37ed0a746a70ec491cf0b922eac51914652bd74c6e1f3730930fcf6cece21fff \
-                    size    72638
+                    rmd160  e3477ee5e3dd887d8aa9d9d56fae45f216258281 \
+                    sha256  ffcd2f0d5bb40a19ea747ad7786fea796a7454f51e6da8f37fec572da8ae3c5f \
+                    size    72622
 
 cargo.crates \
     adler                            1.0.2  f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe \
