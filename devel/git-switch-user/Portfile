@@ -5,6 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        cquintana92 git-switch-user 1.1.3
+github.tarball_from archive
 revision            0
 
 categories          devel
@@ -14,8 +15,6 @@ maintainers         {macports.halostatue.ca:austin @halostatue} \
 
 description         Manage your git identities with ease
 long_description    {*}${description}
-
-# github.tarball_from archive
 
 installs_libs       no
 use_configure       no

@@ -17,8 +17,6 @@ description         Local-first task manager/bug tracker that stores everything 
                     in the git repository and can sync issues from/to GitHub.
 long_description    {*}${description}
 
-# github.tarball_from archive
-
 installs_libs       no
 use_configure       no
 

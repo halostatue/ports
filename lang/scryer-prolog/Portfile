@@ -5,6 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        mthom scryer-prolog 0.9.4 v
+github.tarball_from archive
 revision            0
 
 categories          lang
@@ -14,8 +15,6 @@ maintainers         {macports.halostatue.ca:austin @halostatue} \
 
 description         A modern Prolog implementation written mostly in Rust
 long_description    {*}${description}
-
-# github.tarball_from archive
 
 installs_libs       no
 use_configure       no
