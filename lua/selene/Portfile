@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        Kampfkarren selene 0.28.0
+github.setup        Kampfkarren selene 0.29.0
 github.tarball_from archive
 revision            0
 
@@ -26,9 +26,10 @@ destroot {
 }
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  7f68c1c81eba8c8ceccb3d4931b7b583b51583d8 \
-                    sha256  c51acf52e7c3136cd0b67b9a39a4a447c8f0257371b2b2acc7e77587260a377b \
-                    size    253044
+                    rmd160  94deade211116fd8b81252ee0d3bad7da876b8a9 \
+                    sha256  9882007e7b2d16023cd2c69d64d72afbee65dce7c3ab44a1527f5318667ed2a1 \
+                    size    256465
+
 
 cargo.crates \
     addr2line                       0.19.0  a76fd60b23679b7d19bd066031410fb7e458ccc5e958eb5c325888ce4baedc97 \
@@ -132,7 +133,7 @@ cargo.crates \
     scoped-tls                       1.0.1  e1cf6437eb19a8f4a6cc0f7dca544973b0b78843adbfeb3683d1a94a0024a294 \
     scratch                          1.0.3  ddccb15bcce173023b3fedd9436f882a0739b8dfb45e4f6b6002bee5929f61b2 \
     sct                              0.7.1  da046153aa2352493d6cb7da4b6e5c0c057d8a1d0a9aa8560baffdd945acd414 \
-    selene-lib                      0.28.0  ed0b52d775c95521cd77fdc81841cb47888dc69abb6408e8fe1fa1633168005e \
+    selene-lib                      0.29.0  56e0dcd0927cd7e388e5f5b8925b5e7280fbd0d383a614eec0425225cc458a27 \
     serde                          1.0.152  bb7d1f0d3021d347a83e556fc4683dea2ea09d87bccdf88ff5c12545d89d5efb \
     serde_derive                   1.0.152  af487d118eecd09402d70a5d72551860e788df87b464af30e5ea6a38c75c541e \
     serde_json                      1.0.99  46266871c240a00b8f503b877622fe33430b3c7d963bdc0f2adc511e54a1eae3 \
