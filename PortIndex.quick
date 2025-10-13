@@ -4,10 +4,10 @@ git-bug 912
 git-ce 1561
 git-mediate 2011
 git-some-extras 2641
-git-stack 3369
-git-task 3810
-git-switch-user 4416
-gitql 4888
+git-task 3369
+gitql 3975
+git-stack 4556
+git-switch-user 4997
 jjui 5469
 jqfmt 6018
 licensure 6469
@@ -34,5 +34,5 @@ terramaid 17066
 csvquote 17550
 doxx 17997
 htmd-cli 18567
-spacer 19066
-titlecase 19498
+titlecase 19066
+spacer 19488
