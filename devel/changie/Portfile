@@ -3,7 +3,7 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/miniscruff/changie 1.21.1 v
+go.setup            github.com/miniscruff/changie 1.22.1 v
 github.tarball_from archive
 revision            0
 
@@ -16,9 +16,9 @@ description         Automated changelog tool
 long_description    {*}${description} for preparing releases with lots of \
                     customization options
 
-checksums           rmd160  34dcb3a8f4ad169410948c632f89d433eb5324c7 \
-                    sha256  734d1f42a12b645170925cc1855626dc82a386b4250558baffe416517a9aa710 \
-                    size    1266568
+checksums           rmd160  ef376491401b33bcf67633b136c4f516190ad6e5 \
+                    sha256  da365f000aacf5cfc19cfa7bf42cb2751a16722ddc237755bcbccb21ac39de46 \
+                    size    1270430
 
 # # FIXME: This port currently can't be built without allowing go mod to fetch
 go.offline_build      no
@@ -32,4 +32,3 @@ destroot {
 
 test.run            yes
 test.args           -v
-
