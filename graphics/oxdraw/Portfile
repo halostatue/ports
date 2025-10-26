@@ -8,9 +8,9 @@ github.setup        RohanAdwankar oxdraw 9ccd9bf53f9a309ccda42b5c17e9c1056493fb9
 # This package doesn't currently have any tags
 version             0.1.0
 github.tarball_from archive
-revision            0
+revision            1
 
-categories          devel
+categories          graphics devel
 license             MIT
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
