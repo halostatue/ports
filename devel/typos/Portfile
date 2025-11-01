@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        crate-ci typos 1.38.1 v
+github.setup        crate-ci typos 1.39.0 v
 github.tarball_from archive
 revision            0
 
@@ -26,14 +26,13 @@ destroot {
 }
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  def108208908070a3d90586b1ef825e4620c8436 \
-                    sha256  f7e83dfecba57d778c916bd3d554129fd6d79e0fa781f605e83c7dd89e30711d \
-                    size    4497529
+                    rmd160  821e9c37523a4dafb1ab85b0e0bf72524b21efee \
+                    sha256  947d761577cc4adfccf685c091ed1f32f92a2982c7dd61f48d6370cd46b8e2bb \
+                    size    4476579
 
 # This is the typos port, but the crate required is typos-cli. This requires using the
 # Cargo.lock in the repo for a full build. If a variation of the cargo port can be built
 # from a *crate* we would likely have a simpler answer.
-
 
 cargo.crates \
     Inflector                   0.11.4  fe438c63458706e03479442743baae6c88256498e6431708f6dfc520a26515d3 \
