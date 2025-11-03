@@ -6,7 +6,7 @@ PortGroup           github 1.0
 
 github.setup        wolfpld vv 3.2 v
 github.tarball_from archive
-revision            0
+revision            1
 categories          graphics
 license             BSD-3-Clause
 maintainers         {macports.halostatue.ca:austin @halostatue} \
@@ -31,13 +31,13 @@ depends_lib-append  \
                     path:lib/pkgconfig/lcm2s.pc:lcms2 \
                     path:lib/pkgconfig/libexif.pc:libexif \
                     path:lib/pkgconfig/libheif.pc:libheif \
-                    path:lib/pkgconfig/libjpeg.pc:libjpeg \
+                    path:lib/pkgconfig/libjpeg.pc:libjpeg-turbo \
                     path:lib/pkgconfig/libjxl_threads.pc:libjxl \
                     path:lib/pkgconfig/libpng.pc:libpng \
                     path:lib/pkgconfig/libraw.pc:libraw \
                     path:lib/pkgconfig/librsvg-2.0.pc:librsvg \
                     path:lib/pkgconfig/libsixel.pc:libsixel \
-                    path:lib/pkgconfig/libtiff-4.pc:libtiff-4 \
+                    path:lib/pkgconfig/libtiff-4.pc:tiff \
                     path:lib/pkgconfig/libwebpdemux.pc:webp \
                     path:lib/pkgconfig/pugixml.pc:pugixml \
                     path:lib/pkgconfig/zlib.pc:zlib \
