@@ -5,8 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        jhspetersson git-task 0.2.2
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          devel
 license             MIT
@@ -20,10 +19,8 @@ long_description    {*}${description}
 installs_libs       no
 use_configure       no
 
-set cargo_triple    [cargo.rust_platform]
-
 destroot {
-    xinstall -m 0755 "${worksrcpath}/target/${cargo_triple}/release/${name}" "${destroot}${prefix}/bin/"
+    xinstall -m 0755 "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" "${destroot}${prefix}/bin/"
 }
 
 checksums           ${distname}${extract.suffix} \

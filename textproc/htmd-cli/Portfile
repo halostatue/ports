@@ -5,8 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        letmutex htmd-cli 0.4.1 v
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          textproc
 license             Apache-2
@@ -21,15 +20,16 @@ use_configure       no
 
 set bin_name        htmd
 
-destroot {
-  xinstall -m 0755 "${worksrcpath}/target/[cargo.rust_platform]/release/${bin_name}" \
-    "${destroot}${prefix}/bin/"
-}
-
 checksums           ${distname}${extract.suffix}  \
                     rmd160  d18f2d4409f49cd8fc1cde2d88ed60e78debb24f \
                     sha256  22c024c79403e0b8e60696eb75230e5fbc56503bf74b50bfd33c1ecea8368faf \
                     size    44290
+
+destroot {
+  xinstall -m 0755 \
+      "${worksrcpath}/target/[cargo.rust_platform]/release/${bin_name}" \
+      "${destroot}${prefix}/bin/"
+}
 
 cargo.crates \
     addr2line                       0.22.0  6e4503c46a5c0c7844e948c9a4d6acd9f50cccb4de1c48eb9e291ea17470c678 \

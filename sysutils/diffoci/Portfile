@@ -4,8 +4,7 @@ PortSystem          1.0
 PortGroup           golang 1.0
 
 go.setup            github.com/reproducible-containers/diffoci 0.1.7 v
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          sysutils
 maintainers         {macports.halostatue.ca:austin @halostatue} \

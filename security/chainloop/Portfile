@@ -4,8 +4,7 @@ PortSystem          1.0
 PortGroup           golang 1.0
 
 go.setup            github.com/chainloop-dev/chainloop 1.51.0 v
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          security
 maintainers         {macports.halostatue.ca:austin @halostatue} \
@@ -13,7 +12,6 @@ maintainers         {macports.halostatue.ca:austin @halostatue} \
 license             Apache-2
 
 description         ${distname} is an open source software supply chain control plane
-
 
 long_description    {*}${description}, a single source of truth for artifacts \
                     plus a declarative attestation crafting process.

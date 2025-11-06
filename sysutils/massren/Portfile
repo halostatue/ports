@@ -4,7 +4,8 @@ PortSystem          1.0
 PortGroup           golang 1.0
 
 go.setup            github.com/laurent22/massren 1.5.7 v
-github.tarball_from archive
+revision            1
+
 categories          sysutils
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer

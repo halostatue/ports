@@ -5,8 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        samwho spacer 0.5.0 v
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          textproc
 license             MIT
@@ -19,18 +18,16 @@ long_description    {*}${description}
 installs_libs       no
 use_configure       no
 
-set cargo_triple    [cargo.rust_platform]
-
-destroot {
-    xinstall -m 0755 "${worksrcpath}/target/${cargo_triple}/release/${name}" "${destroot}${prefix}/bin/"
-}
-
 checksums           ${distname}${extract.suffix}  \
                     rmd160  c3ae85e72ecde59244f15add1604ac90402e5dad \
                     sha256  310b08c538c04bae779a1c4786430e974801e8880a4c5256dc0877bc82b61af0 \
                     size    417008
 
-
+destroot {
+    xinstall -m 0755 \
+        "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" \
+        "${destroot}${prefix}/bin/"
+}
 
 cargo.crates \
     addr2line                       0.24.2  dfbe277e56a376000877090da837660b4427aad530e3028d44e0bffe4f89a1c1 \

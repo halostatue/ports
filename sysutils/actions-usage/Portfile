@@ -4,8 +4,7 @@ PortSystem          1.0
 PortGroup           golang 1.0
 
 go.setup            github.com/self-actuated/actions-usage 0.1.2 v
-github.tarball_from tarball
-revision            0
+revision            1
 
 categories          sysutils
 license             MIT

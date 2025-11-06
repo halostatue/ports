@@ -4,8 +4,7 @@ PortSystem          1.0
 PortGroup           golang 1.0
 
 go.setup            github.com/google/osv-scanner 2.2.4 v
-github.tarball_from archive
-revision            0
+revision            1
 
 description         Dependency vulnerability scanner using data provided by https://osv.dev
 long_description    {*}${description}

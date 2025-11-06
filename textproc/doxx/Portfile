@@ -5,8 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        bgreenwell doxx 0.1.1 v
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          textproc
 license             MIT
@@ -21,14 +20,16 @@ long_description    {*}${description}
 installs_libs       no
 use_configure       no
 
-destroot {
-    xinstall -m 0755 "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" "${destroot}${prefix}/bin/"
-}
-
 checksums           ${distname}${extract.suffix}  \
                     rmd160  4a1f66344a70f7511f03fec7c7296dc04c3860c7 \
                     sha256  6923cefa432a08adacedeb105902d47858f0ceea51b00e21e8b10117d86ca9e6 \
                     size    5083862
+
+destroot {
+    xinstall -m 0755 \
+        "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" \
+        "${destroot}${prefix}/bin/"
+}
 
 cargo.crates \
     addr2line                       0.24.2  dfbe277e56a376000877090da837660b4427aad530e3028d44e0bffe4f89a1c1 \

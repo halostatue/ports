@@ -5,8 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        jdrouet mrml 1.7.0 mrml-cli-v
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          devel
 license             MIT
@@ -19,18 +18,18 @@ long_description    {*}${description}
 installs_libs       no
 use_configure       no
 
-set cargo_triple    [cargo.rust_platform]
-
-build.args-append   --bins --package mrml-cli
-
-destroot {
-    xinstall -m 0755 "${worksrcpath}/target/${cargo_triple}/release/${name}" "${destroot}${prefix}/bin/"
-}
-
 checksums           ${distname}${extract.suffix}  \
                     rmd160  1f15b8869c2d26eb9deb39609308af8085473ede \
                     sha256  030813799b9867e5c9cf641e4c415616012853cd147deec233c6506d05adb68a \
                     size    243768
+
+build.args-append   --bins --package mrml-cli
+
+destroot {
+    xinstall -m 0755 \
+        "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" \
+        "${destroot}${prefix}/bin/"
+}
 
 cargo.crates \
     addr2line                       0.24.2  dfbe277e56a376000877090da837660b4427aad530e3028d44e0bffe4f89a1c1 \

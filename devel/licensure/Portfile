@@ -5,8 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        chasinglogic licensure 0.8.1
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          devel
 license             GPL-3
@@ -19,16 +18,16 @@ long_description    {*}${description}
 installs_libs       no
 use_configure       no
 
-set cargo_triple    [cargo.rust_platform]
-
-destroot {
-    xinstall -m 0755 "${worksrcpath}/target/${cargo_triple}/release/${name}" "${destroot}${prefix}/bin/"
-}
-
 checksums           ${distname}${extract.suffix}  \
                     rmd160  c4924927760177a8ca4db06627d84fb98021a4c0 \
                     sha256  785f6da7d43c4d465437aec04a1c650a5d64a25de8bdbbb0ad35b1af6646b650 \
                     size    45064
+
+destroot {
+    xinstall -m 0755 \
+        "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" \
+        "${destroot}${prefix}/bin/"
+}
 
 cargo.crates \
     adler2                           2.0.0  512761e0bb2578dd7380c6baaa0f4ce03e84f95e960231d1dec8bf4d7d6e2627 \

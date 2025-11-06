@@ -5,12 +5,13 @@ PortGroup           cmake 1.1
 PortGroup           github 1.0
 
 github.setup        wolfpld vv 3.2 v
-github.tarball_from archive
-revision            1
+revision            2
+
 categories          graphics
 license             BSD-3-Clause
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
+
 description         Terminal image viewer
 long_description    Display image files directly in your terminal. This works both \
                     locally and over remote connections. An extensive range of modern \

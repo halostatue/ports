@@ -4,7 +4,8 @@ PortSystem          1.0
 PortGroup           golang 1.0
 
 go.setup            github.com/RoseSecurity/Terramaid 2.9.0 v
-github.tarball_from archive
+revision            1
+
 name                terramaid
 
 homepage            https://github.com/RoseSecurity/Terramaid

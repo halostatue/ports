@@ -5,8 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        danobi prr 0.21.0 v
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          devel
 license             GPL-2
@@ -19,17 +18,16 @@ long_description    {*}${description}
 installs_libs       no
 use_configure       no
 
-set cargo_triple    [cargo.rust_platform]
-
 destroot {
-    xinstall -m 0755 "${worksrcpath}/target/${cargo_triple}/release/${name}" "${destroot}${prefix}/bin/"
+    xinstall -m 0755 \
+        "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" \
+        "${destroot}${prefix}/bin/"
 }
 
 checksums           ${distname}${extract.suffix}  \
                     rmd160  35cc9da3ad198ce8df428d768b1db87511a6e5d2 \
                     sha256  891d8b2bc0397027e909750ac7891ca3d6e215acab59a48d5b2da35e60b45b8c \
                     size    258625
-
 
 cargo.crates \
     addr2line                       0.25.1  1b5d307320b3181d6d7954e663bd7c774a838b8220fe0593c86d9fb09f498b4b \

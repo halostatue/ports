@@ -5,8 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        amrdeveloper gql 0.41.0
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          devel
 license             0BSD
@@ -19,17 +18,10 @@ long_description    {*}{
   of most of SQL features such as grouping, ordering and aggregations functions
 }
 
-
 installs_libs       no
 use_configure       no
 
-set cargo_triple    [cargo.rust_platform]
-# The binary is gitql
 set name            gitql
-
-destroot {
-    xinstall -m 0755 "${worksrcpath}/target/${cargo_triple}/release/${name}" "${destroot}${prefix}/bin/"
-}
 
 checksums           ${distname}${extract.suffix}  \
                     rmd160  fe8570b7060630e9e784d5c88545de4cf0fe7bfa \
@@ -38,6 +30,11 @@ checksums           ${distname}${extract.suffix}  \
 
 depends_build       bin:cmake:cmake
 
+destroot {
+    xinstall -m 0755 \
+        "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" \
+        "${destroot}${prefix}/bin/"
+}
 
 cargo.crates \
     adler2                           2.0.0  512761e0bb2578dd7380c6baaa0f4ce03e84f95e960231d1dec8bf4d7d6e2627 \

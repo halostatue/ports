@@ -5,8 +5,7 @@ PortGroup           golang 1.0
 
 go.setup            github.com/noperator/sol 0.0.1
 git.branch          7762c5115dd899bfac10d2f46d066de3c0e81774
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          devel
 maintainers         {macports.halostatue.ca:austin @halostatue} \

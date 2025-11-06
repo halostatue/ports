@@ -5,8 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        gitext-rs git-stack 0.10.20 v
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          devel
 license             MIT, Apache-2
@@ -19,17 +18,14 @@ long_description    {*}${description}
 installs_libs       no
 use_configure       no
 
-set cargo_triple    [cargo.rust_platform]
-
 destroot {
-    xinstall -m 0755 "${worksrcpath}/target/${cargo_triple}/release/${name}" "${destroot}${prefix}/bin/"
+    xinstall -m 0755 "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" "${destroot}${prefix}/bin/"
 }
 
 checksums           ${distname}${extract.suffix}  \
                     rmd160  248c0eec5c3b9b749280195805fa2a867f51edeb \
                     sha256  2a1558b2016c5e310811ff83ae9088730e403c46f651b4c648ab6e41ec9d12d1 \
                     size    195320
-
 
 cargo.crates \
     addr2line                       0.21.0  8a30b2e23b9e17a9f90641c7ab1549cd9b44f296d3ccbf309d2863cfe398a0cb \

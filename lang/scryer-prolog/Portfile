@@ -5,8 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        mthom scryer-prolog 0.10.0 v
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          lang
 license             3BSD
@@ -19,17 +18,17 @@ long_description    {*}${description}
 installs_libs       no
 use_configure       no
 
-set cargo_triple    [cargo.rust_platform]
-
-destroot {
-    xinstall -m 0755 "${worksrcpath}/target/${cargo_triple}/release/${name}" "${destroot}${prefix}/bin/"
-}
 
 checksums           ${distname}${extract.suffix}  \
                     rmd160  6cb1fe91c7240e246bb088934821f643380c6ec6 \
                     sha256  353eca4eea539e0a0eedb1572736bfcc64c5fb6fd2da3b8737c513ad62f60f3b \
                     size    2236439
 
+destroot {
+    xinstall -m 0755 \
+        "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" \
+        "${destroot}${prefix}/bin/"
+}
 
 cargo.crates \
     addr2line                        0.24.2  dfbe277e56a376000877090da837660b4427aad530e3028d44e0bffe4f89a1c1 \

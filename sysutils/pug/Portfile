@@ -4,7 +4,8 @@ PortSystem          1.0
 PortGroup           golang 1.0
 
 go.setup            github.com/leg100/pug 0.6.2 v
-github.tarball_from archive
+revision            1
+
 categories          sysutil devel
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
@@ -24,5 +25,3 @@ go.offline_build no
 destroot {
     xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
 }
-
-

@@ -5,8 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        dotenv-linter dotenv-linter 4.0.0 v
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          sysutils
 license             MIT
@@ -19,16 +18,16 @@ long_description    {*}${description}
 installs_libs       no
 use_configure       no
 
-set cargo_triple    [cargo.rust_platform]
-
-destroot {
-    xinstall -m 0755 "${worksrcpath}/target/${cargo_triple}/release/${name}" "${destroot}${prefix}/bin/"
-}
-
 checksums           ${distname}${extract.suffix}  \
                     rmd160  8014c0d0b17e9488ea87de936596ffe64c46bbf4 \
                     sha256  c10f63e84a877b630986a59680df20ee3f49ae3f89daa8d7e65f427d31b13a32 \
                     size    91500
+
+destroot {
+    xinstall -m 0755 \
+        "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" \
+        "${destroot}${prefix}/bin/"
+}
 
 cargo.crates \
     addr2line                       0.24.2  dfbe277e56a376000877090da837660b4427aad530e3028d44e0bffe4f89a1c1 \

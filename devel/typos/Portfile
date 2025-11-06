@@ -5,8 +5,7 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        crate-ci typos 1.39.0 v
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          devel
 license             MIT
@@ -19,16 +18,16 @@ long_description    {*}${description}
 installs_libs       no
 use_configure       no
 
-set cargo_triple    [cargo.rust_platform]
-
-destroot {
-    xinstall -m 0755 "${worksrcpath}/target/${cargo_triple}/release/${name}" "${destroot}${prefix}/bin/"
-}
-
 checksums           ${distname}${extract.suffix}  \
                     rmd160  821e9c37523a4dafb1ab85b0e0bf72524b21efee \
                     sha256  947d761577cc4adfccf685c091ed1f32f92a2982c7dd61f48d6370cd46b8e2bb \
                     size    4476579
+
+destroot {
+    xinstall -m 0755 \
+        "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" \
+        "${destroot}${prefix}/bin/"
+}
 
 # This is the typos port, but the crate required is typos-cli. This requires using the
 # Cargo.lock in the repo for a full build. If a variation of the cargo port can be built

@@ -4,8 +4,7 @@ PortSystem          1.0
 PortGroup           golang 1.0
 
 go.setup            github.com/devops-kung-fu/bomber 0.5.1 v
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          security
 maintainers         {macports.halostatue.ca:austin @halostatue} \
@@ -14,7 +13,6 @@ license             MPL
 conflicts           bomber
 
 description         Scans Software Bill of Materials (SBOMs) for security vulnerabilities
-
 
 long_description    {*}${description}
 
@@ -25,8 +23,6 @@ checksums           ${distname}${extract.suffix} \
 
 set bin             bomber
 name                bomber-scan
-
-# go.offline_build    no
 
 post-build {
     set bomber ${worksrcpath}/${bin}
