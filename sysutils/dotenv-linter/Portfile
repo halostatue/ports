@@ -5,7 +5,8 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        dotenv-linter dotenv-linter 4.0.0 v
-revision            1
+github.tarball_from archive
+revision            2
 
 categories          sysutils
 license             MIT

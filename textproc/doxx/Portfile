@@ -5,7 +5,8 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        bgreenwell doxx 0.1.1 v
-revision            1
+github.tarball_from archive
+revision            2
 
 categories          textproc
 license             MIT

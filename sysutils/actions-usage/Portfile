@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           golang 1.0
 
 go.setup            github.com/self-actuated/actions-usage 0.1.2 v
-revision            1
+revision            2
 
 categories          sysutils
 license             MIT
@@ -17,9 +17,9 @@ description         Find your total usage on GitHub Actions
 long_description    {*}${description}
 
 checksums           ${distname}${extract.suffix} \
-                    rmd160  8be2ce9b1b10831378b5905a7610d55f334683a9 \
-                    sha256  633a19988bb4ce4d694deb7e31632783fe0d5e1e92505653c0c19419abc68a1e \
-                    size    9354
+                    rmd160  6b857fe6ee7f52fd31ad34177341b5e0bc7971b0 \
+                    sha256  2fa7d8929a8763674f4b56353f9d5f92ee09ad6b4bef80db0899b14034cc5cac \
+                    size    9355
 
 destroot {
     xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/

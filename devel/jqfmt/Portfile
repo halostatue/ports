@@ -5,8 +5,7 @@ PortGroup           golang 1.0
 
 go.setup            github.com/noperator/jqfmt 0.0.2
 git.branch          74b59e03caff3ac5a8c061088d2c228a5c27b171
-github.tarball_from archive
-revision            0
+revision            1
 
 categories          devel
 maintainers         {macports.halostatue.ca:austin @halostatue} \
@@ -18,9 +17,9 @@ description         Like gofmt, but for jq
 long_description    {*}${description}
 
 checksums           ${distname}${extract.suffix} \
-                    rmd160  d83ac7f6502e49dd1bd3f80546edcd8ec1e116c1 \
-                    sha256  57250ad45a015db97d5e989674dbbcb8e7c97017da3a622e004c3b83a561bdd3 \
-                    size    15534
+                    rmd160  4a37f5dd01f0ac714f650d46f20e276ab12ee460 \
+                    sha256  29d6fa2a13d1758e2287c4badd667bd14bda49882d23c7d9828e1b271aee9328 \
+                    size    16209
 
 destroot {
     xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/

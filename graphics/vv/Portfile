@@ -5,7 +5,8 @@ PortGroup           cmake 1.1
 PortGroup           github 1.0
 
 github.setup        wolfpld vv 3.2 v
-revision            2
+github.tarball_from archive
+revision            3
 
 categories          graphics
 license             BSD-3-Clause

@@ -5,7 +5,8 @@ PortGroup           github 1.0
 PortGroup           cargo 1.0
 
 github.setup        prql prql 0.13.6
-revision            1
+github.tarball_from archive
+revision            2
 
 categories          devel
 license             Apache-2
@@ -31,34 +32,32 @@ checksums           ${distname}${extract.suffix}  \
                     sha256  929f9c76b685029b5bf7d5852bb735558ff664290b766fe3d531893377d1c67e \
                     size    3063034
 
-set name            prqlrc
-
 post-build {
-    set prqlc "target/[cargo.rust_platform]/release/${name}"
-    system -W ${worksrcpath} "${prqlc} shell-completion bash > ${name}.bash"
-    system -W ${worksrcpath} "${prqlc} shell-completion fish > ${name}.fish"
-    system -W ${worksrcpath} "${prqlc} shell-completion zsh > ${name}.zsh"
+    set prqlc "target/[cargo.rust_platform]/release/prqlc"
+    system -W ${worksrcpath} "${prqlc} shell-completion bash > prqlc.bash"
+    system -W ${worksrcpath} "${prqlc} shell-completion fish > prqlc.fish"
+    system -W ${worksrcpath} "${prqlc} shell-completion zsh > prqlc.zsh"
 }
 
 destroot {
     xinstall -m 0755 \
-        "${worksrcpath}/target/[cargo.rust_platform]/release/${name}" \
+        "${worksrcpath}/target/[cargo.rust_platform]/release/prqlc" \
         "${destroot}${prefix}/bin/"
 
     set bash_completions_dir share/bash-completion/completions
     xinstall -d ${destroot}${prefix}/${bash_completions_dir}
-    xinstall -m 0644 ${worksrcpath}/${name}.bash \
-        ${destroot}${prefix}/${bash_completions_dir}/${name}
+    xinstall -m 0644 ${worksrcpath}/prqlc.bash \
+        ${destroot}${prefix}/${bash_completions_dir}/prqlc
 
     set fish_completions_dir share/fish/vendor_completions.d
     xinstall -d ${destroot}${prefix}/${fish_completions_dir}
-    xinstall -m 0644 ${worksrcpath}/${name}.fish \
+    xinstall -m 0644 ${worksrcpath}/prqlc.fish \
         ${destroot}${prefix}/${fish_completions_dir}
 
     set zsh_completions_dir share/zsh/site-functions
     xinstall -d ${destroot}${prefix}/${zsh_completions_dir}
-    xinstall -m 0644 ${worksrcpath}/${name}.zsh \
-        ${destroot}${prefix}/${zsh_completions_dir}/_${name}
+    xinstall -m 0644 ${worksrcpath}/prqlc.zsh \
+        ${destroot}${prefix}/${zsh_completions_dir}/_prqlc
 }
 
 cargo.crates \

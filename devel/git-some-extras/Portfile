@@ -4,7 +4,8 @@ PortSystem              1.0
 PortGroup               github 1.0
 
 github.setup            tj git-extras 7.4.0
-revision                1
+github.tarball_from     archive
+revision                2
 name                    git-some-extras
 conflicts               git-extras
 

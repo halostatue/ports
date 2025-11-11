@@ -5,7 +5,8 @@ PortGroup           github   1.0
 PortGroup           makefile 1.0
 
 github.setup        dbro csvquote 0.1.5 v
-revision            1
+github.tarball_from archive
+revision            2
 
 description         Enables common unix utlities like cut, awk, wc, head to \
                     work correctly with csv data containing delimiters and \
