@@ -1,0 +1,30 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/natesales/q 0.19.11 v
+go.offline_build    no
+
+description         A tiny command line DNS client with support for UDP, TCP, DoT, DoH, \
+                    DoQ and ODoH.
+
+long_description    {*}${description}
+
+categories          net
+maintainers         {macports.halostatue.ca:austin @halostatue} \
+                    openmaintainer
+license             GPL-3
+
+conflicts           q
+
+checksums           ${distname}${extract.suffix} \
+                        rmd160  ab9580e97aca8a3036b0c1dd3e4e515ba67623b3 \
+                        sha256  c13dbb556f2eaa26c7bd66632a3ced4026f26486f6563104e919e3cc6d7776ce \
+                        size    395090
+
+build.pre_args-append -ldflags=\"-s -w -X main.version=${version} -X main.commit=macports -X main.date=2025-11-23\"
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/q ${destroot}${prefix}/bin/
+}
