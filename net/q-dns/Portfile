@@ -19,9 +19,9 @@ license             GPL-3
 conflicts           q
 
 checksums           ${distname}${extract.suffix} \
-                        rmd160  ab9580e97aca8a3036b0c1dd3e4e515ba67623b3 \
-                        sha256  c13dbb556f2eaa26c7bd66632a3ced4026f26486f6563104e919e3cc6d7776ce \
-                        size    395090
+                    rmd160  ab9580e97aca8a3036b0c1dd3e4e515ba67623b3 \
+                    sha256  c13dbb556f2eaa26c7bd66632a3ced4026f26486f6563104e919e3cc6d7776ce \
+                    size    395090
 
 build.pre_args-append -ldflags=\"-s -w -X main.version=${version} -X main.commit=macports -X main.date=2025-11-23\"
 

@@ -1,0 +1,52 @@
+--- cmd/resterm/main.go.orig	2025-11-23 20:49:38
++++ cmd/resterm/main.go	2025-11-23 20:53:46
+@@ -54,7 +54,6 @@
+ 		recursive                bool
+ 		showVersion              bool
+ 		checkUpdate              bool
+-		doUpdate                 bool
+ 		openapiSpec              string
+ 		openapiOut               string
+ 		openapiBase              string
+@@ -85,7 +84,6 @@
+ 	flag.BoolVar(&recursive, "recurisve", false, "(deprecated) Recursively scan workspace for request files")
+ 	flag.BoolVar(&showVersion, "version", false, "Show resterm version")
+ 	flag.BoolVar(&checkUpdate, "check-update", false, "Check for newer releases and exit")
+-	flag.BoolVar(&doUpdate, "update", false, "Download and install the latest release, if available")
+ 	flag.StringVar(&openapiSpec, "from-openapi", "", "Path to OpenAPI specification file to convert")
+ 	flag.StringVar(&openapiOut, "http-out", "", "Destination path for generated .http file")
+ 	flag.StringVar(&openapiBase, "openapi-base-var", openapi.DefaultBaseURLVariable, "Variable name for the generated base URL")
+@@ -122,7 +120,7 @@
+ 		log.Fatalf("update client: %v", err)
+ 	}
+ 
+-	if checkUpdate || doUpdate {
++	if checkUpdate {
+ 		u := newCLIUpdater(upClient, version)
+ 		ctx := context.Background()
+ 		res, ok, err := u.check(ctx)
+@@ -149,24 +147,6 @@
+ 		}
+ 		u.printAvailable(res)
+ 		u.printChangelog(res)
+-		if !doUpdate {
+-			_ = rtfmt.Fprintln(
+-				os.Stdout,
+-				rtfmt.LogHandler(log.Printf, "update hint write failed: %v"),
+-				"Run `resterm --update` to install.",
+-			)
+-			os.Exit(0)
+-		}
+-		_, err = u.apply(ctx, res)
+-		if err != nil && !errors.Is(err, update.ErrPendingSwap) {
+-			_ = rtfmt.Fprintf(
+-				os.Stderr,
+-				"update failed: %v\n",
+-				rtfmt.LogHandler(log.Printf, "update failure write failed: %v"),
+-				err,
+-			)
+-			os.Exit(1)
+-		}
+ 		os.Exit(0)
+ 	}
+ 
