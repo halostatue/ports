@@ -3,7 +3,7 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/unkn0wn-root/resterm v0.8.0
+go.setup            github.com/unkn0wn-root/resterm 0.8.0 v
 go.offline_build    no
 
 description         Terminal client for HTTP/GraphQL/gRPC with support for WebSockets, \

@@ -1,0 +1,36 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           golang 1.0
+
+go.setup            github.com/caioricciuti/dev-cockpit 1.0.8 v
+go.offline_build    no
+name                devcockpit
+
+description         Get Under the Hood of Your Apple Silicon Dev cockpit was made for \
+                    developers who want to see what's happening real-time.
+
+long_description    {*}${description}
+
+categories          devel
+maintainers         {macports.halostatue.ca:austin @halostatue} \
+                    openmaintainer
+license             Apache-2
+
+checksums           ${distname}${extract.suffix} \
+                    rmd160  300c215f9317ad2b677a9c27d59432a4545c308d \
+                    sha256  a1ce6d16d46da379d88ca579f24d9d16c542b047c6dd3005637c2d45cf7c49e7 \
+                    size    1978894
+
+build.cmd           make
+build.args          -C app build
+
+patchfiles-append   macports-app-Makefile.diff
+
+post-patch {
+    reinplace "s|@@VERSION@@|${version}|g" "${worksrcpath}/app/Makefile"
+}
+
+destroot {
+    xinstall -m 0755 ${worksrcpath}/app/build/${name} ${destroot}${prefix}/bin/
+}

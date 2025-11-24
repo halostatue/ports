@@ -1,0 +1,11 @@
+--- app/Makefile.orig	2025-11-23 21:23:25
++++ app/Makefile	2025-11-23 21:23:29
+@@ -5,7 +5,7 @@
+ 
+ # Variables
+ BINARY_NAME=devcockpit
+-VERSION=$(shell cat ../VERSION 2>/dev/null || echo "dev")
++VERSION=@@VERSION@@
+ BUILD_DIR=build
+ INSTALL_DIR=/usr/local/bin
+ MAIN_PACKAGE=./cmd/devcockpit
