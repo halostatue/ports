@@ -3,8 +3,8 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/chainloop-dev/chainloop 1.51.0 v
-revision            1
+go.setup            github.com/chainloop-dev/chainloop 1.61.0 v
+revision            0
 
 categories          security
 maintainers         {macports.halostatue.ca:austin @halostatue} \
@@ -17,9 +17,9 @@ long_description    {*}${description}, a single source of truth for artifacts \
                     plus a declarative attestation crafting process.
 
 checksums           ${distname}${extract.suffix} \
-                    rmd160  9e77280ea3dda8f1934d0589afc9511d0ae8420c \
-                    sha256  7582e34b3d36f46c5a5c90ac20f097146b31952ee4c1798a980e8e1c005f30b0 \
-                    size    6267802
+                    rmd160  e61a967474937ef9085bdb66a454c72e3f3394fa \
+                    sha256  5828d3951950d8b315aea1415535d25b54abb61d1ab3b965470fc44e37b6e7a5 \
+                    size    6305638
 
 destroot {
     xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
