@@ -20,9 +20,9 @@ installs_libs       no
 use_configure       no
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  018c43edd3c3dd96eef56e2bc00c8aa0e175042d \
-                    sha256  475acd61bff0b6ee4ec58aa566b442355e88d9efe18267c58c1501f3fb93f4bc \
-                    size    7566369
+                    rmd160  856d134bbaed94e77bd960693b7bc5c10ef005c5 \
+                    sha256  98d5b502c1de094d0111b8c3aa8e292fcec164936147299d7220b58bce119cba \
+                    size    7566479
 
 destroot {
     xinstall -m 0755 \
