@@ -1,0 +1,1674 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "digest"
+require "fileutils"
+require "json"
+require "net/http"
+require "open3"
+require "shellwords"
+require "tempfile"
+require "uri"
+require "yaml"
+
+CONFIG_FILE = File.expand_path("~/.config/macports.yml")
+CONFIG = YAML.load_file(CONFIG_FILE, symbolize_names: true)
+
+CONFIG[:ports].each_key do |port_name|
+  CONFIG[:ports][port_name][:name] = port_name.to_s
+end
+
+EXPLICIT_VERSION = %r{^version[ \t]+(?<version>\S+)}m
+GO_VERSION = %r{^go\.setup[ \t]+(?<repo>\S+)[ \t]+(?<version>\S+)(?:[ \t](?<prefix>\S+))?}m
+GITHUB_VERSION = %r{^github\.setup[ \t]+(?<owner>\S+)[ \t]+(?<repo>\S+)[ \t]+(?<version>\S+)(?:[ \t]+(?<prefix>\S+))?}m
+
+CARGO_CRATES = /\n+(?<crates>^cargo\.crates(?:[^\n]*\n?)*)/
+
+GO_VENDORS = /\n+(?<vendors>^go\.vendors(?:[^\n]*\n?)*)/
+
+STACK = []
+VERBOSE = !!(ARGV.delete("--verbose") || ARGV.delete("-v"))
+UNSTABLE = !!(ARGV.delete("--unstable") || ARGV.delete("-U"))
+
+STATE_DIR = File.expand_path("~/.local/state/macports")
+SYNC_CACHE_FILE = File.join(STATE_DIR, "last-sync")
+LAST_PORT_FILE = File.join(STATE_DIR, "last-port")
+CACHE_DURATION = 3 * 60 * 60
+RECOVERY_TIMEOUT = 8 * 60 * 60
+
+FOLLOW_PHASES = []
+
+def __safe(command) = command.is_a?(Array) ? command : Shellwords.split(command)
+
+def __run(command, input: nil)
+  Open3.popen3(*__safe(command)) do |stdin, stdout, stderr, wait|
+    stdin.puts input if input
+    stdin.close
+
+    {stdout: stdout.read.chomp, stderr: stderr.read.chomp, status: wait.value}
+  end
+end
+
+def should_follow?(phase)
+  FOLLOW_PHASES.include?("all") || FOLLOW_PHASES.include?(phase.to_s)
+end
+
+def run(command, print: true, required: true, input: nil, verbose: false, description: nil, phase: nil)
+  command = __safe(command)
+  description ||= command.shelljoin
+  puts "==> #{description}" if print
+
+  if phase && should_follow?(phase)
+    system(*command, in: input ? IO.popen("echo #{input.shellescape}", "r") : nil)
+    return $?.success? || !required
+  end
+
+  __run(command, input: input) => {stdout:, stderr:, status:}
+
+  puts stdout if (VERBOSE || verbose) && !stdout.empty?
+
+  return true if status.success?
+
+  warn stderr unless stderr.empty?
+  if required
+    halt "Command failed: #{command.shelljoin}", status: status.exitstatus
+  end
+
+  false
+end
+
+def sudo(command, print: true, phase: nil)
+  command = __safe(command).unshift("sudo")
+  run(command, required: true, print: print, phase: phase)
+end
+
+def shell_run(command, ...) = run(%W[sh -c #{__safe(command).shelljoin}], ...)
+
+def capture_or_nil(command)
+  __run(command) => {stdout:, stderr:, status:}
+
+  status.success? ? stdout : nil
+end
+
+def capture_or(command, message)
+  __run(command) => {stdout:, stderr:, status:}
+
+  return stdout if status.success?
+
+  warn stderr unless stderr.empty?
+  halt message, status: status.exitstatus
+end
+
+def capture!(command) = capture_or(command, "Error capturing #{__safe(command).shelljoin}")
+
+def halt(message, status: 1)
+  warn message
+  exit status
+end
+
+def warn(message) = Kernel.warn "macports #{STACK.last}: #{message}"
+
+public_tree = CONFIG.dig(:roots, :public) || halt("Public macports tree not defined")
+private_tree = CONFIG.dig(:roots, :private)
+
+PUBLIC_TREE = File.expand_path(public_tree)
+PRIVATE_TREE = private_tree && File.expand_path(private_tree)
+
+halt "#{PUBLIC_TREE} does not exist" unless File.directory?(PUBLIC_TREE)
+halt "#{PRIVATE_TREE} does not exist" if PRIVATE_TREE && !File.directory?(PRIVATE_TREE)
+
+def context(name)
+  STACK.push(name.to_s.tr("_", "-"))
+  yield
+ensure
+  STACK.pop
+end
+
+def git_main_branch = File.basename(Dir[".git/refs/heads/{main,master}"].first || "main")
+
+def xcode_version
+  __run(%w[xcodebuild -version]) => {stdout:, status:}
+
+  return nil unless status.success?
+
+  xcode, build_version = stdout.chomp.split($/)
+  "#{xcode} #{build_version.shellsplit.last}"
+end
+
+def clt_version
+  __run(%w[pkgutil --pkg-info=com.apple.pkg.CLTools_Executables]) => {stdout:, status:}
+
+  if stdout =~ /version: (.+)/
+    "Command Line Tools #{$1}"
+  else
+    halt "Cannot resolve Command Line Tools version from: #{stdout.inspect}"
+  end
+end
+
+def tested_on
+  context(__callee__) do
+    product_version = `sw_vers -productVersion`.chomp
+    build_version = `sw_vers -buildVersion`.chomp
+    hardware = `uname -m`.chomp
+    build_tools = xcode_version || clt_version
+
+    halt "Cannot find Xcode or Xcode Command Line Tools." if build_tools.nil?
+
+    <<~TESTED_ON
+      macOS #{product_version} #{build_version} #{hardware}
+      #{build_tools}
+    TESTED_ON
+  end
+end
+
+def run_test_script(port, verbose: false)
+  test =
+    if port[:test].start_with?("#!")
+      port[:test]
+    else
+      <<~EOS
+        #!/usr/bin/env bash
+
+        set -euo pipefail
+
+        #{port[:test]}
+      EOS
+    end
+
+  Tempfile.create(["macports-test-"], binmode: false) do |f|
+    f.write(test)
+    f.fsync
+    f.close
+    File.chmod(0o755, f.path)
+    run(f.path, verbose: verbose, description: "Test script for #{port[:name]}", phase: "test")
+  end
+end
+
+def port_test?(port)
+  return port[:port_test] if port.key?(:port_test)
+
+  port[:port_test] = port[:update].match?(/^test\.run\s+yes/m)
+end
+
+def port_test(port)
+  return unless port_test?(port)
+
+  result = __run(%W[port test #{port[:name]}])
+  halt "port test failed for #{port[:name]}" unless result[:status].success?
+
+  port[:test_passed] = true
+end
+
+def get_trac_patch(url, path = nil)
+  halt "trac-patch URL cannot be empty." unless url
+  halt "trac-patch URL must begin with https://" unless url.start_with?("https://")
+
+  path ||= "."
+  path = File.join(path, File.basename(URI(url).path))
+
+  run %W[curl --fail --location --silent --show-error #{url}?format=raw --create-dirs -o #{path}]
+
+  path
+end
+
+def trac_patch(args)
+  context(__callee__) do
+    patch = []
+
+    while args.first&.start_with?("-")
+      break if args.first == "--"
+      patch << args.shift
+    end
+
+    patch = %w[--strip 0] if patch.empty?
+    patch.unshift("patch")
+    url, dir = *args
+
+    path = get_trac_patch(url, dir)
+
+    run(patch, input: File.read(path))
+  end
+end
+
+def ensure_state_dir
+  FileUtils.mkdir_p(STATE_DIR) unless File.directory?(STATE_DIR)
+end
+
+def cache_expired?(cache_file)
+  return true unless File.exist?(cache_file)
+
+  Time.now - File.mtime(cache_file) > CACHE_DURATION
+end
+
+def update_cache(cache_file)
+  ensure_state_dir
+  File.write(cache_file, Time.now.to_i.to_s)
+end
+
+def should_sync?(force_sync)
+  force_sync || cache_expired?(SYNC_CACHE_FILE)
+end
+
+def should_git_update?(root_tree, force_sync)
+  return true if force_sync
+
+  root_name = (root_tree == PUBLIC_TREE) ? "public" : "private"
+  git_cache_file = File.join(STATE_DIR, "git-#{root_name}")
+  cache_expired?(git_cache_file)
+end
+
+def update_git_cache(root_tree)
+  ensure_state_dir
+  root_name = (root_tree == PUBLIC_TREE) ? "public" : "private"
+  git_cache_file = File.join(STATE_DIR, "git-#{root_name}")
+  update_cache(git_cache_file)
+end
+
+def save_last_port(port_name)
+  ensure_state_dir
+  File.write(LAST_PORT_FILE, port_name)
+end
+
+def get_last_port
+  return nil unless File.exist?(LAST_PORT_FILE)
+
+  File.read(LAST_PORT_FILE).strip
+end
+
+def recovery_file_path(port_name)
+  File.join(STATE_DIR, "recovery-#{port_name}.yml")
+end
+
+def calculate_port_digest(port_path)
+  files = []
+
+  portfile = File.join(port_path, "Portfile")
+  files << File.read(portfile) if File.exist?(portfile)
+
+  files_dir = File.join(port_path, "files")
+  if File.directory?(files_dir)
+    Dir.glob(File.join(files_dir, "**/*")).sort.each do |file|
+      next unless File.file?(file)
+      files << File.read(file)
+    end
+  end
+
+  Digest::SHA256.hexdigest(files.join)
+end
+
+def save_recovery_state(port, completed_phases)
+  ensure_state_dir
+
+  recovery_data = {
+    port_name: port[:name],
+    version: port[:version],
+    branch: "#{port[:name]}-#{port[:version]}",
+    timestamp: Time.now.to_i,
+    commit_hash: capture!(%w[git rev-parse HEAD]).strip,
+    files_digest: calculate_port_digest(port[:path]),
+    completed_phases: completed_phases,
+    port_config: port.dup,
+    root_path: port[:root],
+    port_path: port[:path]
+  }
+
+  File.write(recovery_file_path(port[:name]), recovery_data.to_yaml)
+end
+
+def load_recovery_state(port_name)
+  recovery_file = recovery_file_path(port_name)
+  return nil unless File.exist?(recovery_file)
+
+  recovery_data = YAML.load_file(recovery_file, symbolize_names: true)
+
+  if Time.now.to_i - recovery_data[:timestamp] > RECOVERY_TIMEOUT
+    File.delete(recovery_file)
+    return nil
+  end
+
+  recovery_data
+end
+
+def validate_recovery_state(recovery_data)
+  return false unless recovery_data
+
+  result = __run(%W[git rev-parse --verify #{recovery_data[:commit_hash]}])
+  return false unless result[:status].success?
+
+  current_digest = calculate_port_digest(recovery_data[:port_path])
+  files_changed = current_digest != recovery_data[:files_digest]
+
+  if files_changed
+    recovery_data[:completed_phases] = recovery_data[:completed_phases].select do |phase|
+      %w[seaport version_set crates_applied vendors_applied committed].include?(phase)
+    end
+  end
+
+  recovery_data
+end
+
+def cleanup_recovery_state(port_name)
+  recovery_file = recovery_file_path(port_name)
+  File.delete(recovery_file) if File.exist?(recovery_file)
+end
+
+def phase_completed?(recovery_data, phase)
+  recovery_data && recovery_data[:completed_phases].include?(phase.to_s)
+end
+
+def resume_update_from_recovery(port, recovery_data)
+  branch = git_main_branch
+
+  unless phase_completed?(recovery_data, "lint_passed")
+    puts "==> Resuming from lint phase"
+    run_lint(port)
+    save_recovery_state(port, recovery_data[:completed_phases] + ["lint_passed"])
+  end
+
+  unless phase_completed?(recovery_data, "built")
+    puts "==> Resuming from build phase"
+    sudo %W[port clean], phase: "build"
+
+    Array(port.fetch(:variants, [])).each do |variant|
+      sudo %W[port build -N +#{variant}], phase: "build"
+      sudo %W[port clean], phase: "build"
+    end
+    save_recovery_state(port, recovery_data[:completed_phases] + ["built"])
+  end
+
+  unless phase_completed?(recovery_data, "installed")
+    puts "==> Resuming from install phase"
+    sudo %W[port install -N], phase: "install"
+    save_recovery_state(port, recovery_data[:completed_phases] + ["installed"])
+  end
+
+  unless phase_completed?(recovery_data, "tested")
+    puts "==> Resuming from test phase"
+    if port[:test]
+      run_test_script(port)
+    elsif !port[:private]
+      halt "#{port[:name]}: Cannot prepare PR for public port without a port test."
+    end
+    save_recovery_state(port, recovery_data[:completed_phases] + ["tested"])
+  end
+
+  commit_msg = capture!(%W[git log #{branch}.. --format=%B])
+  port[:pr_body] = CONFIG[:template]
+    .gsub(/\{\{\s*description\s*\}\}/, commit_msg)
+    .gsub(/\{\{\s*tested_on\s*\}\}/, tested_on)
+
+  if UNSTABLE || !port[:stable]
+    puts port[:commit_message]
+    puts port[:pr_body]
+  end
+
+  unless port[:private]
+    if !port[:pr_body] || port[:pr_body].empty?
+      halt "port #{port[:name]}: Error generating pull request body"
+    end
+
+    pr_branch = "#{port[:name]}-#{port[:version]}"
+    run %W[git push origin #{pr_branch} --set-upstream]
+
+    create_pr(port, confirm: true)
+    create_pr(port)
+
+    run %W[git switch #{branch}]
+  end
+
+  sudo %W[port uninstall #{port[:name]}] if port[:requested].nil? || port[:requested].empty?
+  cleanup_recovery_state(port[:name])
+
+  puts "==> Recovery completed successfully"
+end
+
+def new_port(repo_input, public: false, force: false)
+  verify_gh_user
+  context(__callee__) do
+    do_new_port(repo_input, public, force)
+  end
+end
+
+def do_new_port(repo_input, public, force)
+  match = repo_input.match(%r{^(?:(?:https://)?github.com/)?(?<owner>[-a-z0-9A-Z]+)/(?<reponame>[^/]+)(?:\.git)?$})
+
+  halt "Invalid format. Use 'owner/repo' or full GitHub URL" unless match
+
+  owner = match[:owner]
+  repo = match[:reponame]
+
+  puts "==> Creating new port for #{owner}/#{repo}"
+
+  repo_data = fetch_github_repo_data(owner, repo)
+
+  language_info = detect_language_and_build_system(owner, repo)
+
+  portfile_content = generate_portfile(owner, repo, repo_data, language_info)
+
+  target_tree = public ? PUBLIC_TREE : PRIVATE_TREE
+  category = determine_category(repo_data)
+  port_dir = File.join(target_tree, category, repo)
+
+  if File.exist?(port_dir) && !force
+    halt "Port directory #{port_dir} already exists. Use --force to overwrite."
+  end
+
+  run %W[mkdir -p #{port_dir}]
+  File.write(File.join(port_dir, "Portfile"), portfile_content)
+
+  add_port_to_config(repo, category)
+
+  puts "==> Created new port: #{category}/#{repo}"
+  puts "==> Added to ~/.config/macports.yml"
+  puts "==> Location: #{port_dir}"
+end
+
+def fetch_github_repo_data(owner, repo)
+  result = __run(%W[gh api repos/#{owner}/#{repo}])
+  halt "Failed to fetch repo data: #{result[:stderr]}" unless result[:status].success?
+
+  JSON.parse(result[:stdout], symbolize_names: true)
+end
+
+def detect_language_and_build_system(owner, repo)
+  result = __run(%W[gh api repos/#{owner}/#{repo}/contents])
+
+  if result[:status].success?
+    files = JSON.parse(result[:stdout], symbolize_names: true)
+    file_names = files.map { |f| f[:name] }
+
+    if file_names.include?("go.mod")
+      return {language: :go, build_system: :go_modules}
+    elsif file_names.include?("Cargo.toml")
+      return {language: :rust, build_system: :cargo}
+    end
+  end
+
+  repo_result = __run(%W[gh api repos/#{owner}/#{repo} --jq .language])
+  if repo_result[:status].success?
+    primary_language = repo_result[:stdout].strip.downcase.delete('"')
+    case primary_language
+    when "go"
+      return {language: :go, build_system: :go_modules}
+    when "rust"
+      return {language: :rust, build_system: :cargo}
+    end
+  end
+
+  {language: :unknown, build_system: :unknown}
+end
+
+def determine_category(repo_data)
+  description = repo_data[:description]&.downcase || ""
+  topics = repo_data[:topics] || []
+
+  return "devel" if (topics & ["development", "developer-tools", "devtools"]).any?
+  return "sysutils" if (topics & ["cli", "command-line", "system", "admin"]).any?
+  return "net" if (topics & ["networking", "http", "api"]).any?
+  return "security" if (topics & ["security", "crypto", "encryption"]).any?
+
+  return "devel" if description.match?(/develop|build|compile|debug/)
+  return "sysutils" if description.match?(/command.?line|cli|system|admin|util/)
+  return "net" if description.match?(/network|http|api|web/)
+  return "security" if description.match?(/security|crypto|encrypt/)
+
+  "sysutils"
+end
+
+def generate_portfile(owner, repo, repo_data, language_info)
+  latest_release = get_latest_release(owner, repo)
+  halt "#{repo}: No releases found. Cannot create port without a release." unless latest_release
+
+  version = latest_release[:tag_name].sub(/^v/, "")
+  prefix = latest_release[:tag_name].start_with?("v") ? "v" : ""
+
+  # Use archive for repos without release assets
+  tarball_from = latest_release[:has_release_assets] ? :releases : :archive
+  tarball_url = build_archive_url(owner, repo, version, prefix)
+
+  puts "==> Calculating checksums for #{tarball_url}"
+  checksums = calculate_checksums(repo, tarball_url)
+
+  <<~PORTFILE.strip
+    # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+    PortSystem          1.0
+    #{generate_portgroups(language_info)}
+
+    #{generate_setup_line(owner, repo, version, prefix, language_info)}
+    #{generate_tarball_from_line(tarball_from, language_info)}revision            0
+
+    homepage            #{(repo_data[:homepage] && repo_data[:homepage].empty?) ? repo_data[:html_url] : (repo_data[:homepage] || repo_data[:html_url])}
+
+    description         #{repo_data[:description] || "#{repo} - a command line tool"}
+
+    long_description    {*}{
+        #{generate_long_description(repo_data)}
+    }
+
+    categories          #{determine_category(repo_data)}
+    installs_libs       no
+    license             #{map_license(repo_data[:license])}
+    maintainers         {macports.halostatue.ca:austin @halostatue} \\
+                        openmaintainer
+
+    checksums           ${distname}${extract.suffix} \\
+                        rmd160  #{checksums[:rmd160]} \\
+                        sha256  #{checksums[:sha256]} \\
+                        size    #{checksums[:size]}
+
+    #{generate_destroot_section(repo, language_info)}
+
+    #{generate_language_specific_sections(owner, repo, version, prefix, language_info)}
+  PORTFILE
+end
+
+def generate_portgroups(language_info)
+  case language_info[:language]
+  when :go
+    "PortGroup           golang 1.0"
+  when :rust
+    "PortGroup           github 1.0\nPortGroup           cargo 1.0"
+  else
+    "PortGroup           github 1.0"
+  end
+end
+
+def generate_setup_line(owner, repo, version, prefix, language_info)
+  case language_info[:language]
+  when :go
+    "go.setup            github.com/#{owner}/#{repo} #{version} #{prefix}".strip
+  when :rust
+    "github.setup        #{owner} #{repo} #{version} #{prefix}".strip
+  else
+    "github.setup        #{owner} #{repo} #{version} #{prefix}".strip
+  end
+end
+
+def generate_tarball_from_line(tarball_from, language_info)
+  return "" if tarball_from == :releases
+  return "" if language_info[:language] == :go
+
+  "github.tarball_from archive\n"
+end
+
+def generate_destroot_section(repo, language_info)
+  return "" if language_info[:language] == :go
+
+  <<~DESTROOT.chomp
+    destroot {
+        xinstall -m 0755 ${worksrcpath}/target/[cargo.rust_platform]/release/#{repo} ${destroot}${prefix}/bin/
+
+        # TODO: Check if #{repo} supports shell completions
+        # Common patterns: '#{repo} completion', '#{repo} --completion', '#{repo} generate-completion'
+        #
+        # set bash_completions_dir ${destroot}${prefix}/share/bash-completion/completions
+        # set fish_completions_dir ${destroot}${prefix}/share/fish/vendor_completions.d
+        # set zsh_completions_dir ${destroot}${prefix}/share/zsh/site-functions
+        # xinstall -d ${bash_completions_dir} ${fish_completions_dir} ${zsh_completions_dir}
+        #
+        # system "${worksrcpath}/target/[cargo.rust_platform]/release/#{repo} completion bash > ${bash_completions_dir}/#{repo}"
+        # system "${worksrcpath}/target/[cargo.rust_platform]/release/#{repo} completion fish > ${fish_completions_dir}/#{repo}.fish"
+        # system "${worksrcpath}/target/[cargo.rust_platform]/release/#{repo} completion zsh > ${zsh_completions_dir}/_#{repo}"
+    }
+  DESTROOT
+end
+
+def build_archive_url(owner, repo, version, prefix)
+  tag = "#{prefix}#{version}"
+  "https://github.com/#{owner}/#{repo}/archive/refs/tags/#{tag}.tar.gz"
+end
+
+def get_latest_release(owner, repo)
+  result = __run(%W[gh api repos/#{owner}/#{repo}/releases/latest])
+
+  return nil unless result[:status].success?
+
+  release = JSON.parse(result[:stdout], symbolize_names: true)
+
+  # Check if release has actual assets (not just auto-generated source)
+  has_assets = release[:assets]&.any?
+
+  release.merge(has_release_assets: has_assets)
+rescue
+  nil
+end
+
+def generate_long_description(repo_data)
+  description = repo_data[:description] || "A command line tool"
+
+  description.gsub(/\s+/, " ").strip
+end
+
+def map_license(license_info)
+  return "unknown" unless license_info
+
+  case license_info[:spdx_id]
+  when "MIT"
+    "MIT"
+  when "Apache-2.0"
+    "Apache-2"
+  when "BSD-3-Clause"
+    "BSD"
+  when "GPL-3.0"
+    "GPL-3"
+  when "GPL-2.0"
+    "GPL-2"
+  else
+    license_info[:spdx_id] || "unknown"
+  end
+end
+
+def generate_language_specific_sections(owner, repo, version, prefix, language_info)
+  case language_info[:language]
+  when :go
+    generate_go_sections(owner, repo)
+  when :rust
+    generate_rust_sections(repo, version, owner, prefix)
+  else
+    ""
+  end
+end
+
+def generate_go_sections(owner, repo)
+  <<~GO_SECTION
+    # If go.vendors causes issues (monorepo downloads, etc.):
+    # 1. Remove the go.vendors section below
+    # 2. Add: go.offline_build no
+
+    # TODO: Run 'go2port github.com/#{owner}/#{repo}' to generate go.vendors section
+    # go.vendors \\
+    #     example.com/module \\
+    #         lock    v1.0.0 \\
+    #         rmd160  PLACEHOLDER \\
+    #         sha256  PLACEHOLDER \\
+    #         size    PLACEHOLDER
+  GO_SECTION
+end
+
+def generate_rust_sections(repo, version, owner, prefix)
+  # Try crates.io first
+  puts "==> Generating cargo.crates with crate2port from crates.io"
+  crates = capture_or_nil(%W[crate2port #{repo}@#{version}])
+
+  if crates&.match?(/^cargo\.crates/)
+    return crates.strip
+  end
+
+  # Fallback to Cargo.lock from repo
+  tag = "#{prefix}#{version}"
+  cargo_lock_url = "https://raw.githubusercontent.com/#{owner}/#{repo}/refs/tags/#{tag}/Cargo.lock"
+
+  puts "==> Fetching Cargo.lock from #{cargo_lock_url}"
+
+  uri = URI(cargo_lock_url)
+  res = Net::HTTP.start(uri.host, uri.port, use_ssl: true, read_timeout: 15, open_timeout: 5) do |http|
+    http.get(uri.request_uri)
+  end
+
+  if res.is_a?(Net::HTTPSuccess)
+    puts "==> Generating cargo.crates with crate2port from Cargo.lock"
+    crates = IO.popen(%w[crate2port -], "r+") do |pipe|
+      pipe.puts res.body
+      pipe.close_write
+      pipe.read
+    end
+
+    return crates.strip if crates&.match?(/^cargo\.crates/)
+  end
+
+  <<~RUST_SECTION.chomp
+    # TODO: Run 'crate2port #{repo}@#{version}' to generate cargo.crates section
+    # cargo.crates \\
+    #     example-crate                    1.0.0  PLACEHOLDER_CHECKSUM
+  RUST_SECTION
+rescue => e
+  puts "==> Warning: Could not generate cargo.crates: #{e.message}"
+  <<~RUST_SECTION.chomp
+    # TODO: Run 'crate2port #{repo}@#{version}' to generate cargo.crates section
+    # cargo.crates \\
+    #     example-crate                    1.0.0  PLACEHOLDER_CHECKSUM
+  RUST_SECTION
+end
+
+def add_port_to_config(port_name, category)
+  config_file = File.expand_path("~/.config/macports.yml")
+  config = YAML.load_file(config_file, symbolize_names: true)
+
+  config[:ports] ||= {}
+  config[:ports][port_name.to_sym] = {category: category}
+
+  File.write(config_file, YAML.dump(config))
+end
+
+def promote_port(port_name)
+  verify_gh_user
+  context(__callee__) do
+    do_promote_port(port_name)
+  end
+end
+
+def do_promote_port(port_name)
+  port = CONFIG[:ports][port_name.to_sym] || {}
+  port[:name] ||= port_name
+
+  handle_unknown_port(port) if port[:category].nil?
+  resolve_port_path(port)
+
+  halt "#{port[:name]} is not in private tree" unless port[:private]
+
+  public_categories = Dir.glob(File.join(PUBLIC_TREE, "*")).select { |d| File.directory?(d) }
+  existing_public_port = public_categories.find do |cat_dir|
+    File.exist?(File.join(cat_dir, port[:name], "Portfile"))
+  end
+
+  if existing_public_port
+    existing_category = File.basename(existing_public_port)
+    halt "#{port[:name]} already exists in public tree as #{existing_category}/#{port[:name]}"
+  end
+
+  unless port[:test]
+    halt "#{port[:name]} cannot be promoted without test"
+  end
+
+  Dir.chdir(PUBLIC_TREE) do
+    branch = git_main_branch
+    run %W[git switch #{branch}], phase: "git"
+    run %W[git fetch --all], phase: "git"
+    run %W[git pull --rebase], phase: "git"
+
+    target_dir = File.join(PUBLIC_TREE, port[:category], port[:name])
+    run %W[mkdir -p #{target_dir}]
+    run %W[cp #{port[:file]} #{target_dir}/Portfile]
+
+    pr_branch = "#{port[:name]}-promote"
+    run %W[git switch --create #{pr_branch} #{branch}]
+    run %W[git add #{port[:category]}/#{port[:name]}/Portfile]
+
+    port[:commit_message] = "#{port[:name]}: new port"
+    run %W[git commit -m #{port[:commit_message]}]
+
+    portfile_content = File.read("#{target_dir}/Portfile")
+    if portfile_content.match(EXPLICIT_VERSION)
+      port[:version] = $1
+    end
+
+    port[:pr_body] = CONFIG[:template]
+      .gsub(/\{\{\s*description\s*\}\}/, port[:commit_message])
+      .gsub(/\{\{\s*tested_on\s*\}\}/, tested_on)
+
+    run %W[git push origin #{pr_branch} --set-upstream]
+    create_pr(port, confirm: true)
+    create_pr(port)
+
+    run %W[git switch #{branch}]
+  end
+
+  puts "==> Port #{port[:name]} promoted to public tree"
+  puts "==> Remember to run 'macports prune' after PR is merged to clean up private tree"
+end
+
+def verify_gh_user
+  return unless CONFIG[:gh]&.[](:user)
+
+  begin
+    current_user = capture!(%W[gh api user --jq .login]).strip
+  rescue
+    halt "Failed to get GitHub user. Run 'gh auth login' first."
+  end
+
+  expected_user = CONFIG[:gh][:user]
+
+  unless current_user == expected_user
+    halt "GitHub user mismatch: logged in as '#{current_user}' but config expects '#{expected_user}'"
+  end
+end
+
+def update_port(port_name, force, target_version, force_sync, resume)
+  verify_gh_user
+  context(__callee__) do
+    do_update_port(port_name, force, target_version, force_sync, resume)
+  end
+end
+
+def set_port_type(port)
+  port[:file] = File.join(port[:path], "Portfile")
+
+  begin
+    portfile = port[:portfile] = File.read(port[:file])
+  rescue Errno::ENOENT
+    halt "Portfile not found at #{port[:file]}"
+  end
+
+  port[:portgroup_golang] = portfile.match?(%r{^PortGroup\s+golang\s+1\.0})
+  port[:portgroup_github] = portfile.match?(%r{^PortGroup\s+github\s+1\.0})
+  port[:needs_cargo_crates] = portfile.match?(%r{^cargo\.crates})
+  port[:needs_go_vendors] = portfile.match?(%r{^go\.vendors})
+end
+
+def check_port_path(port, tree)
+  return false unless port[:category] && tree
+
+  candidate = File.join(tree, port[:category], port[:name])
+
+  File.exist?(File.join(candidate, "Portfile")) && candidate
+end
+
+def do_resolve_port_path(port)
+  case [check_port_path(port, PUBLIC_TREE), check_port_path(port, PRIVATE_TREE)]
+  in [path, false]
+    [:public, PUBLIC_TREE, path]
+  in [false, path]
+    [:private, PRIVATE_TREE, path]
+  in [false, false]
+    [:error, :error, :error]
+  in [String, String => path]
+    [:both, PRIVATE_TREE, path]
+  end
+end
+
+def resolve_port_path(port)
+  result, tree, path = do_resolve_port_path(port)
+
+  if result == :error
+    halt "#{port[:category]}/#{port[:name]} not found in either the public or private trees."
+  end
+
+  if result == :both
+    warn "#{port[:category]}/#{port[:name]} found in both public and private trees."
+    warn "  Using the private tree instance. Press Ctrl-C to cancel or ENTER to continue"
+    gets
+
+    result = :private
+  end
+
+  port[:private] = result == :private
+  port[:path] = path
+  port[:root] = tree
+end
+
+def handle_unknown_port(port)
+  candidate = [
+    Dir[File.join(PUBLIC_TREE, "*", port[:name], "Portfile")].first,
+    PRIVATE_TREE && Dir[File.join(PRIVATE_TREE, "*", port[:name], "Portfile")].first
+  ].compact.first
+
+  halt "Unknown port #{port[:name]}." unless candidate
+
+  port[:category] = File.basename(File.dirname(candidate, 2))
+
+  warn "port #{port[:name]}: No update procedure in #{CONFIG_FILE}."
+  warn "port #{port[:name]}: Guessed root category is #{port[:category]}."
+
+  puts "Enter test command for port #{port[:name]} to continue:"
+  port[:test] = gets.to_s.chomp
+  halt "No test procedure for #{port[:name]} provided." if port[:test].empty?
+end
+
+def get_current_version(port_name)
+  result = __run(%W[port info --version #{port_name}])
+  halt "Failed to get version for #{port_name}" unless result[:status].success?
+
+  result[:stdout].split(" ")[1]
+end
+
+def get_livecheck_version(port_name)
+  result = capture_or_nil(%W[port livecheck #{port_name}])
+
+  return if result.nil? || result.empty?
+
+  updated = "#{port_name} seems to have been updated"
+
+  $1 if /^#{updated} \(port version: \S+, new version: (\S+)\)$/ =~ result
+end
+
+def get_current_checksums(port_name)
+  distfiles = capture_or_nil(%W[port distfiles #{port_name}])
+  halt "port distfiles #{port_name} failed" unless distfiles
+
+  match = %r{\s+rmd160:\s(?<rmd160>\h+)\n\s+sha256:\s(?<sha256>\h+)\n\s+size:\s(?<size>\d+)\n\s+(?<url>\S+)\n}m.match(distfiles)
+
+  if match
+    {
+      rmd160: match[:rmd160],
+      sha256: match[:sha256],
+      size: match[:size],
+      url: match[:url]
+    }
+  else
+    halt "port distfiles #{port_name} does not contain correct information."
+  end
+end
+
+def fetch(port_name, uri, limit = 10, original_uri = nil)
+  halt "#{port_name}: Too many redirects getting #{original_uri || uri}" if limit == 0
+
+  res = Net::HTTP.get_response(URI(uri))
+  case res
+  when Net::HTTPSuccess
+    res.body
+  when Net::HTTPRedirection
+    location = res["Location"]
+    fetch(port_name, location, limit - 1, uri)
+  else
+    halt "#{port_name}: #{res.value} getting #{original_uri || uri}"
+  end
+end
+
+def calculate_checksums(port_name, uri)
+  content = fetch(port_name, uri)
+
+  {
+    sha256: Digest::SHA256.hexdigest(content),
+    rmd160: Digest::RMD160.hexdigest(content),
+    size: content.bytesize.to_s
+  }
+end
+
+def replace_checksums_and_version(content, old_data, new_data)
+  content.gsub(/^revision\s+[1-9]\d*/, "revision 0")
+    .gsub(old_data[:rmd160], new_data[:rmd160])
+    .gsub(old_data[:sha256], new_data[:sha256])
+    .gsub(old_data[:size], new_data[:size])
+    .gsub(old_data[:version], new_data[:version])
+end
+
+def get_updated_portfile(port, target_version)
+  old_version = port[:version] || get_current_version(port[:name])
+  new_version = target_version || get_livecheck_version(port[:name])
+  halt "No new version found for #{port[:name]}" unless new_version
+
+  old_checksums = get_current_checksums(port[:name])
+  old_checksums[:version] = old_version
+  new_url = old_checksums[:url].gsub(/#{Regexp.escape(old_version)}/, new_version)
+
+  new_checksums = calculate_checksums(port[:name], new_url)
+
+  portfile_content = File.read(port[:file])
+  port[:update] = replace_checksums_and_version(
+    portfile_content,
+    old_checksums,
+    new_checksums.merge(version: new_version)
+  )
+
+  if port[:portgroup_golang]
+    case port[:update].match(GO_VERSION)
+    in {repo: repo, version: version, prefix: prefix}
+      port[:go_package] = repo
+      port[:full_version] = "#{prefix}#{version}"
+      repo.gsub!(%r{github.com/}, "")
+      port[:tag_url] = "https://raw.githubusercontent.com/#{repo}/refs/tags/#{port[:full_version]}/"
+    in nil
+    end
+  end
+
+  if port[:portgroup_github]
+    case port[:update].match(GITHUB_VERSION)
+    in {owner: owner, repo: repo, version: version, prefix: prefix}
+      port[:full_version] = "#{prefix}#{version}"
+      port[:tag_url] = "https://raw.githubusercontent.com/#{owner}/#{repo}/refs/tags/#{port[:full_version]}/"
+    in nil
+    end
+  end
+
+  port[:version] = new_version
+end
+
+def check_merge(port)
+  log = capture_or_nil([
+    "git", "log", "--grep", "\\b#{port[:name]}.+#{port[:version]}", "--since", "7 days ago"
+  ])
+
+  return if log.nil? || log.empty?
+
+  warn "port #{port[:name]}: #{port[:version]} has already been merged"
+  Kernel.warn log
+  exit 1
+end
+
+def check_prs(port)
+  search = "(#{port[:name]} AND #{port[:version]}) in:title"
+  jq = "(. | length) > 0"
+  result = capture_or_nil(%W[gh pr list --search #{search} --json number --jq #{jq}])
+
+  if result&.strip == "true"
+    warn "#{port[:name]}: #{port[:version]} already has an open PR."
+    search = "#{port[:name]} in:title"
+    jq = 'map("#\(.number) \(.title)") | .[]'
+    run %W[gh pr list --search #{search} --json number,title --jq #{jq}]
+    exit 1
+  end
+end
+
+def check_pr_for_branch(branch_name)
+  result = begin
+    capture!(%W[gh pr list -R macports/macports-ports --head #{branch_name} --author @me --json number])
+  rescue
+    "[]"
+  end
+
+  JSON.parse(result).any?
+end
+
+def apply_crate2port(port)
+  return unless port[:needs_cargo_crates]
+
+  unless CARGO_CRATES.match?(port[:update])
+    raise "Port needs cargo crates, but cannot match cargo.crates section"
+  end
+
+  port[:update].gsub!(CARGO_CRATES, "")
+
+  crates =
+    if port[:cargo_lock] == "github" && port[:tag_url]
+      uri = URI.join(port[:tag_url], "Cargo.lock")
+      res = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", read_timeout: 15, open_timeout: 5) do |http|
+        http.get(uri.request_uri)
+      end
+      unless res.is_a?(Net::HTTPSuccess)
+        halt "Failed to fetch Cargo.lock from #{uri} (#{res.code})"
+      end
+
+      IO.popen(%w[crate2port -], "r+") do |pipe|
+        pipe.puts res.body
+        pipe.close_write
+        pipe.read
+      end
+    else
+      crate = port[:crate] || port[:name]
+      capture!(%W[crate2port #{crate}@#{port[:version]}])
+    end
+
+  port[:update] << "\n\n" << crates if crates
+end
+
+def apply_go2port(port)
+  return unless port[:needs_go_vendors]
+
+  raise "No match" unless GO_VENDORS.match?(port[:update])
+
+  port[:update].gsub!(GO_VENDORS, "")
+
+  url =
+    if port[:go_package].split("/").first.include?(".")
+      port[:go_package]
+    else
+      "github.com/#{port[:go_package]}"
+    end
+
+  go2port = capture!(%W[go2port get #{url} #{port[:full_version]}])
+  vendors = GO_VENDORS.match(go2port)[:vendors]
+
+  port[:update] << "\n\n" << vendors
+end
+
+def __offset_to_lines(lines, offset)
+  return nil unless offset
+
+  start_char, end_char = offset
+  first_line = last_line = nil
+  current_char = 0
+
+  lines.each_with_index do |line, index|
+    line_start = current_char
+    line_end = current_char + line.length + 1
+
+    first_line ||= index + 1 if start_char.between?(line_start, line_end)
+
+    if end_char > line_start && end_char <= line_end + $/.length
+      last_line = index + 1
+      break
+    end
+
+    current_char = line_end
+  end
+
+  last_line ||= lines.size if first_line
+
+  first_line..last_line
+end
+
+def do_port_lint(port, retry: false)
+  is_retry = binding.local_variable_get(:retry)
+
+  if is_retry
+    puts "==> Running port reclaim due to lint warning"
+    sudo %W[port -N reclaim --keep-build-deps], phase: "lint"
+  end
+
+  puts is_retry ? "==> port lint --nitpick" : "==> port lint --nitpick (retry after reclaim)"
+
+  Open3.popen3(*__safe("port lint --nitpick")) do |stdin, stdout, stderr, wait|
+    stdin.close
+    stdout.close
+    {stderr: stderr.read.chomp, status: wait.value}
+  end
+end
+
+def run_lint(port)
+  do_port_lint(port) => {stderr:, status:}
+
+  if stderr.include?("run 'sudo port reclaim' in")
+    do_port_lint(port, retry: true) => {stderr:, status:}
+  end
+
+  body = port[:update] || port[:portfile]
+
+  has_platforms = /^platforms\s+darwin$/.match?(body)
+
+  crates_offset = CARGO_CRATES.match(body).offset(:crates) if port[:needs_cargo_crates]
+  vendors_offset = GO_VENDORS.match(body).offset(:vendors) if port[:needs_go_vendors]
+
+  lines = body.split($/, -1)
+  crates_range = __offset_to_lines(lines, crates_offset)
+  vendors_range = __offset_to_lines(lines, vendors_offset)
+
+  stderr =
+    stderr.split($/).map {
+      case it
+      when /^Warning: .+\.crate - missing recommended checksum type/
+        nil
+      when /^Warning: Unnecessary platforms line as darwin is the default/
+        has_platforms ? it : nil
+      when /^Warning: Line (\d+) seems to hardcode the version number/
+        line = $1.to_i
+
+        if crates_range&.include?(line) || vendors_range&.include?(line)
+          nil
+        else
+          it
+        end
+      else
+        it
+      end
+    }.compact.join("\n").strip
+
+  return if stderr.empty? && status.success?
+
+  warn stderr
+  halt "#{port[:name]}: Port lint failed"
+end
+
+def prepare_pr(port, branch)
+  run_lint(port)
+
+  sudo %W[port clean], phase: "build"
+
+  Array(port.fetch(:variants, [])).each do |variant|
+    sudo %W[port build -N +#{variant}], phase: "build"
+    sudo %W[port clean], phase: "build"
+  end
+
+  sudo %W[port install -N], phase: "install"
+
+  port_test(port)
+
+  if port[:test]
+    run_test_script(port)
+  elsif port[:private]
+    return
+  else
+    halt "#{port[:name]}: Cannot prepare PR for public port without a port test."
+  end
+
+  commit_msg = capture!(%W[git log #{branch}.. --format=%B])
+
+  port[:pr_body] =
+    CONFIG[:template]
+      .gsub(/\{\{\s*description\s*\}\}/, commit_msg)
+      .gsub(/\{\{\s*tested_on\s*\}\}/, tested_on)
+
+  if UNSTABLE || !port[:stable]
+    puts port[:commit_message]
+    puts port[:pr_body]
+  end
+end
+
+def create_pr(port, confirm: false)
+  return if port[:stable] && confirm && !UNSTABLE
+
+  gh_pr_create = %W[gh pr create --fill --body-file -]
+  gh_pr_create << "--dry-run" if confirm
+
+  run(gh_pr_create, input: port[:pr_body], verbose: confirm)
+
+  if confirm || UNSTABLE
+    puts "Press Ctrl-C to cancel or ENTER to continue"
+    gets
+  end
+end
+
+def do_update_port(port_name, force, target_version, force_sync, resume)
+  if resume
+    recovery_data = load_recovery_state(port_name)
+    recovery_data = validate_recovery_state(recovery_data)
+
+    if recovery_data
+      puts "==> Resuming update for #{port_name} from #{Time.at(recovery_data[:timestamp])}"
+      port = recovery_data[:port_config]
+
+      Dir.chdir(recovery_data[:port_path]) do
+        run %W[git switch #{recovery_data[:branch]}], phase: "git"
+        resume_update_from_recovery(port, recovery_data)
+      end
+      return
+    else
+      puts "==> No valid recovery state found for #{port_name}, starting fresh"
+    end
+  end
+
+  port = CONFIG[:ports][port_name.to_sym] || {}
+  port[:name] ||= port_name
+
+  save_last_port(port_name)
+
+  if port[:cargo_unstable] && !force
+    halt "#{port[:name]} cannot be updated automatically because of Cargo.lock instability."
+  end
+
+  handle_unknown_port(port) if port[:category].nil?
+
+  resolve_port_path(port)
+
+  if should_sync?(force_sync)
+    sudo %W[port sync], phase: "sync"
+    update_cache(SYNC_CACHE_FILE)
+  end
+
+  Dir.chdir(port[:root]) do
+    branch = git_main_branch
+    run %W[git switch #{branch}], phase: "git"
+
+    if should_git_update?(port[:root], force_sync)
+      run %W[git fetch --all], phase: "git"
+      run %W[git pull --rebase], phase: "git"
+      update_git_cache(port[:root])
+    end
+
+    set_port_type(port)
+
+    get_updated_portfile(port, target_version)
+    save_recovery_state(port, ["seaport", "version_set"])
+
+    check_merge(port)
+    check_prs(port)
+
+    run(%W[port echo requested and name:#{port[:name]}])
+    port[:requested] = capture!(%W[port echo requested and name:#{port[:name]}])
+
+    Dir.chdir(port[:path]) do
+      apply_crate2port(port)
+      save_recovery_state(port, ["seaport", "version_set", "crates_applied"])
+
+      apply_go2port(port)
+      save_recovery_state(port, ["seaport", "version_set", "crates_applied", "vendors_applied"])
+
+      port[:update] << "\n" unless port[:update].end_with?("\n")
+
+      pr_branch = "#{port[:name]}-#{port[:version]}"
+      run %W[git switch --create #{pr_branch} #{branch}] unless port[:private]
+
+      File.write(port[:file], port[:update])
+
+      run %W[git add #{port[:file]}]
+
+      if port[:private]
+        Dir.chdir(port[:root]) do
+          run %W[portindex]
+          run %W[git add PortIndex PortIndex.quick]
+        end
+      end
+
+      port[:commit_message] = "#{port[:name]}: Update to #{port[:version]}"
+
+      run %W[git commit -m #{port[:commit_message]}]
+      save_recovery_state(port, ["seaport", "version_set", "crates_applied", "vendors_applied", "committed"])
+
+      begin
+        prepare_pr(port, branch)
+        save_recovery_state(port, ["seaport", "version_set", "crates_applied", "vendors_applied", "committed", "lint_passed", "built", "installed", "tested"])
+      rescue => e
+        puts "==> Update failed during prepare_pr phase"
+        puts "==> Recovery state saved. Use --resume to continue after fixing issues."
+        raise e
+      end
+
+      if port[:private]
+        run %W[git push]
+      else
+        if !port[:pr_body] || port[:pr_body].empty?
+          halt "port #{port[:name]}: Error generating pull request body"
+        end
+
+        run %W[git push origin #{pr_branch} --set-upstream]
+
+        create_pr(port, confirm: true)
+        create_pr(port)
+
+        run %W[git switch #{branch}]
+      end
+    end
+
+    sudo %W[port uninstall #{port[:name]}] if port[:requested].nil? || port[:requested].empty?
+
+    cleanup_recovery_state(port[:name])
+  end
+end
+
+def group_ports
+  public_ports = []
+  private_ports = []
+  both = []
+
+  CONFIG[:ports].each_value do
+    case do_resolve_port_path(it)
+    in [:public, _, _]
+      public_ports << it[:name]
+    in [:private, _, _]
+      private_ports << it[:name]
+    in [:both, _, _]
+      both << it[:name]
+      private_ports << it[:name]
+      public_ports << it[:name]
+    else
+      nil
+    end
+  end
+
+  {both:, public_ports:, private_ports:}
+end
+
+def print_livecheck(name)
+  __run(%W[port livecheck #{name}]) => {status:, stderr:, stdout:}
+
+  output =
+    if !status.success?
+      "error on livecheck: #{stderr.chomp}"
+    elsif stdout.chomp.empty?
+      "no updates"
+    else
+      base_output = stdout.chomp.sub(%r{#{name} seems to have been updated }, "").gsub(%r{[()]}, "")
+
+      if base_output =~ /new version: ([\d.]+)/
+        $1
+
+        pr_info =
+          begin
+            search = ["#{name} in:title"]
+            jq = ['map("#\(.number) \(.title)") | .[]']
+
+            prs = capture_or_nil(
+              %W[gh pr -R macports/macports-ports list --search] +
+              search +
+              %W[--json number,title --jq] +
+              jq
+            )
+
+            "(open PRs: #{prs.split("\n").join(", ")})" if !prs&.empty?
+          rescue
+          end
+
+        "#{base_output} #{pr_info}"
+      else
+        base_output
+      end
+    end
+
+  puts "#{name}: #{output}"
+end
+
+def print_ports(&block)
+  group_ports => {public_ports:, private_ports:}
+
+  puts "==> Public Ports" unless public_ports.empty?
+  public_ports.each(&block)
+
+  puts "\n==> Private Ports" unless private_ports.empty?
+  private_ports.each(&block)
+end
+
+def livecheck = print_ports { print_livecheck(it) }
+
+def check_requested(args)
+  if args.empty?
+    print_ports do
+      __run(%W[port echo requested and name:#{it}]) => {stdout:}
+
+      puts "#{it}: #{stdout.chomp.empty? ? "unrequested" : "requested"}"
+    end
+  else
+    args.each do
+      __run(%W[port echo requested and name:#{it}]) => {stdout:}
+
+      puts "#{it}: #{stdout.chomp.empty? ? "unrequested" : "requested"}"
+    end
+  end
+end
+
+def run_port_lint(port_name)
+  port = CONFIG[:ports][port_name.to_sym] || {}
+  port[:name] ||= port_name
+
+  halt "#{port_name} is not defined" if port[:category].nil?
+
+  resolve_port_path(port)
+
+  Dir.chdir(port[:path]) do
+    set_port_type(port)
+    run_lint(port)
+  end
+end
+
+def run_port_test(port_name)
+  port = CONFIG[:ports][port_name.to_sym] || {}
+
+  halt "#{port_name} does not have a defined test." if !port[:test]
+
+  if port[:test]
+    run_test_script(port, verbose: true)
+  end
+end
+
+def run_port_log(args)
+  port_name = nil
+  log_args = []
+
+  i = 0
+  while i < args.length
+    case args[i]
+    when "--phase"
+      log_args << args[i] << args[i + 1]
+      i += 2
+    when "--level"
+      log_args << args[i] << args[i + 1]
+      i += 2
+    else
+      if port_name.nil? && !args[i].start_with?("-")
+        port_name = args[i]
+      else
+        log_args << args[i]
+      end
+      i += 1
+    end
+  end
+
+  port_name ||= get_last_port
+  halt "No port specified and no recent port found" unless port_name
+
+  port = CONFIG[:ports][port_name.to_sym] || {}
+  port[:name] ||= port_name
+
+  handle_unknown_port(port) if port[:category].nil?
+  resolve_port_path(port)
+
+  Dir.chdir(port[:path]) do
+    log_cmd = %W[port log] + log_args
+    exec(*log_cmd)
+  end
+end
+
+def prune_repos
+  verify_gh_user
+  context(__callee__) do
+    puts "==> Pruning macports repositories"
+
+    [PUBLIC_TREE, PRIVATE_TREE].compact.each do |tree|
+      next unless File.directory?(tree)
+
+      puts "==> Processing #{File.basename(tree)}"
+
+      Dir.chdir(tree) do
+        run %W[git fetch --all --prune], phase: "git"
+
+        branch = git_main_branch
+        run %W[git switch #{branch}], phase: "git"
+        run %W[git pull --rebase], phase: "git"
+
+        branches_output = capture!(%w[git branch -vv])
+
+        gone_branches = []
+        other_branches = []
+
+        branches_output.split("\n").each do |line|
+          next if line.match?(/^\*|^\s+(main|master\s)/)
+
+          branch_name = line.strip.split(/\s+/).first
+
+          if line.include?(": gone]")
+            gone_branches << branch_name if branch_name
+          elsif branch_name && !%w[main master].include?(branch_name)
+            other_branches << branch_name
+          end
+        end
+
+        gone_branches.each do |branch_name|
+          puts "==> Removing gone branch: #{branch_name}"
+          run %W[git branch -D #{branch_name}]
+        end
+
+        other_branches.each do |branch_name|
+          if check_pr_for_branch(branch_name)
+            puts "==> Skipping branch #{branch_name} (has open PR)"
+            next
+          end
+
+          print "Remove branch #{branch_name}? [y/N] "
+          response = gets.chomp.downcase
+          if response == "y" || response == "yes"
+            puts "==> Removing branch: #{branch_name}"
+            run %W[git branch -D #{branch_name}]
+          end
+        end
+      end
+
+      update_git_cache(tree)
+    end
+
+    puts "==> Repository pruning complete"
+  end
+end
+
+ARGV.reject! { |a| a == "--verbose" || a == "-v" }
+
+command = ARGV.first
+ARGV.shift
+
+case command
+when "trac-patch", "trac_patch"
+  trac_patch(ARGV)
+when "xcode", "xcode-version", "xcode_version"
+  puts xcode_version
+when "cli", "cli-version", "cli_version"
+  puts clt_version
+when "tested-on", "tested_on"
+  puts tested_on
+when "livecheck"
+  livecheck
+when "log"
+  run_port_log(ARGV)
+when "prune"
+  prune_repos
+when "update", "update-port", "update_port"
+  name = nil
+  force = false
+  target_version = nil
+  force_sync = false
+  resume = false
+
+  while ARGV.first
+    case ARGV.first
+    when "--force", "-F"
+      force = true
+    when "--sync"
+      force_sync = true
+    when "--resume"
+      resume = true
+    when "--version"
+      ARGV.shift
+      target_version = ARGV.first
+    when "--follow"
+      ARGV.shift
+      if ARGV.first && !ARGV.first.start_with?("-")
+        FOLLOW_PHASES << ARGV.first
+      else
+        FOLLOW_PHASES << "all"
+        next
+      end
+    else
+      if ARGV.first&.start_with?("--follow=")
+        phase = ARGV.first.split("=", 2)[1]
+        FOLLOW_PHASES << phase
+      elsif !ARGV.first&.start_with?("-")
+        name = ARGV.first
+      end
+    end
+    ARGV.shift
+  end
+
+  halt "No port name provided for #{command}." unless name
+
+  if resume && !name
+    name = get_last_port
+    halt "No port name provided and no recent port found for resume." unless name
+  end
+
+  halt "No port name provided for #{command}." unless name
+
+  unless /\A[-a-zA-Z0-9_.]+\z/.match?(name)
+    halt "Invalid port name: #{name} (allowed: [-a-zA-Z0-9_.])"
+  end
+
+  update_port(name, force, target_version, force_sync, resume)
+when "promote"
+  name = ARGV.first
+  halt "No port name provided for promote." unless name
+
+  unless /\A[-a-zA-Z0-9_.]+\z/.match?(name)
+    halt "Invalid port name: #{name} (allowed: [-a-zA-Z0-9_.])"
+  end
+
+  promote_port(name)
+when "new"
+  repo_input = ARGV.first
+  halt "No GitHub repository provided for new." unless repo_input
+
+  public = ARGV.include?("--public")
+  force = ARGV.include?("--force")
+
+  new_port(repo_input, public: public, force: force)
+when "test"
+  run_port_test(ARGV.first)
+when "lint"
+  run_port_lint(ARGV.first)
+when "requested"
+  check_requested(ARGV)
+when %(show)
+  print_ports { puts it }
+else
+  warn "Unknown or missing command"
+  puts "Usage: #{File.basename($PROGRAM_NAME)} [--verbose] update <portname> [--force] [--sync] [--resume] [--follow[=phase]] [--version <ver>]"
+  puts "       #{File.basename($PROGRAM_NAME)} promote <portname>"
+  puts "       #{File.basename($PROGRAM_NAME)} new <owner/repo|github-url> [--public]"
+  puts "       #{File.basename($PROGRAM_NAME)} log [portname] [--phase <phase>] [--level <level>]"
+  puts "       #{File.basename($PROGRAM_NAME)} prune"
+end

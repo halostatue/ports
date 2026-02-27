@@ -1,0 +1,224 @@
+---
+gh:
+  user: halostatue
+roots:
+  public: ~/oss/macports/macports-ports
+  private: ~/oss/macports/local-ports
+ports:
+  oasdiff:
+    category: devel
+    test: |
+      oasdiff qr
+  gitleaks:
+    category: security
+    test: |
+      # This token is part of the gitleaks test suite.
+      echo 'aws_token := "AKIALALEMEL33243OLIA"' |
+        gitleaks stdin --exit-code 0 2>&1 |
+        grep -q 'leaks found: 1'
+  chezmoi:
+    category: sysutils
+    stable: true
+    test: |
+      chezmoi doctor
+  cocogitto:
+    category: devel
+    test: |
+      {
+        cog verify \
+          "Your Mother Was A Hamster, And Your Father Smelt Of Elderberries" 2>&1 ||
+        true
+      } | grep -q 'Error: Missing commit type separator `:`'
+  ripgrep:
+    category: textproc
+    test: |
+      printf "fooXbar\nfoXobar\nfoobaXr\n" | rg X -c | grep -q 3
+    cargo_lock: github
+    variants:
+      - pcre
+  colima:
+    category: sysutils
+    stable: true
+    test: |
+      colima list
+  jaq:
+    cargo_lock: github
+    category: textproc
+    test: |
+      [[ "$(echo '{"foo": true}' | jaq 'has("foo")')" == true ]]
+  lima:
+    category: sysutils
+    stable: true
+    test: |
+      limactl list
+    variants:
+      - additional_guestagents
+  lychee:
+    cargo_lock: github
+    category: devel
+    test: |
+      echo 'https://canada.com/' | lychee -
+  mise:
+    category: sysutils
+    cargo_lock: github
+    stable: true
+    test: |
+      mise doctor
+  passage:
+    category: security
+    test: |
+      #!/usr/bin/env bash
+
+      declare id created tmp
+      created=false
+      tmp="$(mktemp)"
+      rm -f "${tmp}"
+      id="$(basename "${tmp}")"
+
+      if ! [[ -f ~/.passage/identities ]]; then
+        mkdir -p ~/.passage
+        age-keygen -o ~/.passage/identities
+        created=true
+      fi
+
+      (
+        set -x
+        passage generate test."${id}"
+        passage rm -f test."${id}"
+      )
+
+      "${created}" && rm -rf ~/.passage
+  pinact:
+    category: security
+    stable: true
+    test: |
+      pinact version
+  rebels-in-the-sky:
+    category: games
+    crate: rebels
+    test: |
+      rebels --version
+  ruby-build:
+    category: ruby
+    stable: true
+    test: |
+      ruby-build --list
+  viu:
+    category: graphics
+    test: |
+      #!/usr/bin/env bash
+
+      viu ~/Pictures/garden.jpg
+  zizmor:
+    cargo_lock: github
+    category: security
+    stable: true
+    test: |
+      zizmor --thanks
+  taplo:
+    category: devel
+    cargo_lock: github
+    test: |
+      taplo config schema | jq keys
+  vv:
+    category: graphics
+    test: |
+      vv ~/Pictures/garden.jpg
+
+  actions-usage:
+    category: sysutils
+  chainloop:
+    category: security
+  changie:
+    category: devel
+  csvquote:
+    category: textproc
+  diffoci:
+    category: sysutils
+  dotenv-linter:
+    category: sysutils
+    test: |
+      tmp="$(mktemp)"
+      echo 'VAR = value  ' >>"$tmp"
+      { dotenv-linter check --plain "$tmp" || true } | grep -q 'Found 2 problems'
+  git-branch-stash:
+    category: devel
+  git-bug:
+    category: devel
+  git-mediate:
+    category: devel
+  git-some-extras:
+    category: devel
+  git-stack:
+    category: devel
+  git-task:
+    category: devel
+  gitql:
+    category: devel
+  htmd-cli:
+    category: textproc
+  jqfmt:
+    category: devel
+    test: |
+      [[ "$(printf 'has(\n\n\"foo\"\n\n)\n\n')" == 'has("foo")' ]]
+  licensure:
+    category: devel
+  manifest-tool:
+    category: sysutils
+  massren:
+    category: sysutils
+  mrml:
+    category: devel
+    cargo_lock: github
+  osv-scanner:
+    category: security
+  prql:
+    category: devel
+    cargo_lock: github
+  prr:
+    category: devel
+  pug:
+    category: sysutils
+  scryer-prolog:
+    category: lang
+  selene:
+    category: lua
+  shadowenv:
+    category: sysutils
+    cargo_lock: github
+  sol:
+    category: devel
+  spacer:
+    category: textproc
+  terramaid:
+    category: sysutils
+  titlecase:
+    category: textproc
+  typos:
+    category: devel
+    cargo_lock: github
+    test: |
+      {
+        echo 'processsor = false' | typos - || true
+      } | grep -q 'error: `processsor` should be `processors`, `processor`'
+  faketty:
+    category: sysutils
+template: |
+  #### Description
+
+  {{description}}
+
+  ##### Tested on
+
+  {{tested_on}}
+
+  ##### Verification
+
+  Have you
+
+  - [x] followed our [Commit Message Guidelines](https://trac.macports.org/wiki/CommitMessages)?
+  - [x] squashed and [minimized your commits](https://guide.macports.org/#project.github)?
+  - [x] checked that there aren't other open [pull requests](https://github.com/macports/macports-ports/pulls) for the same change?
+  - [x] checked your Portfile with `port lint`?
+  - [x] tried a full install with `sudo port -vst install`?
+  - [x] tested basic functionality of all binary files?
