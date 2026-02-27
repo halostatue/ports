@@ -3,10 +3,10 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/leg100/pug 0.6.2 v
-revision            1
+go.setup            github.com/leg100/pug 0.6.5 v
+revision 0
 
-categories          sysutil devel
+categories          sysutils devel
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 license             MPL-2
@@ -16,9 +16,9 @@ description         Drive terraform at terminal velocity
 long_description    ${description}
 
 checksums           ${distname}${extract.suffix} \
-                    rmd160  03af08201a44e006a0467bae6c5e699a21d7cd4c \
-                    sha256  e4a298523b450883be7bb3a9ab3f40c5d821ac88bd91d682093595c537a7f45d \
-                    size    10052756
+                    rmd160  95fe104a799eaecdfbdccdb82d0c32364fdd7b7b \
+                    sha256  a65d9d6e381b8e3efd22e90b0088f25c048734072ec6f132a39f1b7c20e9ea3f \
+                    size    10050797
 
 go.offline_build no
 
