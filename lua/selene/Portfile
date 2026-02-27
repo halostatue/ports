@@ -4,11 +4,11 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        Kampfkarren selene 0.29.0
+github.setup        Kampfkarren selene 0.30.0
 github.tarball_from archive
-revision            2
+revision 0
 
-categories          devel lua
+categories          lua devel
 license             MPL-2
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
@@ -20,9 +20,9 @@ installs_libs       no
 use_configure       no
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  94deade211116fd8b81252ee0d3bad7da876b8a9 \
-                    sha256  9882007e7b2d16023cd2c69d64d72afbee65dce7c3ab44a1527f5318667ed2a1 \
-                    size    256465
+                    rmd160  7decf0f264010e53cf9d38a31c6450d979ab18c5 \
+                    sha256  2cb62ef165012f062208fbc906af0f390a60f2adcf0cba9f1d60c12feccf8d23 \
+                    size    256006
 
 destroot {
     xinstall -m 0755 \
@@ -70,7 +70,7 @@ cargo.crates \
     flate2                          1.0.25  a8a2db397cb1c8772f31494cb8917e48cd1e64f0fa7efac59fbd741a0a8ce841 \
     fnv                              1.0.7  3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1 \
     form_urlencoded                  1.1.0  a9c384f161156f5260c24a097c56119f9be8c798586aecc13afbcbe7b7e26bf8 \
-    full_moon                        1.2.0  9a02c056a5966f6db8e663ee48093280f098d68d97763a94490ee63178d54776 \
+    full_moon                        2.1.1  40373a6bf84c41c6124c01cbedf5ab53d0d468adf1c0d7efd4c3273531fbb609 \
     full_moon_derive                0.11.0  99b4bd12ce56927d1dc5478d21528ea8c4b93ca85ff8f8043b6a5351a2a3c6f7 \
     generator                        0.7.2  d266041a359dfa931b370ef684cceb84b166beb14f7f0421f4a6a3d0c446d12e \
     getrandom                        0.2.8  c05aeb6a22b8f62540c194aac980f2115af067bfe15a0734d7277a768d396b31 \
@@ -132,7 +132,7 @@ cargo.crates \
     scoped-tls                       1.0.1  e1cf6437eb19a8f4a6cc0f7dca544973b0b78843adbfeb3683d1a94a0024a294 \
     scratch                          1.0.3  ddccb15bcce173023b3fedd9436f882a0739b8dfb45e4f6b6002bee5929f61b2 \
     sct                              0.7.1  da046153aa2352493d6cb7da4b6e5c0c057d8a1d0a9aa8560baffdd945acd414 \
-    selene-lib                      0.29.0  56e0dcd0927cd7e388e5f5b8925b5e7280fbd0d383a614eec0425225cc458a27 \
+    selene-lib                      0.30.0  a4d5c4b19bc7b9481a7b97c2b387b1e11007347109d2838589c5e91ff65ab229 \
     serde                          1.0.152  bb7d1f0d3021d347a83e556fc4683dea2ea09d87bccdf88ff5c12545d89d5efb \
     serde_derive                   1.0.152  af487d118eecd09402d70a5d72551860e788df87b464af30e5ea6a38c75c541e \
     serde_json                      1.0.99  46266871c240a00b8f503b877622fe33430b3c7d963bdc0f2adc511e54a1eae3 \
