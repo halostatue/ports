@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        letmutex htmd-cli 0.5.0 v
+github.setup        letmutex htmd-cli 0.5.1 v
 github.tarball_from archive
 revision            0
 
@@ -22,9 +22,9 @@ use_configure       no
 set bin_name        htmd
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  ebdb8ebd20b7ad3242614004e9eb30424776f958 \
-                    sha256  8a4223b03f8208298ec5610e7ef12c5a0ea7e36bc7d501dbf36b6a01a2857849 \
-                    size    44517
+                    rmd160  50caa4370a51ad6256d3f430a6fc41333066c105 \
+                    sha256  505999b9463ac230f4c330930f6ca9e55d0ebabcc92cce71c75b4b8769467e6e \
+                    size    44282
 
 destroot {
   xinstall -m 0755 \
@@ -57,17 +57,16 @@ cargo.crates \
     glob                              0.3.1  d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b \
     hashbrown                        0.14.5  e5274423e17b7c9fc20b6e7e208532f9b19825d82dfd615708b70edd83df41f1 \
     hermit-abi                        0.3.9  d231dfb89cfffdbc30e7fc41579ed6066ad03abda9e567ccafae602b97ec5024 \
-    htmd                              0.5.0  60ae59466542f2346e43d4a5e9b4432a1fc915b279c9fc0484e9ed7379121454 \
-    html5ever                        0.35.0  55d958c2f74b664487a2035fe1dadb032c48718a03b63f3ab0b8537db8549ed4 \
+    htmd                              0.5.1  8e3283c6ef7b7af1e31cf13e9ce70ef2577c5a33a880bb80b3aaf791adfcc9a3 \
+    html5ever                        0.36.1  6452c4751a24e1b99c3260d505eaeee76a050573e61f30ac2c924ddc7236f01e \
     indexmap                          2.2.6  168fb715dda47215e360912c096649d23d58bf392ac62f73919e831745e40f26 \
     is_terminal_polyfill             1.70.0  f8478577c03552c21db0e2724ffb8986a5ce7af88107e6be5d2ee6e158c12800 \
     libc                            0.2.155  97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c \
     lock_api                         0.4.12  07af8b9cdd281b7915f413fa73f29ebd5d55d0d3f0155584dade1ff18cea1b17 \
     log                              0.4.21  90ed8c1e510134f979dbc4f070f87d4313098b704861a105fe34231c70a3901c \
     mac                               0.1.1  c41e0c4fef86961ac6d6f8a82609f55f31b05e4fce149ac5710e439df7619ba4 \
-    markup5ever                      0.35.0  311fe69c934650f8f19652b3946075f0fc41ad8757dbb68f1ca14e7900ecc1c3 \
-    markup5ever_rcdom     0.35.0+unofficial  c8bcd53df4748257345b8bc156d620340ce0f015ec1c7ef1cff475543888a31d \
-    match_token                      0.35.0  ac84fd3f360fcc43dc5f5d186f02a94192761a080e8bc58621ad4d12296a58cf \
+    markup5ever                      0.36.1  6c3294c4d74d0742910f8c7b466f44dda9eb2d5742c1e430138df290a1e8451c \
+    markup5ever_rcdom     0.36.0+unofficial  3e5fc8802e8797c0dfdd2ce5c21aa0aee21abbc7b3b18559100651b3352a7b63 \
     memchr                            2.7.4  78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3 \
     miniz_oxide                       0.7.4  b8a240ddb74feaf34a79a7add65a741f3167852fba007066dcac1ca548d89c08 \
     new_debug_unreachable             1.0.6  650eef8c711430f1a879fdd01d4745a7deea475becfb90269c06775983bbf086 \
@@ -75,13 +74,10 @@ cargo.crates \
     object                           0.36.0  576dfe1fc8f9df304abb159d767a29d0476f7750fbf8aa7ad07816004a207434 \
     parking_lot                      0.12.3  f1bf18183cf54e8d6059647fc3063646a1801cf30896933ec2311622cc4b9a27 \
     parking_lot_core                 0.9.10  1e401f977ab385c9e4e3ab30627d6f26d00e2c73eef317493c4ec6d468726cf8 \
-    phf                              0.11.2  ade2d8b8f33c7333b51bcf0428d37e217e9f32192ae4772156f65063b8ce03dc \
     phf                              0.13.1  c1562dc717473dbaa4c1f85a36410e03c047b2e7df7f45ee938fbef64ae7fadf \
-    phf_codegen                      0.11.2  e8d39688d359e6b34654d328e262234662d16cc0f60ec8dcbe5e718709342a5a \
-    phf_generator                    0.11.2  48e4cc64c2ad9ebe670cb8fd69dd50ae301650392e81c05f9bfcb2d5bdbc24b0 \
+    phf_codegen                      0.13.1  49aa7f9d80421bca176ca8dbfebe668cc7a2684708594ec9f3c0db0805d5d6e1 \
     phf_generator                    0.13.1  135ace3a761e564ec88c03a77317a7c6b80bb7f7135ef2544dbe054243b89737 \
     phf_macros                       0.13.1  812f032b54b1e759ccd5f8b6677695d5268c588701effba24601f6932f8269ef \
-    phf_shared                       0.11.2  90fcb95eef784c2ac79119d1dd819e162b5da872ce6f3c3abe1e8ca1c082f72b \
     phf_shared                       0.13.1  e57fef6bc5981e38c2ce2d63bfa546861309f875b8a75f092d1d54ae2d64f266 \
     pin-project-lite                 0.2.14  bda66fc9667c18cb2758a2ac84d1167245054bcf85d5d1aaa6923f45801bdd02 \
     ppv-lite86                       0.2.17  5b40af805b3121feab8a3c29f04d8ad262fa8e0561883e7653e024ae4479e6de \
@@ -97,11 +93,10 @@ cargo.crates \
     serde                           1.0.203  7253ab4de971e72fb7be983802300c30b5a7f0c2e56fab8abfc6a214307c0094 \
     serde_derive                    1.0.203  500cbc0ebeb6f46627f50f3f5811ccf6bf00643be300b4c3eabc0ef55dc5b5ba \
     serde_spanned                     0.6.6  79e674e01f999af37c49f70a6ede167a8a60b2503e56c5599532a65baa5969a0 \
-    siphasher                        0.3.11  38b58827f4464d87d377d175e90bf58eb00fd8716ff0a62f80356b5e61555d0d \
     siphasher                         1.0.1  56199f7ddabf13fe5074ce809e7d3f42b42ae711800501b5b16ea82ad029c39d \
     smallvec                         1.13.2  3c5e1a9a646d36c3599cd173a41282daf47c44583ad367b8e6837255952e5c67 \
-    string_cache                      0.8.9  bf776ba3fa74f83bf4b63c3dcbbf82173db2632ed8452cb2d891d33f459de70f \
-    string_cache_codegen              0.5.4  c711928715f1fe0fe509c53b43e993a9a557babc2d0a3567d0a3006f1ac931a0 \
+    string_cache                      0.9.0  a18596f8c785a729f2819c0f6a7eae6ebeebdfffbfe4214ae6b087f690e31901 \
+    string_cache_codegen              0.6.1  585635e46db231059f76c5849798146164652513eb9e8ab2685939dd90f29b69 \
     strsim                           0.11.1  7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f \
     syn                              2.0.66  c42f3f41a2de00b01c0aaad383c5a45241efc8b2d1eda5661812fda5f3cdcff5 \
     tendril                           0.4.3  d24a120c5fc464a3458240ee02c299ebcb9d67b5249c8848b09d639dca8d7bb0 \
@@ -114,7 +109,7 @@ cargo.crates \
     utf8parse                         0.2.2  06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821 \
     uuid                              1.8.0  a183cf7feeba97b4dd1c0d46788634f6221d87fa961b305bed08c851829efcc0 \
     wasi      0.11.0+wasi-snapshot-preview1  9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423 \
-    web_atoms                         0.1.2  0b9c5f0bc545ea3b20b423e33b9b457764de0b3730cd957f6c6aa6c301785f6e \
+    web_atoms                         0.2.3  57a9779e9f04d2ac1ce317aee707aa2f6b773afba7b931222bff6983843b1576 \
     windows-sys                      0.52.0  282be5f36a8ce781fad8c8ae18fa3f9beff57ec1b52cb3de0789201425d9a33d \
     windows-targets                  0.52.5  6f0713a46559409d202e70e28227288446bf7841d3211583a4b53e3f6d96e7eb \
     windows_aarch64_gnullvm          0.52.5  7088eed71e8b8dda258ecc8bac5fb1153c5cffaf2578fc8ff5d61e23578d3263 \
@@ -126,4 +121,4 @@ cargo.crates \
     windows_x86_64_gnullvm           0.52.5  852298e482cd67c356ddd9570386e2862b5673c85bd5f88df9ab6802b334c596 \
     windows_x86_64_msvc              0.52.5  bec47e5bfd1bff0eeaf6d8b485cc1074891a197ab4225d504cb7a1ab88b02bf0 \
     winnow                           0.6.13  59b5e5f6c299a3c7890b876a2a587f3115162487e704907d9b6cd29473052ba1 \
-    xml5ever                         0.35.0  ee3f1e41afb31a75aef076563b0ad3ecc24f5bd9d12a72b132222664eb76b494
+    xml5ever                         0.36.1  f57dd51b88a4b9f99f9b55b136abb86210629d61c48117ddb87f567e51e66be7
