@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        crate-ci typos 1.45.2 v
+github.setup        crate-ci typos 1.47.0 v
 github.tarball_from archive
 revision            0
 
@@ -20,9 +20,9 @@ installs_libs       no
 use_configure       no
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  f26cda9543dadc36a814c6c7025943bf33251d7f \
-                    sha256  38e111a6c358b92977eb6592f4f7dc3b01920341c8c852f5eb2f2003126b3b7a \
-                    size    4607878
+                    rmd160  7f637c56b2dd8ccfeb86ab7c2436366cb5b26064 \
+                    sha256  dc538f582f90aec6ccd92635667aa782de0339b7c33f25512f60b2512afdd181 \
+                    size    4621258
 
 destroot {
     xinstall -m 0755 \
@@ -40,7 +40,7 @@ cargo.crates \
     adler2                              2.0.1  320119579fcad9c21884f5c4861d16174d0e06250625266f50fe6898340abefa \
     ahash                              0.8.12  5a15f179cd60c4584b8a8c596927aadc462e27f2ca70c04e0071964a73ba7a75 \
     aho-corasick                        1.1.4  ddd31a130427c27518df266943a5308ed92d4b226cc639f5a8f1002816174301 \
-    annotate-snippets                 0.12.13  74fc7650eedcb2fee505aad48491529e408f0e854c2d9f63eb86c1361b9b3f93 \
+    annotate-snippets                 0.12.15  92570a3f9c98e7e84df84b71d0965ac99b1871fcd75a3773a3bd1bad13f64cf7 \
     anstream                            1.0.0  824a212faf96e9acacdbd09febd34438f8f711fb84e09a8916013cd7815ca28d \
     anstyle                            1.0.14  940b3a0ca603d1eade50a4846a2afffd5ef57a9feac2c0e2ec2e14f9ead76000 \
     anstyle-parse                       1.0.0  52ce7f38b242319f7cabaa6813055467063ecdc9d355bbb4ce0c68908cd8130e \
@@ -53,11 +53,11 @@ cargo.crates \
     bitflags                           2.11.0  843867be96c8daad0d758b57df9392b6d8d271134fce549de6ce169ff98a92af \
     bstr                               1.12.1  63044e1ae8e69f3b5a92c736ca6269b8d12fa7efe39bf34ddb06d102cf0e2cab \
     cfg-if                              1.0.4  9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801 \
-    clap                                4.6.0  b193af5b67834b676abd72466a96c1024e6a6ad978a1f484bd90b85c94041351 \
+    clap                                4.6.1  1ddb117e43bbf7dacf0a4190fef4d345b9bad68dfc649cb349e7d17d28428e51 \
     clap-cargo                         0.18.3  936551935c8258754bb8216aec040957d261f977303754b9bf1a213518388006 \
     clap-verbosity-flag                 3.0.4  9d92b1fab272fe943881b77cc6e920d6543e5b1bfadbd5ed81c7c5a755742394 \
     clap_builder                        4.6.0  714a53001bf66416adb0e2ef5ac857140e7dc3a0c48fb28b2f10762fc4b5069f \
-    clap_derive                         4.6.0  1110bd8a634a1ab8cb04345d8d878267d57c3cf1b38d91b71af6686408bbca6a \
+    clap_derive                         4.6.1  f2ce8604710f6733aa641a2b3731eaa1e8b3d9973d5e3565da11800813f997a9 \
     clap_lex                            1.0.0  3a822ea5bc7590f9d40f1ba12c0dc3c2760f3482c6984db1573ad11031420831 \
     codegenrs                           3.0.2  11a564a9c6e001f881ff5074dc1fb10aae609c82c92b7ddb47e40987be820771 \
     colorchoice                         1.0.4  b05b61dc5112cbb17e4b6cd61790d9845d13888356391624cbe7e41efeac1e75 \
@@ -103,15 +103,15 @@ cargo.crates \
     globset                            0.4.18  52dfc19153a48bde0cbd630453615c8151bce3a5adfac7a0aebfbf0a1e1f57e3 \
     globwalk                            0.9.1  0bf760ebf69878d9fd8f110c89703d90ce35095324d1f1edcb595c63945ee757 \
     hashbrown                          0.15.5  9229cfe53dfd69f0609a49f65461bd93001ea1ef889cd5529dd176593f5338a1 \
-    hashbrown                          0.16.1  841d1cc9bed7f9236f321df977030373f4a4163ae1a7dbfe1a51a2c1a51d9100 \
+    hashbrown                          0.17.0  4f467dd6dccf739c208452f8014c75c18bb8301b050ad1cfb27153803edb0f51 \
     heck                                0.5.0  2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea \
-    human-panic                         2.0.7  ca7d4a01c69c8cbe4bec7ea7e0fe0e703c36a770463eb1fe6e82e9f08aecb191 \
+    human-panic                         2.0.8  e2815d0c49773c6e0a9753960b3d0e50b822e48e08c77bcb4780be8474c9cc3d \
     humantime                           2.3.0  135b12329e5e3ce057a9f972339ea52bc954fe1e9358ef27f95e89716fbc5424 \
     humantime-serde                     1.1.1  57a3db5ea5923d99402c94e9feb261dc5ee9b4efa158b0315f788cf549cc200c \
     id-arena                            2.3.0  3d3067d79b975e8844ca9eb072e16b31c3c1c36928edf9c6789548c524d0d954 \
     ident_case                          1.0.1  b9e0384b61958566e926dc50660321d12159025e767c18e043daf26b70104c39 \
     ignore                             0.4.25  d3d782a365a015e0f5c04902246139249abf769125006fbe7649e2ee88169b4a \
-    indexmap                           2.13.0  7714e70437a7dc3ac8eb7e6f8df75fd8eb422675fc7678aff7364301092b1017 \
+    indexmap                           2.14.0  d466e9454f08e4a911e14806c24e16fba1b4c121d1ea474396f396069cf949d9 \
     is_terminal_polyfill               1.70.2  a6cb138bb79a146c1bd460005623e142ef0181e3d0219cb493e02f7d08a35695 \
     itertools                          0.14.0  2b192c782037fadd9cfa75548310488aabdbf3d2da73885b31bd0abd03351285 \
     itoa                               1.0.17  92ecc6618181def0457392ccd0ee51198e065e016d1d527a7ac1b6dc7c1f09d2 \
@@ -179,7 +179,7 @@ cargo.crates \
     simdutf8                            0.1.5  e3a9fe34e3e7a50316060351f37187a3f546bce95496156754b601a5fa71b76e \
     similar                             2.7.0  bbbb5d9659141646ae647b42fe094daf6c6192d1620870b449d9557f748b2daa \
     siphasher                           1.0.1  56199f7ddabf13fe5074ce809e7d3f42b42ae711800501b5b16ea82ad029c39d \
-    snapbox                             1.2.0  8d9a4b69d5b4116a26b662c0bb38895261da3f3bfc171657d66a2a3c7a41e929 \
+    snapbox                             1.2.1  f92ac911648d788a6435401d9b4803959039d4de9919fdabdb415a8bebd027be \
     snapbox-macros                      1.1.0  ed4a172e483585ebbc7c7f7d1705ca7e3f94f606ed78caa14805673189fd5455 \
     static_assertions                   1.1.0  a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f \
     strsim                             0.11.1  7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f \
@@ -195,10 +195,10 @@ cargo.crates \
     thiserror                          2.0.17  f63587ca0f12b72a0600bcba1d40081f830876000bb46dd2337a3051618f4fc8 \
     thiserror-impl                     2.0.17  3ff15c8ecd7de3849db632e14d18d2571fa09dfc5ed93479bc4485c7a517c913 \
     thread_local                        1.1.9  f60246a4944f24f6e018aa17cdeffb7818b76356965d03b07d6a9886e8962185 \
-    toml                     1.1.1+spec-1.1.0  994b95d9e7bae62b34bab0e2a4510b801fa466066a6a8b2b57361fa1eba068ee \
+    toml                     1.1.2+spec-1.1.0  81f3d15e84cbcd896376e6730314d59fb5a87f31e4b038454184435cd57defee \
     toml_datetime            1.1.1+spec-1.1.0  3165f65f62e28e0115a00b2ebdd37eb6f3b641855f9d636d3cd4103767159ad7 \
     toml_edit               0.25.9+spec-1.1.0  da053d28fe57e2c9d21b48261e14e7b4c8b670b54d2c684847b91feaf4c7dac5 \
-    toml_parser              1.1.1+spec-1.1.0  39ca317ebc49f06bd748bfba29533eac9485569dc9bf80b849024b025e814fb9 \
+    toml_parser              1.1.2+spec-1.1.0  a2abe9b86193656635d2411dc43050282ca48aa31c2451210f4202550afb7526 \
     toml_writer              1.1.1+spec-1.1.0  756daf9b1013ebe47a8776667b466417e2d4c5679d441c26230efd9ef78692db \
     trycmd                              1.2.0  218889993f76bda9b2ef57c12c3cab0eef4fd54ec7b36d1704849867f69e7bb4 \
     typed-arena                         2.0.2  6af6ae20167a9ece4bcb41af5b80f8a1f1df981f6391189ce00fd257af04126a \
@@ -236,7 +236,7 @@ cargo.crates \
     windows-strings                     0.5.1  7837d08f69c77cf6b07689544538e017c1bfcf57e34b4c0ff58e6c2cd3b37091 \
     windows-sys                        0.61.2  ae137229bcbd6cdf0f7b80a31df61766145077ddf49416a728b02cb3921ff3fc \
     windows-threading                   0.2.1  3949bd5b99cafdf1c7ca86b43ca564028dfe27d66958f2470940f73d86d75b37 \
-    winnow                              1.0.1  09dac053f1cd375980747450bfc7250c264eaae0583872e845c0c7cd578872b5 \
+    winnow                              1.0.2  2ee1708bef14716a11bae175f579062d4554d95be2c6829f518df847b7b3fdd0 \
     wit-bindgen                        0.51.0  d7249219f66ced02969388cf2bb044a09756a083d0fab1e566056b04d9fbcaa5 \
     wit-bindgen-core                   0.51.0  ea61de684c3ea68cb082b7a88508a8b27fcc8b797d738bfc99a82facf1d752dc \
     wit-bindgen-rust                   0.51.0  b7c566e0f4b284dd6561c786d9cb0142da491f46a9fbed79ea69cdad5db17f21 \
