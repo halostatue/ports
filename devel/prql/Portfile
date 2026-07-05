@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        prql prql 0.13.12
+github.setup        prql prql 0.13.13
 github.tarball_from archive
 revision 0
 
@@ -28,9 +28,9 @@ cargo.update        no
 depends_build       port:python312
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  425d139e8e2fd61e758f2396961328a1cb9f5451 \
-                    sha256  8e24657f9bec405bccc3c22404cc97e18d6583ffbafc3cd3286038f7c1728606 \
-                    size    3087326
+                    rmd160  0a18b3ace6bb22d079b95ff9477c99a07fa14521 \
+                    sha256  089e85cfe54e2bcf7018b32ccb6fe06bdfefc1f1b9f10ddb9a59c74a24c54c22 \
+                    size    3091578
 
 post-build {
     set prqlc "target/[cargo.rust_platform]/release/prqlc"
@@ -70,7 +70,7 @@ cargo.crates \
     allocator-api2                  0.2.21  683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923 \
     android_system_properties        0.1.5  819e7219dbd41043ac279b19830f2efc897156490d7fd6ea916720117ee66311 \
     anes                             0.1.6  4b46cbb362ab8752921c97e041f5e366ee6297bd428a31275b9fcf1e380f7299 \
-    ansi-to-html                     0.2.2  12e283a4fc285735ef99577e81a125f738429516161ac33977e466d0d8d40764 \
+    ansi-to-html                     0.2.3  1747e9bde0e06cdfa780fcba909df1fa220f82421ead1fd4a93427763d2cbda6 \
     anstream                         1.0.0  824a212faf96e9acacdbd09febd34438f8f711fb84e09a8916013cd7815ca28d \
     anstyle                         1.0.13  5192cca8006f1fd4f7237516f40fa183bb07f8fbdfedaa0036de5ea9b0b45e78 \
     anstyle-parse                    1.0.0  52ce7f38b242319f7cabaa6813055467063ecdc9d355bbb4ce0c68908cd8130e \
@@ -120,7 +120,7 @@ cargo.crates \
     cfg-if                           1.0.4  9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801 \
     cfg_aliases                      0.2.1  613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724 \
     chrono                          0.4.44  c673075a2e0e5f4a1dde27ce9dee1ea4558c7ffe648f576438a20ca1d2acc4b0 \
-    chumsky                         0.12.0  4ba4a05c9ce83b07de31b31c874e87c069881ac4355db9e752e3a55c11ec75a6 \
+    chumsky                         0.13.0  e0d2bfadce76f963d776feff99db6dc33783829539258314776383b33e2a00f8 \
     ciborium                         0.2.2  42e69ffd6f0917f5c029256a24d0161db17cea3997d185db0d35926308770f0e \
     ciborium-io                      0.2.2  05afea1e0a06c9be33d539b876f1ce3692f4afea2cb41f740e7743225ed1c757 \
     ciborium-ll                      0.2.2  57663b653d948a338bfb3eeba9bb2fd5fcfaecb9e199e87e1eda4d9e8b240fd9 \
@@ -273,7 +273,7 @@ cargo.crates \
     lexical-util                     1.0.7  2604dd126bb14f13fb5d1bd6a66155079cb9fa655b37f875b3a742c705dbed17 \
     lexical-write-float              1.0.6  50c438c87c013188d415fbabbb1dceb44249ab81664efbd31b14ae55dabb6361 \
     lexical-write-integer            1.0.6  409851a618475d2d5796377cad353802345cba92c867d9fbcde9cf4eac4e14df \
-    libc                           0.2.185  52ff2c0fe9bc6cb6b14a0592c2ff4fa9ceb83eea9db979b0487cd054946a2b8f \
+    libc                           0.2.186  68ab91017fe16c622486840e4c83c9a37afeff978bd239b5293d61ece587de66 \
     libduckdb-sys                1.10501.0  12096c1694924782b3fe21e790630b77bacb4fcb7ad9d7ee0fec626f985bf248 \
     libloading                       0.8.9  d7c4b02199fee7c5d21a5ae7d8cfa79a6ef5bb2fc834d6e9058e89c825efdc55 \
     libm                            0.2.16  b6d2cec3eae94f9f509c767b45932f1ada8350c4bdb85af2fcab4a3c14807981 \
@@ -295,7 +295,7 @@ cargo.crates \
     memo-map                         0.3.3  38d1115007560874e373613744c6fba374c17688327a71c1476d1a5954cc857b \
     memoffset                        0.9.1  488016bfae457b036d996092f6cb448677611ce4449e970ceaf42695203f218a \
     minicov                          0.3.8  4869b6a491569605d66d3952bcdf03df789e5b536e5f0cf7758a7f08a55ae24d \
-    minijinja                       2.19.0  805bfd7352166bae857ee569628b52bcd85a1cecf7810861ebceb1686b72b75d \
+    minijinja                       2.20.0  2929e494b2280e1e18959bb2e121da03347ae896896fdfaceaab43c88a02803f \
     miniz_oxide                      0.8.9  1fa76a2c86f704bdb222d66965fb3d63269ce38518b83cb0575fca855ebb6316 \
     mio                              1.2.0  50b7e5b27aa02a74bac8c3f23f448f8d87ff11f92d3aac1a6ed369ee08cc56c1 \
     mysql                           28.0.0  4a732193888328fc060ab901c0ed1355521267a51ffbfd9a0b3786434c6b8e7f \
@@ -365,10 +365,8 @@ cargo.crates \
     ref-cast                        1.0.25  f354300ae66f76f1c85c5f84693f0ce81d747e2c3f21a45fef496d89c960bf7d \
     ref-cast-impl                   1.0.25  b7186006dcb21920990093f30e3dea63b7d6e977bf1256be20c3563a5db070da \
     regex                           1.12.3  e10754a14b9137dd7b1e3e5b0493cc9171fdd105e0ab477f51b72e7f3ac0e276 \
-    regex-automata                   0.3.9  59b23e92ee4318893fa3fe3e6fb365258efbfe6ac6ab30f090cdcbb7aa37efa9 \
     regex-automata                  0.4.14  6e1dd4122fc1595e8162618945476892eefca7b88c52820e74af6262213cae8f \
     regex-lite                       0.1.9  cab834c73d247e67f4fae452806d17d3c7501756d98c8808d7c9c7aa7d18f973 \
-    regex-syntax                     0.7.5  dbb5fb1acd8a1a18b3dd5be62d25485eb770e05afb408a9627d14d451bae12da \
     regex-syntax                    0.8.10  dc897dd8d9e8bd1ed8cdad82b5966c3e0ecae09fb1907d58efaa013543185d0a \
     relative-path                    1.9.3  ba39f3699c378cd8970968dcbff9c43159ea4cfbd88d43c00b22f2ef10a435d2 \
     rend                             0.4.2  71fe3824f5629716b1589be05dacd749f6aa084c87e00e016714a8cdfccc997c \
@@ -432,7 +430,7 @@ cargo.crates \
     socket2                          0.6.3  3a766e1110788c36f4fa1c2b71b387a7815aa65f88ce0229841826633d93723e \
     sqlformat                        0.3.5  a0d7b3e8a3b6f2ee93ac391a0f757c13790caa0147892e3545cd549dd5b54bc0 \
     sqlite-wasm-rs                   0.5.2  2f4206ed3a67690b9c29b77d728f6acc3ce78f16bf846d83c94f76400320181b \
-    sqlparser                       0.60.0  505aa16b045c4c1375bf5f125cce3813d0176325bfe9ffc4a903f423de7774ff \
+    sqlparser                       0.62.0  13c6d1b651dc4edf07eead2a0c6c78016ce971bc2c10da5266861b13f25e7cec \
     stable_deref_trait               1.2.1  6ce2be8dc25455e1f91df71bfa12ad37d7af1092ae736f3a6cd0e37bc7810596 \
     stringprep                       0.1.5  7b4df3d392d81bd458a8a621b8bffbd2302a12ffe288a9d931670948749463b1 \
     strsim                          0.11.1  7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f \
@@ -448,7 +446,7 @@ cargo.crates \
     sync_wrapper                     1.0.2  0bf256ce5efdfa370213c1dabab5935a12e49f2c58d15e9eac2870d3b4f27263 \
     synstructure                    0.13.2  728a70f3dbaf5bab7f0c4b1ac8d7ae5ea60a4b5549c8a5914361c99147a709d2 \
     tap                              1.0.1  55937e1799185b12863d447f42597ed69d9928686b8d88a1df17376a097d8369 \
-    tar                             0.4.45  22692a6476a21fa75fdfc11d452fda482af402c008cdbaf3476414e122040973 \
+    tar                             0.4.46  3f6221d9a6003c78398e3b239969f352578258df48c8eb051caadae0015bc840 \
     target-lexicon                  0.13.5  adb6935a6f5c20170eeceb1a3835a49e12e19d792f6dd344ccc76a985ca5a6ca \
     tempfile                        3.27.0  32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd \
     termcolor                        1.4.1  06794f8f6c5c898b3275aebefa6b8a1cb24cd2c6c79397ab15774837a0bc5755 \
@@ -468,7 +466,7 @@ cargo.crates \
     tinytemplate                     1.2.1  be4d6b5f19ff7664e8c98d03e2139cb510db9b0a60b55f8e8709b689d939b6bc \
     tinyvec                         1.10.0  bfa5fdc3bce6191a1dbc8c02d5c8bffcf557bafa17c124c5264a458f1b0613fa \
     tinyvec_macros                   0.1.1  1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20 \
-    tokio                           1.51.1  f66bf9585cda4b724d3e78ab34b73fb2bbaba9011b9bfdf69dc836382ea13b8c \
+    tokio                           1.52.3  8fc7f01b389ac15039e4dc9531aa973a135d7a4135281b12d7c1bc79fd57fffe \
     tokio-macros                     2.7.0  385a6cb71ab9ab790c5fe8d67f1645e6c450a7ce006a33de03daa956cf70a496 \
     tokio-postgres                  0.7.13  6c95d533c83082bb6490e0189acaa0bbeef9084e60471b696ca6988cd0541fb0 \
     tokio-rustls                    0.24.1  c28327cf380ac148141087fbfb9de9d7bd4e84ab5d2c28fbc911d753de8a7081 \
@@ -511,9 +509,9 @@ cargo.crates \
     uuid                            1.20.0  ee48d38b119b0cd71fe4141b30f5ba9c7c5d9f4e7a3a8b4a674e4b6ef789976f \
     valuable                         0.1.1  ba73ea9cf16a25df0c8caa16c51acb937d5712a8429db78a3ee29d5dcacd3a65 \
     vcpkg                           0.2.15  accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426 \
-    vergen                           9.0.2  31f25fc8f8f05df455c7941e87f093ad22522a9ff33d7a027774815acf6f0639 \
-    vergen-gitcl                     1.0.2  0227006d09f98ab00ea69e9a5e055e676a813cfbed4232986176c86a6080b997 \
-    vergen-lib                       0.1.5  c0c767e6751c09fc85cde58722cf2f1007e80e4c8d5a4321fc90d83dc54ca147 \
+    vergen                           9.0.6  6b2bf58be11fc9414104c6d3a2e464163db5ef74b12296bda593cac37b6e4777 \
+    vergen-gitcl                     1.0.8  b9dfc1de6eb2e08a4ddf152f1b179529638bedc0ea95e6d667c014506377aefe \
+    vergen-lib                       0.1.6  9b07e6010c0f3e59fcb164e0163834597da68d1f864e2b8ca49f74de01e9c166 \
     version_check                    0.9.5  0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a \
     walkdir                          2.5.0  29790946404f91d9c5d06f9874efddea1dc06c5efe94541a7d6863108e3a5e4b \
     want                             0.3.1  bfa7760aed19e106de2c7c0b581b509f2f25d3dacaf737cb82ac61bc6d760b0e \
