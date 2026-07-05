@@ -3,7 +3,7 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/miniscruff/changie 1.24.0 v
+go.setup            github.com/miniscruff/changie 1.25.0 v
 go.offline_build    no
 revision            0
 
@@ -20,9 +20,9 @@ maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 
 checksums           ${distname}${extract.suffix} \
-                    rmd160  cde5045d27d8522915cff379814bb0c6bb40b56e \
-                    sha256  5eaef2de621e1502f0c449cc52b48d4de4a7373353f5008d0334172dc356b336 \
-                    size    1271470
+                    rmd160  d665a53406c4b1633ba3d06bdadbe7db386e0128 \
+                    sha256  a3ab6f739aaa98473db5da707eee7563b3fa803896e3472018f68add02737aa0 \
+                    size    1273288
 
 build.env-append      CGO_ENABLED=0
 build.pre_args-append -ldflags \"-X main.version=${version}\"
