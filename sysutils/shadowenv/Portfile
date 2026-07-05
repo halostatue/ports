@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        shopify shadowenv 3.5.0
+github.setup        shopify shadowenv 3.5.1
 github.tarball_from archive
 revision 0
 
@@ -25,9 +25,9 @@ installs_libs       no
 use_configure       no
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  f80de4dfbd855c146604b66fca4a4de3e83a5ea9 \
-                    sha256  f8a080de1b9f048db99e33ee91e4077f456a21dab02a10f2844da6fc6296e529 \
-                    size    234447
+                    rmd160  94ea4273bccecd40891befbdda04e38a3ff65187 \
+                    sha256  ff81d1baa7567b7570bb1e842d6a248f2f7c42c56bfa5f4c76beeb450395017c \
+                    size    236857
 
 destroot {
     xinstall -m 0755 \
