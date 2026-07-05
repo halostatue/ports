@@ -3,7 +3,7 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/google/osv-scanner 2.3.8 v
+go.setup            github.com/google/osv-scanner 2.4.0 v
 revision            0
 
 description         Dependency vulnerability scanner using data provided by https://osv.dev
@@ -15,9 +15,9 @@ license             Apache-2
 maintainers         {macports.halostatue.ca:austin @halostatue} \
                     openmaintainer
 
-checksums           rmd160  000b246385db3d1b4748c872522cabcab7ee25f9 \
-                    sha256  768e5d38a68b5675cd28a298e6d28973b29170743ae79f5de58be956be4a0c66 \
-                    size    12448387
+checksums           rmd160  b8a22cbe14ed53a0d70cd2c69244a591349b89a2 \
+                    sha256  407ceeb62b2a1f3fb8260bf527f2d61d1079f440e23c8c94a9796791d7edd565 \
+                    size    12458061
 
 go.offline_build    no
 
