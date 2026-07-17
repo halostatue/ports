@@ -3,7 +3,7 @@
 PortSystem          1.0
 PortGroup           golang 1.0
 
-go.setup            github.com/chainloop-dev/chainloop 1.103.1 v
+go.setup            github.com/chainloop-dev/chainloop 1.104.3 v
 revision            0
 
 categories          security
@@ -17,9 +17,9 @@ long_description    {*}${description}, a single source of truth for artifacts \
                     plus a declarative attestation crafting process.
 
 checksums           ${distname}${extract.suffix} \
-                    rmd160  5da5cb15599a8939eb4005cb3e2940b7d6ab4e44 \
-                    sha256  258701deea31c0bdece9462cf7c6500d02bc1a0454e74cf198b086a6046b05c2 \
-                    size    7619650
+                    rmd160  0351d4beed6538cf122e44a32cc92d7109a7cb56 \
+                    sha256  d63fb6069446671eb7f4bd190ade1916642a9f3f1c23f3b61e249bce2ea6b807 \
+                    size    7649603
 
 destroot {
     xinstall -m 0755 ${worksrcpath}/${name} ${destroot}${prefix}/bin/
