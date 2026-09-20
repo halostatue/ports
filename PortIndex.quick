@@ -19,8 +19,8 @@ vv 8569
 scryer-prolog 9851
 selene 10330
 bomber-scan 10784
-actions-usage 11279
-chainloop 11709
+chainloop 11279
+actions-usage 11853
 devcockpit 12283
 diffoci 12865
 dotenv-linter 13288
@@ -29,9 +29,9 @@ manifest-tool 14276
 massren 14869
 pug 15295
 shadowenv 15684
-csvquote 16421
-doxx 16868
-terramaid 17438
+terramaid 16421
+csvquote 16906
+doxx 17353
 htmd-cli 17923
 spacer 18422
 titlecase 18854
