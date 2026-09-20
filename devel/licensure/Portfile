@@ -4,9 +4,9 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        chasinglogic licensure 0.8.1
+github.setup        chasinglogic licensure 0.9.0
 github.tarball_from archive
-revision            2
+revision 0
 
 categories          devel
 license             GPL-3
@@ -20,9 +20,9 @@ installs_libs       no
 use_configure       no
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  c4924927760177a8ca4db06627d84fb98021a4c0 \
-                    sha256  785f6da7d43c4d465437aec04a1c650a5d64a25de8bdbbb0ad35b1af6646b650 \
-                    size    45064
+                    rmd160  64d912b4ca37cc276d5dfec64a517a288ab6e16b \
+                    sha256  5778cd3eb3475d20bef9d2f592bd78902727c735b54ca851bdff4c8639d70a93 \
+                    size    45404
 
 destroot {
     xinstall -m 0755 \
