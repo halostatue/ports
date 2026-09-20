@@ -49,6 +49,11 @@ def __run(command, input: nil)
   end
 end
 
+def __run?(command, input: nil)
+  __run(command, input:) => {status:}
+  status.success?
+end
+
 def should_follow?(phase)
   FOLLOW_PHASES.include?("all") || FOLLOW_PHASES.include?(phase.to_s)
 end
@@ -124,7 +129,13 @@ ensure
   STACK.pop
 end
 
-def git_main_branch = File.basename(Dir[".git/refs/heads/{main,master}"].first || "main")
+def git_main_branch
+  ref = capture_or_nil(%w[git symbolic-ref --short refs/remotes/origin/HEAD])
+  return File.basename(ref) if ref
+
+  %w[main master].find { __run?(%W[git show-ref --verify --quiet refs/heads/#{it}])} ||
+    "main"
+end
 
 def xcode_version
   __run(%w[xcodebuild -version]) => {stdout:, status:}
@@ -525,41 +536,47 @@ def generate_portfile(owner, repo, repo_data, language_info)
   # Use archive for repos without release assets
   tarball_from = latest_release[:has_release_assets] ? :releases : :archive
   tarball_url = build_archive_url(owner, repo, version, prefix)
+  homepage =
+    if repo_data[:homepage] && repo_data[:homepage].empty?
+      repo_data[:html_url]
+    else
+      repo_data[:homepage] || repo_data[:html_url]
+    end
 
   puts "==> Calculating checksums for #{tarball_url}"
   checksums = calculate_checksums(repo, tarball_url)
 
   <<~PORTFILE.strip
-    # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+        # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
 
-    PortSystem          1.0
-    #{generate_portgroups(language_info)}
+        PortSystem          1.0
+        #{generate_portgroups(language_info)}
 
-    #{generate_setup_line(owner, repo, version, prefix, language_info)}
-    #{generate_tarball_from_line(tarball_from, language_info)}revision            0
+        #{generate_setup_line(owner, repo, version, prefix, language_info)}
+        #{generate_tarball_from_line(tarball_from, language_info)}
+        revision            0
 
-    homepage            #{(repo_data[:homepage] && repo_data[:homepage].empty?) ? repo_data[:html_url] : (repo_data[:homepage] || repo_data[:html_url])}
+        homepage            #{homepage}
+        description         #{repo_data[:description] || "#{repo} - a command line tool"}
 
-    description         #{repo_data[:description] || "#{repo} - a command line tool"}
+        long_description    {*}{
+            #{generate_long_description(repo_data)}
+        }
 
-    long_description    {*}{
-        #{generate_long_description(repo_data)}
-    }
+        categories          #{determine_category(repo_data)}
+        installs_libs       no
+        license             #{map_license(repo_data[:license])}
+        maintainers         {macports.halostatue.ca:austin @halostatue} \\
+                            openmaintainer
 
-    categories          #{determine_category(repo_data)}
-    installs_libs       no
-    license             #{map_license(repo_data[:license])}
-    maintainers         {macports.halostatue.ca:austin @halostatue} \\
-                        openmaintainer
+        checksums           ${distname}${extract.suffix} \\
+                            rmd160  #{checksums[:rmd160]} \\
+                            sha256  #{checksums[:sha256]} \\
+                            size    #{checksums[:size]}
 
-    checksums           ${distname}${extract.suffix} \\
-                        rmd160  #{checksums[:rmd160]} \\
-                        sha256  #{checksums[:sha256]} \\
-                        size    #{checksums[:size]}
+        #{generate_destroot_section(repo, language_info)}
 
-    #{generate_destroot_section(repo, language_info)}
-
-    #{generate_language_specific_sections(owner, repo, version, prefix, language_info)}
+    -   #{generate_language_specific_sections(owner, repo, version, prefix, language_info)}
   PORTFILE
 end
 
@@ -726,8 +743,6 @@ rescue => e
   puts "==> Warning: Could not generate cargo.crates: #{e.message}"
   <<~RUST_SECTION.chomp
     # TODO: Run 'crate2port #{repo}@#{version}' to generate cargo.crates section
-    # cargo.crates \\
-    #     example-crate                    1.0.0  PLACEHOLDER_CHECKSUM
   RUST_SECTION
 end
 
@@ -1385,7 +1400,7 @@ def print_livecheck(name)
     if !status.success?
       "error on livecheck: #{stderr.chomp}"
     elsif stdout.chomp.empty?
-      "no updates"
+      nil
     else
       base_output = stdout.chomp.sub(%r{#{name} seems to have been updated }, "").gsub(%r{[()]}, "")
 
@@ -1414,7 +1429,7 @@ def print_livecheck(name)
       end
     end
 
-  puts "#{name}: #{output}"
+  puts "#{name}: #{output}" if output
 end
 
 def print_ports(&block)
