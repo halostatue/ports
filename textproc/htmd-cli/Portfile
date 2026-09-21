@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        letmutex htmd-cli 0.5.1 v
+github.setup        letmutex htmd-cli 0.5.2 v
 github.tarball_from archive
 revision            0
 
@@ -22,9 +22,9 @@ use_configure       no
 set bin_name        htmd
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  50caa4370a51ad6256d3f430a6fc41333066c105 \
-                    sha256  505999b9463ac230f4c330930f6ca9e55d0ebabcc92cce71c75b4b8769467e6e \
-                    size    44282
+                    rmd160  2f0e4e5b7c16bdf63fb42f188166e5fc0f889c36 \
+                    sha256  29476e0907eec2e42c94ffa760a81387982ca8dcba75e13b8b5366f78410e1d0 \
+                    size    44279
 
 destroot {
   xinstall -m 0755 \
@@ -57,7 +57,7 @@ cargo.crates \
     glob                              0.3.1  d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b \
     hashbrown                        0.14.5  e5274423e17b7c9fc20b6e7e208532f9b19825d82dfd615708b70edd83df41f1 \
     hermit-abi                        0.3.9  d231dfb89cfffdbc30e7fc41579ed6066ad03abda9e567ccafae602b97ec5024 \
-    htmd                              0.5.1  8e3283c6ef7b7af1e31cf13e9ce70ef2577c5a33a880bb80b3aaf791adfcc9a3 \
+    htmd                              0.5.2  c7c7dc50d9fc45420821992986b3840b968c9e564f8261516d89d50c8f2edcff \
     html5ever                        0.36.1  6452c4751a24e1b99c3260d505eaeee76a050573e61f30ac2c924ddc7236f01e \
     indexmap                          2.2.6  168fb715dda47215e360912c096649d23d58bf392ac62f73919e831745e40f26 \
     is_terminal_polyfill             1.70.0  f8478577c03552c21db0e2724ffb8986a5ce7af88107e6be5d2ee6e158c12800 \
