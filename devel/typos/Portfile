@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           github 1.0
 PortGroup           cargo 1.0
 
-github.setup        crate-ci typos 1.50.2 v
+github.setup        crate-ci typos 1.50.3 v
 github.tarball_from archive
 revision            0
 
@@ -20,9 +20,9 @@ installs_libs       no
 use_configure       no
 
 checksums           ${distname}${extract.suffix}  \
-                    rmd160  bf0958b121606df41fe52d4869ff85c64db05bad \
-                    sha256  412b161d33996e2c3c4a8b076e22183527f3420242975e868ba9968a3ce1727e \
-                    size    4656320
+                    rmd160  751ba28763476acd34c49f1ff58dce2203fb442c \
+                    sha256  64cad1fb73601e06b701456cc17a5b9b65536508e8299a27218175cae494c0f7 \
+                    size    4657931
 
 destroot {
     xinstall -m 0755 \
